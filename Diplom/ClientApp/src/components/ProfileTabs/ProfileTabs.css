@@ -1,0 +1,42 @@
+
+.profileTabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 8vh;
+}
+.profileTab {
+    text-align: center;
+    width: 100%;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+    border-radius: 4px;
+    height: 8vh;
+}
+.dropdownMenu .dropdownSubmenu {
+    margin-top: -2px;
+    visibility: hidden;
+    transition-property: visibility;
+    transition-duration: 0.2s;
+    transition-delay: 0.2s;
+}
+.dropdownMenuEnd {
+    visibility: hidden;
+}
+.menu-item:hover + .dropdownSubmenu {
+    visibility: visible;
+}
+.dropdownSubmenu:hover {
+    visibility: visible;
+}
+.dropdownToggleEnd:hover + .dropdownMenuEnd {
+    visibility: visible;
+}
+.subTab {
+    background-color: lightblue;
+}
+.dropdownMenuEnd:hover {
+    visibility: visible;
+}
+

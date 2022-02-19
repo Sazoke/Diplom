@@ -1,0 +1,42 @@
+.main {
+    margin: 0;
+    border: solid #1b6ec2;
+    height: 160vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+.about {
+    gap: 2vh;
+    border: solid #E01A76;
+    height: 25vh;
+    display: flex;
+    flex-direction: row;
+}
+.profilePic {
+    border: solid #1b6ec2;
+    width: 15%;
+}
+.info {
+    border: solid green;
+    width: 85%;
+}
+.profileTabs {
+    display: flex;
+    width: 100%;
+    list-style-type: none;
+    border: solid yellow;
+    margin: 0;
+    padding: 0;
+    justify-content: space-between;
+}
+.profileBarButton {
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+.blocks-area {
+    display: flex;
+    flex-direction: row;
+    gap: 4vh
+}

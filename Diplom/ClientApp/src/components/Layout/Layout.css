@@ -1,0 +1,16 @@
+.mainContainer {
+    margin: 2vh 4vh 0 4vh;
+}
+.footer {
+    margin: 0 4vh 0 4vh;
+    text-align: center;
+    height: 8vh;
+    border: solid aqua;
+}
+.footerText {
+    height: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

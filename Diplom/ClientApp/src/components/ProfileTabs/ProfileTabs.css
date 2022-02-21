@@ -6,13 +6,23 @@
     height: 8vh;
 }
 .profileTab {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    border-left: solid 1px #536cc9;
+    border-right: solid 1px #536cc9;
+    justify-content: center;
     width: 100%;
     background-color: white;
     color: black;
-    border: 2px solid #008CBA;
-    border-radius: 4px;
     height: 8vh;
+    transition-duration: 0.2s;
+    transition-delay: 0.2s;
+    transition-property: background-color;
+    cursor: pointer;
+    font-size: 2.5vh;
+}
+.profileTab:hover {
+    background-color: #9eb3ff;
 }
 .dropdownMenu .dropdownSubmenu {
     margin-top: -2px;

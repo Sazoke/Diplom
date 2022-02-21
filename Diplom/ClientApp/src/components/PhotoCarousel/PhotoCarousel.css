@@ -1,0 +1,59 @@
+.carousel {
+    margin: 2vh 0;
+    position: relative;
+    width: 94vw;;
+    padding: 1vh 2vh;
+    border: 1px solid #CCC;
+    border-radius: 15px;
+    background: #9eb3ff;
+    display: flex;
+    flex-direction: row;
+    height: 28vh;
+}
+.carousel-container {
+    height: 100%;
+    width: 90vw;
+    overflow: hidden;
+}
+.carousel-container ul {
+    height: 100%;
+    width: 9999px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transition: margin-left 250ms;
+}
+.carousel-container li {
+    height: 100%;
+    width: 30vw;
+    display: inline-block;
+}
+.arrow {
+    width: 2vw;
+    height: 100%;
+    padding: 0;
+    background: #536cc9;
+    font-size: 24px;
+    line-height: 24px;
+    color: white;
+    border: none;
+}
+
+.arrow:focus {
+    outline: none;
+}
+
+.arrow:hover {
+    background: #ccc;
+    cursor: pointer;
+}
+
+.prev {
+    border-radius: 50% 0 0 50%;
+    left: 7px;
+}
+
+.next {
+    border-radius: 0 50% 50% 0;
+    right: 7px;
+}

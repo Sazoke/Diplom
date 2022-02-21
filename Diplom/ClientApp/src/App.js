@@ -13,8 +13,11 @@ import './custom.css'
 
 export default class App extends Component {
   static displayName = App.name;
+    componentDidMount() {
+        document.body.style.background = "linear-gradient(0, rgba(16,63,111,1) 0%, rgba(27,110,194,1) 50%, rgba(204,229,255,1) 100%)"
+    }
 
-  render () {
+    render () {
     return (
       <Layout>
         <Route exact path='/' component={Home} />

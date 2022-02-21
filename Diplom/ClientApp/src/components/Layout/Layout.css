@@ -2,10 +2,11 @@
     margin: 2vh 4vh 0 4vh;
 }
 .footer {
-    margin: 0 4vh 0 4vh;
+    margin: 0;
     text-align: center;
     height: 8vh;
-    border: solid aqua;
+    background: linear-gradient(180deg, rgba(105,100,87,1) 0%, rgba(173,134,33,1) 50%, rgba(232,179,44,1) 100%);
+    font-weight: bold;
 }
 .footerText {
     height: 100%;

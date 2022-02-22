@@ -1,25 +1,30 @@
 import React from "react";
 import './PhotoCarousel.css';
 
-export const PhotoCarousel = () => {
+export const PhotoCarousel = (props: {pics: string[]}) => {
     const pics: string[] = ['green','yellow','green','yellow','green','yellow','green','yellow','green','yellow']
 
     const getPics = (pics: string[]) => {
-        return pics.reduce<JSX.Element[]>(function (res, current) { res.push(<li style={{background:current}}></li>)
+        return pics.reduce<JSX.Element[]>(function (res, current) {
+                res.push(
+                    <li>
+                        <img src={current} />
+                    </li>
+            )
             return res;
             },[])
     }
 
     let position = 0;
     const nextClick = () => {
-        if (position !== -270) {
-            position -= 90;
+        if (position !== -264) {
+            position -= 88;
             document.getElementById('picList')!.style.marginLeft = position + 'vw';
         }
     }
     const prevClick = () => {
         if (position !== 0) {
-            position += 90;
+            position += 88;
             document.getElementById('picList')!.style.marginLeft = position + 'vw';
         }
     }
@@ -29,7 +34,7 @@ export const PhotoCarousel = () => {
             <button className='arrow prev' onClick={prevClick}>⮜</button>
             <div className='carousel-container'>
                 <ul id='picList'>
-                    {getPics(pics)}
+                    {getPics(props.pics)}
                 </ul>
             </div>
             <button className="arrow next" onClick={nextClick}>⮞</button>

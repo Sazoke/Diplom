@@ -2,18 +2,29 @@ import React from "react";
 import './BlockContent.css';
 import {ImagePlaceholder} from "../../Icons/ImagePlaceholder";
 
-export const BlockContent = () => {
+interface ContentProps {
+    contentName: string,
+    contentTypeOrDate: string | Date,
+    contentImage?: string,
+}
+
+export const BlockContent = (props: ContentProps) => {
+
+    const typeOrDate = typeof props.contentTypeOrDate === "string" ? props.contentTypeOrDate : props.contentTypeOrDate.toString();
     return (
         <div className='content-container'>
             <div className='content-type'>
-                Разновидность материала
+                {typeOrDate}
             </div>
             <div className='block-content'>
                 <div className='content-image'>
-                    <ImagePlaceholder />
+                    {props.contentImage
+                        ? <img src={props.contentImage}/>
+                        : <ImagePlaceholder />
+                    }
                 </div>
                 <div className='content-name'>
-                    Название материала
+                    {props.contentName}
                 </div>
             </div>
         </div>

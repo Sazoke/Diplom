@@ -25,26 +25,27 @@
     background-color: #9eb3ff;
 }
 .dropdownMenu .dropdownSubmenu {
-    margin-top: -2px;
     visibility: hidden;
-    transition-property: visibility;
-    transition-duration: 0.2s;
-    transition-delay: 0.2s;
 }
 .dropdownMenuEnd {
     visibility: hidden;
+    transform: translate(100%,-100%);
 }
 .menu-item:hover + .dropdownSubmenu {
     visibility: visible;
+    position: relative;
+    z-index: 999;
 }
 .dropdownSubmenu:hover {
     visibility: visible;
+    position: relative;
+    z-index: 999;
 }
 .dropdownToggleEnd:hover + .dropdownMenuEnd {
     visibility: visible;
 }
 .subTab {
-    background-color: lightblue;
+    border: solid 1px #536cc9;
 }
 .dropdownMenuEnd:hover {
     visibility: visible;

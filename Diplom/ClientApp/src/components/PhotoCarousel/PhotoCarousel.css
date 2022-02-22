@@ -12,7 +12,7 @@
 }
 .carousel-container {
     height: 100%;
-    width: 90vw;
+    width: 88vw;
     overflow: hidden;
 }
 .carousel-container ul {
@@ -21,12 +21,17 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    transition: margin-left 250ms;
+    transition: margin-left 1s;
 }
 .carousel-container li {
     height: 100%;
-    width: 30vw;
+    width: 22vw;
     display: inline-block;
+}
+.carousel-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 .arrow {
     width: 2vw;

@@ -5,6 +5,7 @@ import {ProfileTabs} from "../ProfileTabs/ProfileTabs";
 import {Block} from "../Block/Block";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
 import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
+import { profileObject } from '../../fakeApi';
 
 export const Profile = () => {
 
@@ -16,10 +17,10 @@ export const Profile = () => {
                 return (
                     <div className='preview'>
                         <div className='blocks-area'>
-                            <Block header={'Блок новых материалов'}/>
-                            <Block header={'Блок свежих мероприятий'}/>
+                            <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
+                            <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
                         </div>
-                        <PhotoCarousel />
+                        <PhotoCarousel pics={profileObject.photos} />
                     </div>
                 )
             default:
@@ -30,15 +31,19 @@ export const Profile = () => {
         <div className='main'>
             <div className='about'>
                 <div className='profilePic'>
-                    <AvatarPlaceholder />
+                    {profileObject.avatar
+                        ?
+                        <img src={profileObject.avatar} />
+                        :
+                        <AvatarPlaceholder />
+                    }
                 </div>
                 <div className='info'>
                     <div className='fio'>
-                        Фамилия Имя Отчество
+                        {profileObject.name}
                     </div>
                     <div className='additional-info'>
-                        Сайт является информационным ресурсом, с отдельными кабинетами пользователей, своего рода личными персональными страницами преподавателей. Основной целевой аудиторией будут преподаватели профильных школьных предметов, текущей школы, и других российских средних учебных заведений, а так же школьники и их родители.
-                        Сайт является информационным ресурсом, с отдельными кабинетами пользователей, своего рода личными персональными страницами преподавателей. Основной целевой аудиторией будут преподаватели профильных школьных предметов, текущей школы, и других российских средних учебных заведений, а так же школьники и их родители.
+                        {profileObject.description}
                     </div>
                 </div>
             </div>

@@ -13,11 +13,17 @@
     height: 35vh;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 }
 .profilePic {
+    height: 100%;
+    display: flex;
     border-radius: 1vh;
     width: 15%;
     background-color: #9eb3ff;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 .info {
     width: 85%;
@@ -56,4 +62,9 @@
 .photo-area {
     height: 10vh;
     border: solid yellow;
+}
+.profilePic img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }

@@ -15,8 +15,13 @@
 .content-image {
     width: 40%;
     height: 100%;
-    padding: 2vh;
+    padding: 4px;
     background-color: #9eb3ff;
+}
+.content-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 .content-name {
     width: 60%;
@@ -34,8 +39,9 @@
     transition-delay: 0.2s;
     transition-property: margin, z-index;
     z-index: 0;
+    font-size: 2.5vh;
 }
 .content-container:hover {
     margin: -6px;
-    z-index: 9999;
+    z-index: 99;
 }

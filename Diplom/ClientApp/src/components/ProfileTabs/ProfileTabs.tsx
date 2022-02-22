@@ -15,8 +15,8 @@ export const ProfileTabs = (props: IProfileTabsProps) => {
                 <div style={{width: "100%"}} id='teacher' className='dropdownMenu'>
                     <div className=' profileTab menu-item'>Педагогам</div>
                     <div className='dropdownSubmenu'>
-                        <div id='base' className='profileTab menu-item' onClick={(e) => props.setActive(e.currentTarget.id)}> База </div>
-                        <div className='profileTab dropdownToggleEnd menu-item'> Материалы </div>
+                        <div id='base' className='profileTab subTab menu-item' onClick={(e) => props.setActive(e.currentTarget.id)}> База </div>
+                        <div className='profileTab dropdownToggleEnd subTab menu-item'> Материалы </div>
                             <div className='dropdownMenuEnd'>
                                 <div id='prez' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab subTab menu-item'> Prez </div>
                             </div>

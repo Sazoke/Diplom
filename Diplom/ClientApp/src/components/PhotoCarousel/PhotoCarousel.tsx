@@ -1,13 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import './PhotoCarousel.css';
 
-export const PhotoCarousel = (props: {pics: string[]}) => {
-    const pics: string[] = ['green','yellow','green','yellow','green','yellow','green','yellow','green','yellow']
+export const PhotoCarousel = (props: {pics: string[], user: string, userPic: string}) => {
+
+    const [currentPhoto, setCurrentPhoto] = useState<string | undefined>(undefined);
 
     const getPics = (pics: string[]) => {
         return pics.reduce<JSX.Element[]>(function (res, current) {
                 res.push(
-                    <li>
+                    <li onClick={() => setCurrentPhoto(current)}>
                         <img src={current} />
                     </li>
             )
@@ -38,6 +39,17 @@ export const PhotoCarousel = (props: {pics: string[]}) => {
                 </ul>
             </div>
             <button className="arrow next" onClick={nextClick}>⮞</button>
+            {currentPhoto
+                ? <div className='current-photo'>
+                    <div className='photo-with-description'>
+                        <div className='overlay' onClick={() => setCurrentPhoto(undefined)}>{}</div>
+                        <img src={currentPhoto} />
+                        <div className='photo-description'>
+                            <a>{}</a>
+                        </div>
+                    </div>
+                </div>
+                : undefined}
         </div>
 
     )

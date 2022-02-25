@@ -20,11 +20,15 @@ export const Profile = () => {
                             <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
                             <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
                         </div>
-                        <PhotoCarousel pics={profileObject.photos} />
+                        <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
                     </div>
                 )
+            case 'tests':
+                return <div className='def'>
+            </div>
             default:
-                return <div> aaaaaaaaaaa </div>
+                return <div className='def'>
+                </div>
         }
     }
     return (

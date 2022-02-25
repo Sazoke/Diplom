@@ -1,4 +1,4 @@
-import image from './Icons/9794.jpg';
+import image from './Icons/portrait.webp';
 import image1 from './Icons/1.jpg';
 import image2 from './Icons/81aKwYDGd4Y.jpg'
 import image3 from './Icons/WDX7Vtm-OB0.jpg'

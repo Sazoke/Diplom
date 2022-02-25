@@ -10,7 +10,7 @@
 }
 .about {
     gap: 2vh;
-    height: 35vh;
+    height: 30vh;
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -67,4 +67,12 @@
     height: 100%;
     width: 100%;
     object-fit: contain;
+}
+.def {
+    height: 130vh;
+    margin: 0;
+    background: #0366d6;
+}
+.preview {
+    height: 130vh;
 }

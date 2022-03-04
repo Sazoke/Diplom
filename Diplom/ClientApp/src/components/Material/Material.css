@@ -1,0 +1,17 @@
+.material {
+    height: 130vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.files {
+    border: solid #cccccc 2px;
+    height: 100%;
+}
+.title {
+    font-size: 3vh;
+    background-color: #cccccc;
+    width: 100%;
+    text-align: center;
+    height: 5vh;
+}

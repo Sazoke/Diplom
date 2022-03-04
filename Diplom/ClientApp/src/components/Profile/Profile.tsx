@@ -7,7 +7,6 @@ import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
 import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
 import { profileObject } from '../../fakeApi';
 import {Material} from "../Material/Material";
-import {List} from "../List/List";
 
 
 export const Profile = () => {
@@ -28,9 +27,7 @@ export const Profile = () => {
                 )
             case 'prez':
                 return <Material />
-            case 'events':
-                return <List />
-                default:
+            default:
                 return <div className='def'>
                 </div>
         }

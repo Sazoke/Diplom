@@ -17,7 +17,7 @@ export const ProfileTabs = (props: IProfileTabsProps) => {
                         <div id='base' className='profileTab subTab menu-item' onClick={(e) => props.setActive(e.currentTarget.id)}> Учебно-методическая база </div>
                         <div className='profileTab dropdownToggleEnd subTab menu-item'> Материалы {'>'} </div>
                             <div className='dropdownMenuEnd'>
-                                <div id='prez' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab subTab menu-item'> Prez </div>
+                                <div id='prez' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab subTab menu-item'> Презентации </div>
                             </div>
                     </div>
                 </div>

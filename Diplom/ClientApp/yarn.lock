@@ -2393,6 +2393,11 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
+autobind-decorator@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/autobind-decorator/-/autobind-decorator-2.4.0.tgz#ea9e1c98708cf3b5b356f7cf9f10f265ff18239c"
+  integrity sha512-OGYhWUO72V6DafbF8PM8rm3EPbfuyMZcJhtm5/n26IDwO18pohE4eNazLoCGhPiXOCD0gEGmrbU3849QvM8bbw==
+
 autoprefixer@^9.6.1:
   version "9.8.8"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.8.8.tgz#fd4bd4595385fa6f06599de749a4d5f7a474957a"
@@ -3448,7 +3453,7 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
-core-js@^3.5.0, core-js@^3.8.3:
+core-js@^3.21.1, core-js@^3.5.0, core-js@^3.8.3:
   version "3.21.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.21.1.tgz#f2e0ddc1fc43da6f904706e8e955bc19d06a0d94"
   integrity sha512-FRq5b/VMrWlrmCzwRrpDYNxyHP9BcAZC+xHJaqTgIE5091ZV1NTmyh0sGOg5XqpnHvR0svdy0sv1gWA1zmhxig==
@@ -6651,6 +6656,21 @@ jest@24.9.0:
   dependencies:
     import-local "^2.0.0"
     jest-cli "^24.9.0"
+
+jodit-react@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-1.2.6.tgz#d30ab3ecf1a31620783200801054538e613280fb"
+  integrity sha512-fdfQaKOoqsPNtRn59Q8X+cfnuJJOLmMEXQAQEabrug4Km03TRULLubXRxALo5YfO8VDIdXGtBC6iHPokM6xaIA==
+  dependencies:
+    jodit "^3.9.4"
+
+jodit@^3.14.3, jodit@^3.9.4:
+  version "3.14.3"
+  resolved "https://registry.yarnpkg.com/jodit/-/jodit-3.14.3.tgz#282b0474578d3fad32592d85022001143909eb3a"
+  integrity sha512-92OPpMj7iBQqyO0JF4mOwM8C6K4T43tCc70VboQ/XB/zgh5vB6prlMaPOYiLAR39vUiU5w7MJe79cCdRI6l9eQ==
+  dependencies:
+    autobind-decorator "^2.4.0"
+    core-js "^3.21.1"
 
 jquery@^3.5.1:
   version "3.6.0"

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Diplom.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class OidcConfigurationController : Controller
     {
         private readonly ILogger<OidcConfigurationController> _logger;

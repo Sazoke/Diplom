@@ -5,7 +5,6 @@ import './Material.css';
 export const Material = () => {
 
     const [changable, setChangable] = useState(false);
-
     const editor = useRef(null);
     const [content, setContent] = useState(localStorage.getItem('temp') ?? 'Start typing....');
     const config = {
@@ -15,13 +14,15 @@ export const Material = () => {
         allowResizeX: false,
         removeButtons: ['source'],
         toolbar: false,
-        askBeforePasteHTML: false
+        askBeforePasteHTML: false,
+        enableDragAndDropFileToEditor: true,
+
     };
     config["toolbar"] = changable;
     config["readonly"] = !changable;
 
     return (
-        <div className='material' onDoubleClick={() => {setChangable(!changable); localStorage.setItem('temp', content)}}>
+        <div className='material' onDoubleClick={() => {setChangable(!changable); localStorage.setItem('temp', content); console.log(localStorage.getItem('temp'))}}>
             <div className='title'>
                 Разновидность материала
             </div>

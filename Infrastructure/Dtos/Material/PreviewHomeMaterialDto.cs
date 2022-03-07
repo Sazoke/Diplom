@@ -1,4 +1,4 @@
-namespace Diplom.Dtos.Material;
+namespace Infrastructure.Dtos.Material;
 
 public class PreviewHomeMaterialDto : PreviewMaterialDto
 {

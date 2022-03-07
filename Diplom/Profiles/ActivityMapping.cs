@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Diplom.Dtos.Activity;
+using Infrastructure.Dtos.Activity;
 using Infrastructure.Models;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Http;

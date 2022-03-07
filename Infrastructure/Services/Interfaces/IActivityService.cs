@@ -8,5 +8,5 @@ public interface IActivityService
 
     Task<Activity> GetById(long id);
 
-    Task InsertOrUpdate(Activity activity);
+    Task Add(Activity activity);
 }

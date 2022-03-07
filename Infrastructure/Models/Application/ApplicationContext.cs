@@ -5,14 +5,14 @@ namespace Infrastructure.Models.Application;
 
 public class ApplicationContext
 {
-    public ApplicationContext(IHttpContextAccessor httpContextAccessor, ApplicationUserManager usermanager)
+    public ApplicationContext(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
     {
         if (httpContextAccessor.HttpContext?.User.Identity != null && 
             httpContextAccessor.HttpContext != null && 
             !httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             return;
-        var id = usermanager.GetUserId(httpContextAccessor.HttpContext?.User);
-        CurrentUser = usermanager.Users.FirstOrDefault(u => u.Id == id);
+        CurrentUserId = userManager.GetUserId(httpContextAccessor.HttpContext?.User);
     }
-    public ApplicationUser CurrentUser { get; set; }
+    
+    public string CurrentUserId { get; set; }
 }

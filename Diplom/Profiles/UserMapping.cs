@@ -1,6 +1,5 @@
 using AutoMapper;
-using Diplom.Dtos;
-using Diplom.Dtos.User;
+using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
 
 namespace Diplom.Profiles;

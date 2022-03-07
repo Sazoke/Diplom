@@ -1,7 +1,6 @@
-using Diplom.Dtos.Base;
-using Microsoft.AspNetCore.Http;
+using Infrastructure.Dtos.Base;
 
-namespace Diplom.Dtos.Material;
+namespace Infrastructure.Dtos.Material;
 
 public class PreviewMaterialDto : BaseDto
 {

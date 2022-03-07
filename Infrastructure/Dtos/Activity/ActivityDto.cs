@@ -1,7 +1,6 @@
-using System;
-using Diplom.Dtos.Base;
+using Infrastructure.Dtos.Base;
 
-namespace Diplom.Dtos.Activity;
+namespace Infrastructure.Dtos.Activity;
 
 public class ActivityDto : ExtendedDto
 {

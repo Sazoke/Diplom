@@ -1,0 +1,28 @@
+.block-header {
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vh;
+    background-color: #536cc9;
+    color: white;
+    border-radius: 2px 2px 0 0;
+    width: 100%;
+    font-weight: bold;
+}
+.block {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 85vh;
+    border: solid 5px #9eb3ff;
+    border-radius: 1vh;
+}
+.row {
+    margin: 0;
+    height: 50%;
+}
+.col {
+    padding: 0;
+    width: 100%;
+}

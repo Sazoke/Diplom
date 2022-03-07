@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Diplom.Dtos.Base;
+namespace Infrastructure.Dtos.Base;
 
 public class BaseDto
 {

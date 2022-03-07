@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using Diplom.Dtos.Activity;
-using Diplom.Dtos.Base;
-using Diplom.Dtos.Material;
+using Infrastructure.Dtos.Activity;
+using Infrastructure.Dtos.Material;
 using Microsoft.AspNetCore.Http;
 
-namespace Diplom.Dtos.User;
+namespace Infrastructure.Dtos.User;
 
 public class UserProfileDto
 {

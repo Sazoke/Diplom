@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
 using Infrastructure.Models.Application;
 using Infrastructure.Models.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Infrastructure.Repositories;
 
@@ -12,13 +14,14 @@ public class BaseRepository<T> where T : BaseAuditableEntity
     {
         _context = context;
     }
+    
+    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? includes = null) => includes(await Get())
+        .FirstOrDefault(e => e.Id == id);
 
-    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? includes = null) => includes(await Get()).FirstOrDefault(e => e.Id == id);
-
-    public async Task<IEnumerable<T>> GetByIds(Func<IQueryable<T>, IQueryable<T>>? includes, IEnumerable<long> ids) =>
+    public async Task<IEnumerable<T>> GetByIds (IEnumerable<long> ids, Func<IQueryable<T>, IQueryable<T>>? includes = null) =>
          includes(await Get()).Where(e => ids.Contains(e.Id));
 
-    public async Task<IEnumerable<T>> GetMany(Func<IQueryable<T>, IQueryable<T>>? includes = null)
+    public async Task<IEnumerable<T>> GetAll(Func<IQueryable<T>, IQueryable<T>>? includes = null)
     {
         return includes is null ? await Get() : includes(await Get());
     }
@@ -51,4 +54,6 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         _context.Remove(entity);
         await _context.SaveChangesAsync();
     }
+
+    public virtual async Task SaveChangesAsync() => await _context.SaveChangesAsync();
 }

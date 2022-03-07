@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Http;
-
-namespace Diplom.Dtos.User;
+namespace Infrastructure.Dtos.User;
 
 public class CreateUserDto
 {
@@ -8,9 +6,5 @@ public class CreateUserDto
     
     public string Password { get; set; }
     
-    public IFormFile Image { get; set; }
-    
     public string Email { get; set; }
-    
-    public string Description { get; set; }
 }

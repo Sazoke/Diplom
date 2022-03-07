@@ -1,4 +1,4 @@
-namespace Diplom.Dtos.Activity;
+namespace Infrastructure.Dtos.Activity;
 
 public class PreviewHomeActivityDto : PreviewActivityDto
 {

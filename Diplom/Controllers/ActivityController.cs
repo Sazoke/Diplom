@@ -1,12 +1,10 @@
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Diplom.Dtos.Activity;
+using Infrastructure.Dtos.Activity;
 using Infrastructure.Models;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diplom.Controllers;
@@ -50,9 +48,7 @@ public class ActivityController : Controller
         activity.Image = await _bucket.WriteFileAsync(dto.Image);
         foreach (var formFile in dto.Files)
             activity.Files.Add(await _bucket.WriteFileAsync(formFile));
-        await _activityService.InsertOrUpdate(activity);
+        await _activityService.Add(activity);
         return Ok(activity);
     }
-    
-    
 }

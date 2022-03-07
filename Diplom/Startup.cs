@@ -6,7 +6,6 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,8 +30,9 @@ namespace Diplom
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped(typeof(BaseRepository<>));
             
+            services.AddApplicationServices();
+            
             services.AddDefaultIdentity<ApplicationUser>()
-                .AddUserManager<ApplicationUserManager>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
@@ -45,7 +45,6 @@ namespace Diplom
             services.AddControllersWithViews();
             services.AddRazorPages();
             
-            services.AddApplicationServices();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });

@@ -3,6 +3,8 @@ import { Component } from 'react';
 import authService from './AuthorizeService';
 import { AuthenticationResultStatus } from './AuthorizeService';
 import { LoginActions, QueryParameterNames, ApplicationPaths } from './ApiAuthorizationConstants';
+import { RegistrationForm  } from '../RegistrationForm/RegistrationFrom';
+import {Profile} from "../Profile/Profile";
 
 // The main responsibility of this component is to handle the user's login process.
 // This is the starting point for the login process. Any component that needs to authenticate
@@ -35,7 +37,7 @@ export class Login extends Component {
                 this.redirectToProfile();
                 break;
             case LoginActions.Register:
-                this.redirectToRegister();
+                //this.redirectToRegister();
                 break;
             default:
                 throw new Error(`Invalid action '${action}'`);
@@ -51,12 +53,13 @@ export class Login extends Component {
         } else {
             switch (action) {
                 case LoginActions.Login:
-                    return (<div>Processing login</div>);
+                    return (<RegistrationForm />);
                 case LoginActions.LoginCallback:
                     return (<div>Processing login callback</div>);
                 case LoginActions.Profile:
+                    return (<Profile />)
                 case LoginActions.Register:
-                    return (<div></div>);
+                    return (<RegistrationForm />);
                 default:
                     throw new Error(`Invalid action '${action}'`);
             }

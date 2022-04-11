@@ -15,28 +15,29 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         _context = context;
     }
     
-    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? includes = null) => includes(await Get())
+    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? queries = null) => queries(await GetAll())
         .FirstOrDefault(e => e.Id == id);
 
-    public async Task<IEnumerable<T>> GetByIds (IEnumerable<long> ids, Func<IQueryable<T>, IQueryable<T>>? includes = null) =>
-         includes(await Get()).Where(e => ids.Contains(e.Id));
+    public async Task<IEnumerable<T>> GetByIds (IEnumerable<long> ids, Func<IQueryable<T>, IQueryable<T>>? queries = null) =>
+        queries(await GetAll()).Where(e => ids.Contains(e.Id));
 
-    public async Task<IEnumerable<T>> GetAll(Func<IQueryable<T>, IQueryable<T>>? includes = null)
+    public async Task<IEnumerable<T>> GetAll(Func<IQueryable<T>, IQueryable<T>>? queries = null)
     {
-        return includes is null ? await Get() : includes(await Get());
+        return queries is null ? await GetAll() : queries(await GetAll());
     }
 
-    private async Task<IQueryable<T>> Get() => _context.Set<T>().AsQueryable();
+    private async Task<IQueryable<T>> GetAll() => _context.Set<T>().AsQueryable();
 
 
-    public async Task Insert(T entity)
+    public async Task<T> AddAsync(T entity)
     {
         entity.Created = DateTime.Now;
         _context.Add(entity);
         await _context.SaveChangesAsync();
+        return entity;
     }
 
-    public virtual async Task Update(T entity)
+    public virtual async Task UpdateAsync(T entity)
     {
         _context.Update(entity);
         await _context.SaveChangesAsync();

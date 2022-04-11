@@ -20,7 +20,7 @@ public abstract class BaseTeacherComponentService<T> where T : TeacherComponent
     {
         var component = await _repository.GetById(id);
         component.Name = name;
-        await _repository.Update(component);
+        await _repository.UpdateAsync(component);
         await _repository.SaveChangesAsync();
     }
 
@@ -28,7 +28,7 @@ public abstract class BaseTeacherComponentService<T> where T : TeacherComponent
     {
         var component = await _repository.GetById(id);
         component.Description = description;
-        await _repository.Update(component);
+        await _repository.UpdateAsync(component);
         await _repository.SaveChangesAsync();
     }
 
@@ -36,7 +36,7 @@ public abstract class BaseTeacherComponentService<T> where T : TeacherComponent
     {
         var component = await _repository.GetById(id);
         component.Image = await _bucket.WriteFileAsync(file);
-        await _repository.Update(component);
+        await _repository.UpdateAsync(component);
         await _repository.SaveChangesAsync();
         return component.Image;
     }
@@ -44,17 +44,17 @@ public abstract class BaseTeacherComponentService<T> where T : TeacherComponent
     public async Task<string> AddFile(long id, IFormFile file)
     {
         var component = await _repository.GetById(id);
-        component.Files.Add(await _bucket.WriteFileAsync(file));
-        await _repository.Update(component);
+        component.Content.Add(await _bucket.WriteFileAsync(file));
+        await _repository.UpdateAsync(component);
         await _repository.SaveChangesAsync();
-        return component.Files.Last();
+        return component.Content.Last();
     }
 
     public async Task DeleteFile(long id, string fileName)
     {
         var component = await _repository.GetById(id);
-        component.Files.Remove(fileName);
-        await _repository.Update(component);
+        component.Content.Remove(fileName);
+        await _repository.UpdateAsync(component);
         await _repository.SaveChangesAsync();
     }
 }

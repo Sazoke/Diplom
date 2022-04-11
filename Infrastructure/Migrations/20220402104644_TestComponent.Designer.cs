@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220402104644_TestComponent")]
+    partial class TestComponent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,9 +174,6 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AreaId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -202,8 +201,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AreaId");
 
                     b.HasIndex("TeacherId");
 
@@ -294,9 +291,6 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AreaId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -326,68 +320,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaId");
-
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Materials");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.SchoolArea", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SchoolAreas");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Tag", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long?>("ActivityId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("MaterialId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long?>("SchoolAreaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("TestId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("MaterialId");
-
-                    b.HasIndex("SchoolAreaId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.Question", b =>
@@ -431,9 +366,6 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AreaId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -458,8 +390,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AreaId");
 
                     b.HasIndex("TeacherId");
 
@@ -632,59 +562,24 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Activity", b =>
                 {
-                    b.HasOne("Infrastructure.Models.SchoolArea", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Infrastructure.Models.Application.ApplicationUser", "Teacher")
                         .WithMany("Activities")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Area");
-
                     b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
-                    b.HasOne("Infrastructure.Models.SchoolArea", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Infrastructure.Models.Application.ApplicationUser", "Teacher")
                         .WithMany("Materials")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Area");
-
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Tag", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Activity", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("ActivityId");
-
-                    b.HasOne("Infrastructure.Models.Material", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("MaterialId");
-
-                    b.HasOne("Infrastructure.Models.SchoolArea", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("SchoolAreaId");
-
-                    b.HasOne("Infrastructure.Models.Test.Test", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("TestId");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.Question", b =>
@@ -696,19 +591,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Test.Test", b =>
                 {
-                    b.HasOne("Infrastructure.Models.SchoolArea", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Infrastructure.Models.Application.ApplicationUser", "Teacher")
                         .WithMany("Tests")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Area");
 
                     b.Navigation("Teacher");
                 });
@@ -771,11 +658,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Activity", b =>
-                {
-                    b.Navigation("Tags");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.Application.ApplicationUser", b =>
                 {
                     b.Navigation("Activities");
@@ -785,23 +667,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Tests");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Material", b =>
-                {
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.SchoolArea", b =>
-                {
-                    b.Navigation("Tags");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.Test.Test", b =>
                 {
                     b.Navigation("Questions");
 
                     b.Navigation("Results");
-
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

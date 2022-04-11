@@ -23,4 +23,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Test> Tests { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<UserResult> Results { get; set; }
+    public DbSet<SchoolArea> SchoolAreas { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 }

@@ -6,5 +6,5 @@ public class ExtendedDto : BaseDto
 {
     public string Description { get; set; }
     
-    public List<IFormFile> Files { get; set; }
+    public List<string> Content { get; set; }
 }

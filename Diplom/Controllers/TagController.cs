@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.Tag;
 using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diplom.Controllers;
@@ -45,6 +46,7 @@ public class TagController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create()
     {
         var result = await _tagService.CreateAsync();
@@ -53,6 +55,7 @@ public class TagController : Controller
     }
     
     [HttpPut]
+    [Authorize]
     public async Task<IActionResult> EditName([FromBody] TagDto tagDto)
     {
         if (tagDto.Id is null || tagDto.Name is null)
@@ -62,6 +65,7 @@ public class TagController : Controller
     }
     
     [HttpPut]
+    [Authorize]
     public async Task<IActionResult> EditSchoolArea([FromBody] TagDto tagDto)
     {
         if (tagDto.Id is null || tagDto.SchoolAreaId is null)

@@ -1,12 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diplom.Controllers;
 
 [Route("[controller]/[action]")]
+[Authorize]
 public class AttachmentController : Controller
 {
     private readonly IBucket _bucket;

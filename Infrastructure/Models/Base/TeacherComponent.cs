@@ -16,7 +16,7 @@ public abstract class TeacherComponent : BaseAuditableEntity
     
     public string Image { get; set; }
     
-    public List<string> Content { get; set; }
+    public List<Content> Content { get; set; }
     
     public long AreaId { get; set; }
     

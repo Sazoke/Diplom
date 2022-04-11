@@ -31,9 +31,6 @@ public class ActivityService : BaseTeacherComponentService<Activity>, IActivityS
     public async Task Add(Activity activity)
     {
         activity.TeacherId = _context.CurrentUserId;
-        if (activity.Id != 0)
-            await _activityRepository.AddAsync(activity);
-        else
-            await _activityRepository.UpdateAsync(activity);
+        await _activityRepository.AddAsync(activity);
     }
 }

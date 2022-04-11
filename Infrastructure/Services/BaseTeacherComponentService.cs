@@ -40,21 +40,6 @@ public abstract class BaseTeacherComponentService<T> where T : TeacherComponent
         await _repository.SaveChangesAsync();
         return component.Image;
     }
-
-    public async Task<string> AddFile(long id, IFormFile file)
-    {
-        var component = await _repository.GetById(id);
-        component.Content.Add(await _bucket.WriteFileAsync(file));
-        await _repository.UpdateAsync(component);
-        await _repository.SaveChangesAsync();
-        return component.Content.Last();
-    }
-
-    public async Task DeleteFile(long id, string fileName)
-    {
-        var component = await _repository.GetById(id);
-        component.Content.Remove(fileName);
-        await _repository.UpdateAsync(component);
-        await _repository.SaveChangesAsync();
-    }
+    
+    
 }

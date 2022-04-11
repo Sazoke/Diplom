@@ -26,7 +26,7 @@ public class ActivityController : Controller
     public async Task<IActionResult> GetActivities([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var activities = await _activityService.GetActivitiesPagedList(page, pageSize);
-        var dtos = activities.Select(a => _mapper.Map<Activity>(a)).ToList();
+        var dtos = activities.Select(a => _mapper.Map<ActivityDto>(a)).ToList();
         return Ok(dtos);
     }
 

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.SchoolArea;
 using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diplom.Controllers;
@@ -37,6 +38,7 @@ public class SchoolAreaController : Controller
     }
     
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create()
     {
         var result = await _schoolAreaService.CreateAsync();
@@ -45,6 +47,7 @@ public class SchoolAreaController : Controller
     }
     
     [HttpPut]
+    [Authorize]
     public async Task<IActionResult> EditName([FromBody] SchoolAreaDto areaDto)
     {
         if (areaDto.Id is null || areaDto.Name is null)

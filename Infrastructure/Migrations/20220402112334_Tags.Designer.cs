@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220402112334_Tags")]
+    partial class Tags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,6 +187,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<List<string>>("Files")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text");
@@ -282,34 +288,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Content", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsFile")
-                        .HasColumnType("boolean");
-
-                    b.Property<long?>("MaterialId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MaterialId");
-
-                    b.ToTable("Content");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
                     b.Property<long>("Id")
@@ -327,6 +305,10 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<List<string>>("Files")
+                        .IsRequired()
+                        .HasColumnType("text[]");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -391,7 +373,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("SchoolAreaId")
+                    b.Property<long?>("SchoolAreaId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("TestId")
@@ -461,6 +443,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<List<string>>("Files")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text");
@@ -499,7 +485,7 @@ namespace Infrastructure.Migrations
                     b.Property<long?>("TestId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -665,13 +651,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Content", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Material", null)
-                        .WithMany("Content")
-                        .HasForeignKey("MaterialId");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
                     b.HasOne("Infrastructure.Models.SchoolArea", "Area")
@@ -701,17 +680,13 @@ namespace Infrastructure.Migrations
                         .WithMany("Tags")
                         .HasForeignKey("MaterialId");
 
-                    b.HasOne("Infrastructure.Models.SchoolArea", "SchoolArea")
+                    b.HasOne("Infrastructure.Models.SchoolArea", null)
                         .WithMany("Tags")
-                        .HasForeignKey("SchoolAreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SchoolAreaId");
 
                     b.HasOne("Infrastructure.Models.Test.Test", null)
                         .WithMany("Tags")
                         .HasForeignKey("TestId");
-
-                    b.Navigation("SchoolArea");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.Question", b =>
@@ -814,8 +789,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
-                    b.Navigation("Content");
-
                     b.Navigation("Tags");
                 });
 

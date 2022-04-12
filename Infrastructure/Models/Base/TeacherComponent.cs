@@ -15,6 +15,11 @@ public abstract class TeacherComponent : BaseAuditableEntity
     public ApplicationUser Teacher { get; set; }
     
     public string Image { get; set; }
+
+    public long AreaId { get; set; }
     
-    public List<string> Files { get; set; }
+    [ForeignKey(nameof(AreaId))]
+    public SchoolArea Area { get; set; }
+    
+    public List<Tag> Tags { get; set; }
 }

@@ -15,20 +15,18 @@ public class ActivityController : Controller
 {
     private readonly IActivityService _activityService;
     private readonly IMapper _mapper;
-    private readonly IBucket _bucket;
     
-    public ActivityController(IActivityService activityService, IMapper mapper, IBucket bucket)
+    public ActivityController(IActivityService activityService, IMapper mapper)
     {
         _activityService = activityService;
         _mapper = mapper;
-        _bucket = bucket;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetActivities([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var activities = await _activityService.GetActivitiesPagedList(page, pageSize);
-        var dtos = activities.Select(a => _mapper.Map<Activity>(a)).ToList();
+        var dtos = activities.Select(a => _mapper.Map<ActivityDto>(a)).ToList();
         return Ok(dtos);
     }
 
@@ -45,9 +43,6 @@ public class ActivityController : Controller
     public async Task<IActionResult> CreateActivity([FromBody] ActivityDto dto)
     {
         var activity = _mapper.Map<Activity>(dto);
-        activity.Image = await _bucket.WriteFileAsync(dto.Image);
-        foreach (var formFile in dto.Files)
-            activity.Files.Add(await _bucket.WriteFileAsync(formFile));
         await _activityService.Add(activity);
         return Ok(activity);
     }

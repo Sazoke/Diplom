@@ -4,11 +4,13 @@ namespace Infrastructure.Services.Interfaces;
 
 public interface IBucket
 {
-    Task<byte[]> ReadFileAsync(string fileName);
+    Task<Stream> ReadFileAsync(string fileName);
 
     Task<string> WriteFileAsync(IFormFile formFile);
     
-    byte[] ReadFile(string fileName);
+    Stream ReadFile(string fileName);
 
     string WriteFile(IFormFile formFile);
+
+    void Remove(string name);
 }

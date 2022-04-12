@@ -21,6 +21,16 @@ export const Material = () => {
     config["toolbar"] = changable;
     config["readonly"] = !changable;
 
+    const getMaterial = async() => {
+        await fetch('/Material/GetById/',
+            {
+                method: 'GET',
+                body: '0',
+            }
+            ).then(response => console.log(response))
+            .catch(error => console.log(error));
+    };
+
     return (
         <div className='material' onDoubleClick={() => {setChangable(!changable); localStorage.setItem('temp', content); console.log(localStorage.getItem('temp'))}}>
             <div className='title'>
@@ -38,6 +48,7 @@ export const Material = () => {
                     Прикрепленные файлы
                 </div>
             </div>
+            <button onClick={() => getMaterial()}>Отправить</button>
         </div>
     )
 }

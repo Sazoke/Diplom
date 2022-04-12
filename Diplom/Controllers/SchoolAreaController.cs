@@ -21,7 +21,7 @@ public class SchoolAreaController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromBody] long id)
+    public async Task<IActionResult> GetById([FromQuery] long id)
     {
         var result = await _schoolAreaService.GetByIdAsync(id);
         if (result is null)

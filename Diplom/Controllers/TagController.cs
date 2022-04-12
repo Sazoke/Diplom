@@ -22,7 +22,7 @@ public class TagController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromBody] long id)
+    public async Task<IActionResult> GetById([FromQuery] long id)
     {
         var result = await _tagService.GetByIdAsync(id);
         if (result is null)
@@ -32,7 +32,7 @@ public class TagController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetBySchoolArea([FromBody] long schoolAreaId)
+    public IActionResult GetBySchoolArea([FromQuery] long schoolAreaId)
     {
         try
         {

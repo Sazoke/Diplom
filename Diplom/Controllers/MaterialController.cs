@@ -20,7 +20,7 @@ public class MaterialController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromBody] long id)
+    public async Task<IActionResult> GetById([FromQuery] long id)
     {
         try
         {
@@ -33,7 +33,7 @@ public class MaterialController : Controller
         }
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> GetByFilter([FromBody] FilterDto filter)
     {
         try

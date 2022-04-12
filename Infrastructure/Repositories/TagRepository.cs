@@ -8,6 +8,6 @@ public class TagRepository : BaseRepository<Tag>
     {
     }
 
-    public IEnumerable<Tag> GetBySchoolArea(long schoolAreaId) =>
-        _context.Tags.Where(t => t.SchoolAreaId == schoolAreaId);
+    public async Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId) =>
+        await GetAll(q => q.Where(t => t.SchoolAreaId == schoolAreaId));
 }

@@ -1,18 +1,15 @@
-using System.Linq.Expressions;
-using Infrastructure.Models.Application;
 using Infrastructure.Models.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Infrastructure.Repositories;
 
 public class BaseRepository<T> where T : BaseAuditableEntity
 {
-    protected readonly ApplicationDbContext _context;
+    protected readonly DbContext Context;
 
-    public BaseRepository(ApplicationDbContext context)
+    public BaseRepository(DbContext context)
     {
-        _context = context;
+        Context = context;
     }
     
     public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? queries = null) => queries(await GetAll())
@@ -26,35 +23,35 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         return queries is null ? await GetAll() : queries(await GetAll());
     }
 
-    private async Task<IQueryable<T>> GetAll() => _context.Set<T>().AsQueryable();
+    private async Task<IQueryable<T>> GetAll() => Context.Set<T>().AsQueryable();
 
 
     public async Task<T> AddAsync(T entity)
     {
         entity.Created = DateTime.Now;
-        _context.Add(entity);
-        await _context.SaveChangesAsync();
+        Context.Add(entity);
+        await Context.SaveChangesAsync();
         return entity;
     }
 
     public virtual async Task UpdateAsync(T entity)
     {
-        _context.Update(entity);
-        await _context.SaveChangesAsync();
+        Context.Update(entity);
+        await Context.SaveChangesAsync();
     }
     
     public virtual async Task Delete(long id)
     {
-        var entity = await _context.Set<T>().FindAsync(id);
-        _context.Remove(entity);
-        await _context.SaveChangesAsync();
+        var entity = await Context.Set<T>().FindAsync(id);
+        Context.Remove(entity);
+        await Context.SaveChangesAsync();
     }
 
     public virtual async Task Delete(T entity)
     {
-        _context.Remove(entity);
-        await _context.SaveChangesAsync();
+        Context.Remove(entity);
+        await Context.SaveChangesAsync();
     }
 
-    public virtual async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+    public virtual async Task SaveChangesAsync() => await Context.SaveChangesAsync();
 }

@@ -6,26 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.Realizations;
 
-public class ActivityService : BaseTeacherComponentService<Activity>, IActivityService
+public class ActivityService : BaseComponentService<Activity>, IActivityService
 {
     private readonly BaseRepository<Activity> _activityRepository;
     private readonly ApplicationContext _context;
 
-    public ActivityService(BaseRepository<Activity> activityRepository, IBucket bucket, ApplicationContext context) : base(activityRepository, bucket)
+    public ActivityService(BaseRepository<Activity> repository, ApplicationContext applicationContext, TagRepository tagRepository, ApplicationContext context, BaseRepository<Activity> activityRepository) : base(repository, applicationContext, tagRepository)
     {
-        _activityRepository = activityRepository;
         _context = context;
+        _activityRepository = activityRepository;
     }
 
     public async Task<IEnumerable<Activity>> GetActivitiesPagedList(int page, int pageSize)
     {
-        var activitiesQuery = await _activityRepository.GetAll(q => q.Include(a => a.Content));
+        var activitiesQuery = await _activityRepository.GetAll();
         return activitiesQuery.OrderByDescending(a => a.Date).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public async Task<Activity> GetById(long id)
     {
-        return await _activityRepository.GetById(id, q => q.Include(q => q.Content));
+        return await _activityRepository.GetById(id);
     }
 
     public async Task Add(Activity activity)

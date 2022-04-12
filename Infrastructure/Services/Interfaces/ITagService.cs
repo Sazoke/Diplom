@@ -6,7 +6,7 @@ public interface ITagService
 {
     public Task<Tag> GetByIdAsync(long id);
     
-    public IEnumerable<Tag> GetBySchoolArea(long schoolAreaId);
+    public Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId);
 
     public Task<Tag> CreateAsync();
     

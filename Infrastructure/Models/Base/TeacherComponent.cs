@@ -15,9 +15,7 @@ public abstract class TeacherComponent : BaseAuditableEntity
     public ApplicationUser Teacher { get; set; }
     
     public string Image { get; set; }
-    
-    public List<Content> Content { get; set; }
-    
+
     public long AreaId { get; set; }
     
     [ForeignKey(nameof(AreaId))]

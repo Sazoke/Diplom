@@ -20,6 +20,8 @@ public static class ServiceExtensions
         services.AddScoped<IBucket, BucketStorage>(b => new BucketStorage(appEnvironment.WebRootPath));
         services.AddScoped<IActivityService, ActivityService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<TagRepository>();
+        services.AddScoped<IMaterialService, MaterialService>();
         return services;
     }
 }

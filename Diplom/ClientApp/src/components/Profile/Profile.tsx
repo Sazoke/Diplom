@@ -18,7 +18,7 @@ export const Profile = () => {
         switch(active) {
             case "preview":
                 return (
-                    <div className='preview'>
+                    <div>
                         <div className='blocks-area'>
                             <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
                             <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>

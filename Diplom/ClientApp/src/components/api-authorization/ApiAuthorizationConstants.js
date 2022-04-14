@@ -12,14 +12,14 @@ export const LogoutActions = {
 };
 
 export const LoginActions = {
-  Login: 'login',
+  Login: 'Login',
   LoginCallback: 'login-callback',
   LoginFailed: 'login-failed',
   Profile: 'profile',
-  Register: 'register'
+  Register: 'Register'
 };
 
-const prefix = '/authentication';
+const prefix = '/Identity';
 
 export const ApplicationPaths = {
   DefaultLoginRedirectPath: '/',

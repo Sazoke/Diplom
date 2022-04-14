@@ -1,14 +1,14 @@
 .carousel {
     margin: 2vh 0;
     position: relative;
-    width: 94vw;;
+    width: 100%;
     padding: 1vh 2vh;
     border: 1px solid #CCC;
     border-radius: 15px;
     background: #9eb3ff;
     display: flex;
     flex-direction: row;
-    height: 28vh;
+    height: 220px;
 }
 .carousel-container {
     height: 100%;

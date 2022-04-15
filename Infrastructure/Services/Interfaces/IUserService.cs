@@ -11,5 +11,5 @@ public interface IUserService
 
     Task EditDescription(string description);
 
-    Task<string> EditImage(IFormFile formFile);
+    Task EditImage(string formFile);
 }

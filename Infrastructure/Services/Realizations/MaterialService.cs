@@ -10,27 +10,18 @@ namespace Infrastructure.Services.Realizations;
 
 public class MaterialService : BaseComponentService<Material>, IMaterialService
 {
-    private readonly BaseRepository<Content> _contentRepository;
+    private readonly BaseRepository<Content?> _contentRepository;
 
-    public MaterialService(BaseRepository<Material> repository, ApplicationContext applicationContext,
-        TagRepository tagRepository, BaseRepository<Content> contentRepository) : base(repository, applicationContext,
+    public MaterialService(BaseRepository<Material?> repository, ApplicationContext applicationContext,
+        TagRepository tagRepository, BaseRepository<Content?> contentRepository) : base(repository, applicationContext,
         tagRepository)
     {
         _contentRepository = contentRepository;
     }
 
-    public async Task<Material> GetByIdAsync(long id) => 
-        await Repository.GetById(id, q => q.Include(m => m.Content));
-
-    public async Task<IEnumerable<Material>> GetByFilterAsync(FilterDto filterDto)
-    {
-        var materials = await Repository.GetAll(q => q.Include(c => c.Tags)
-            .Where(c => (!filterDto.SchoolArea.HasValue || filterDto.SchoolArea == c.AreaId) &&
-                        (!filterDto.Tags.Any() || c.Tags.All(t => filterDto.Tags.Contains(t.Id))) &&
-                        (filterDto.TeacherId != null || filterDto.TeacherId == c.TeacherId)).Skip(filterDto.Skip)
-            .Take(filterDto.PageSize));
-        return materials;
-    }
+    public async Task<Material?> GetByIdAsync(long id) =>
+        await Repository.GetById(id, q => q.Include(a => a.Tags)
+            .Include(m => m.Content));
 
     public async Task EditTypeAsync(long id, string type)
     {

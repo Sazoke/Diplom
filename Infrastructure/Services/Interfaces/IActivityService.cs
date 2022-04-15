@@ -1,12 +1,9 @@
+using Infrastructure.Dtos.Base;
 using Infrastructure.Models;
 
 namespace Infrastructure.Services.Interfaces;
 
-public interface IActivityService
+public interface IActivityService : IComponentService<Activity>
 {
-    Task<IEnumerable<Activity>> GetActivitiesPagedList(int page, int pageSize);
-
-    Task<Activity> GetById(long id);
-
-    Task Add(Activity activity);
+    public Task EditDate(long id, DateTime date);
 }

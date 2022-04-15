@@ -64,12 +64,12 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditImage([FromBody] IFormFile image)
+    public async Task<IActionResult> EditImage([FromBody] string image)
     {
         try
         {
-            var fileName = await _userService.EditImage(image);
-            return Ok(fileName);
+            await _userService.EditImage(image);
+            return Ok();
         }
         catch (Exception e)
         {

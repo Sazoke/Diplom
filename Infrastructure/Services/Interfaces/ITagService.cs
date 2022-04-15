@@ -4,9 +4,9 @@ namespace Infrastructure.Services.Interfaces;
 
 public interface ITagService
 {
-    public Task<Tag> GetByIdAsync(long id);
+    public Task<Tag?> GetByIdAsync(long id);
     
-    public Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId);
+    public Task<IEnumerable<Tag?>> GetBySchoolArea(long schoolAreaId);
 
     public Task<Tag> CreateAsync();
     

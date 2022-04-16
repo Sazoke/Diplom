@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Models.Application;
+using Newtonsoft.Json;
 
 namespace Infrastructure.Models.Base;
 
@@ -12,6 +13,7 @@ public abstract class TeacherComponent : BaseAuditableEntity
     public string TeacherId { get; set; }
     
     [ForeignKey(nameof(TeacherId))]
+    [JsonIgnore]
     public ApplicationUser Teacher { get; set; }
     
     public string? Image { get; set; }

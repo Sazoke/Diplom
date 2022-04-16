@@ -6,13 +6,14 @@ export const TestConstructor = () => {
 
     const addQuestion = () => {
         setQuestionsState([...questionsState, {question: 'Новый вопрос', variants: [{value: 'вариант 1', isRightAnswer: false}, {value: 'вариант 2', isRightAnswer: false}]}]);
-        console.log(questionsState);
     }
     const removeQuestion = (index: number) => {
         setQuestionsState([...questionsState.splice(index, 1)]);
     }
     const changeQuestion = (value: string, index: number) => {
-
+        let copy = [...questionsState];
+        copy[index].question = value;
+        setQuestionsState(copy);
     }
     const resetVariants = (value: {value: string, isRightAnswer: boolean}[], index: number) => {
         let copy = [...questionsState];
@@ -25,7 +26,7 @@ export const TestConstructor = () => {
             <QuestionContainer
                 key={e.question}
                 question={e}
-                changeQuestion={(el) => changeQuestion(el,index)}
+                changeQuestion={(el) => changeQuestion(el, index)}
                 removeQuestion={() => removeQuestion(index)}
                 resetVariants={(variants) => resetVariants(variants, index)}
             />

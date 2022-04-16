@@ -22,6 +22,10 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
         variants[index].value = value;
         props.resetVariants(variants);
     }
+    const removeVariant = (index: number) => {
+        variants.splice(index, 1);
+        props.resetVariants(variants);
+    }
     
     return <div>
         <Gapped>
@@ -29,12 +33,14 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
             <label>Несколько вариантов ответов</label>
         </Gapped>
         <div>
-            <input value={props.question.question} onChange={(e) => setQuestion(e.currentTarget.value)}/>
+            <input value={props.question.question} onChange={(e) => props.changeQuestion(e.currentTarget.value)}/>
+            <button onClick={() => props.removeQuestion()}>Убрать</button>
             {!multiVariant && <RadioGroup>
                 {variants.map((e, index) =>
                     <Gapped>
                         <Radio value={e.value} />
                         <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
+                        <button onClick={() => removeVariant(index)}>Убрать вариант</button>
                     </Gapped>
                 )}
             </RadioGroup>}
@@ -43,6 +49,7 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
                     <Gapped>
                         <Checkbox value={e.value} />
                         <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
+                        <button onClick={() => removeVariant(index)}>Убрать вариант</button>
                     </Gapped>
                 )}
             </div>}

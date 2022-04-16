@@ -10,6 +10,8 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
 import './custom.css'
+import {SearchPage} from './components/SearchPage/SearchPage';
+import {TestConstructor} from "./components/TestConstructor/TestConstructor";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -25,6 +27,8 @@ export default class App extends Component {
         <AuthorizeRoute path='/fetch-data' component={FetchData} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         <Route path='/profile' component={Profile} />
+        <Route path='/search' component={SearchPage} />
+          <Route path='/test' component={TestConstructor} />
       </Layout>
     );
   }

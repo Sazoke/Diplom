@@ -6,6 +6,9 @@ import {Block} from "../Block/Block";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
 import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
 import { profileObject } from '../../fakeApi';
+import {Material} from "../Material/Material";
+import {List} from "../List/List";
+
 
 export const Profile = () => {
 
@@ -15,7 +18,7 @@ export const Profile = () => {
         switch(active) {
             case "preview":
                 return (
-                    <div className='preview'>
+                    <div>
                         <div className='blocks-area'>
                             <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
                             <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
@@ -23,10 +26,11 @@ export const Profile = () => {
                         <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
                     </div>
                 )
-            case 'tests':
-                return <div className='def'>
-            </div>
-            default:
+            case 'prez':
+                return <Material />
+            case 'events':
+                return <List />
+                default:
                 return <div className='def'>
                 </div>
         }

@@ -12,23 +12,23 @@ export const LogoutActions = {
 };
 
 export const LoginActions = {
-  Login: 'login',
+  Login: 'Login',
   LoginCallback: 'login-callback',
   LoginFailed: 'login-failed',
   Profile: 'profile',
-  Register: 'register'
+  Register: 'Register'
 };
 
-const prefix = '/authentication';
+const prefix = '/Identity';
 
 export const ApplicationPaths = {
   DefaultLoginRedirectPath: '/',
   ApiAuthorizationClientConfigurationUrl: `_configuration/${ApplicationName}`,
   ApiAuthorizationPrefix: prefix,
-  Login: `${prefix}/${LoginActions.Login}`,
+  Login: `${prefix}/Account/${LoginActions.Login}`,
   LoginFailed: `${prefix}/${LoginActions.LoginFailed}`,
   LoginCallback: `${prefix}/${LoginActions.LoginCallback}`,
-  Register: `${prefix}/${LoginActions.Register}`,
+  Register: `${prefix}/Account/${LoginActions.Register}`,
   Profile: `${prefix}/${LoginActions.Profile}`,
   LogOut: `${prefix}/${LogoutActions.Logout}`,
   LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,

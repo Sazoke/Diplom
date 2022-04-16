@@ -20,6 +20,7 @@
     transition-property: background-color;
     cursor: pointer;
     font-size: 2.5vh;
+    padding: 4px;
 }
 .profileTab:hover {
     background-color: #9eb3ff;

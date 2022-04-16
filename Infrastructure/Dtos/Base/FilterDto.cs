@@ -11,6 +11,8 @@ public class FilterDto
     public long? SchoolArea { get; set; }
     
     public string? TeacherId { get; set; }
+    
+    public DateTime? DateTime { get; set; }
 
     public int Skip => (Page - 1) * PageSize;
 }

@@ -9,71 +9,29 @@ namespace Infrastructure.Services;
 
 public abstract class BaseComponentService<T> where T : TeacherComponent
 {
-    protected readonly BaseRepository<T?> Repository;
-    private readonly TagRepository _tagRepository;
-    private readonly ApplicationContext _applicationContext;
+    protected readonly BaseRepository<T> Repository;
 
-    protected BaseComponentService(BaseRepository<T?> repository, ApplicationContext applicationContext, TagRepository tagRepository)
+    protected BaseComponentService(BaseRepository<T> repository)
     {
         Repository = repository;
-        _applicationContext = applicationContext;
-        _tagRepository = tagRepository;
     }
 
-    public async Task<T> CreateAsync()
+    public async Task<IEnumerable<T>> GetByFilterAsync(FilterDto filterDto)
     {
-        var type = typeof(T);
-        var constructor = type.GetConstructor(Array.Empty<Type>());
-        var result = constructor?.Invoke(Array.Empty<object>()) as T;
-        result.TeacherId = _applicationContext.CurrentUserId;
-        await Repository.AddAsync(result);
-        return result;
-    }
-
-    public async Task EditNameAsync(long id, string name)
-    {
-        var component = await Repository.GetById(id);
-        component.Name = name;
-        await Repository.UpdateAsync(component);
-    }
-
-    public async Task EditDescriptionAsync(long id, string description)
-    {
-        var component = await Repository.GetById(id);
-        component.Description = description;
-        await Repository.UpdateAsync(component);
-    }
-
-    public async Task EditImageAsync(long id, string file)
-    {
-        var component = await Repository.GetById(id);
-        component.Image = file;
-        await Repository.UpdateAsync(component);
-    }
-
-    public async Task EditSchoolAreaAsync(long id, long areaId)
-    {
-        var component = await Repository.GetById(id);
-        component.AreaId = areaId;
-        component.Tags = new List<Tag>();
-        await Repository.UpdateAsync(component);
-    }
-    
-    public async Task EditTagsAsync(long id, List<long> tagIds)
-    {
-        var component = await Repository.GetById(id);
-        var tags = await _tagRepository.GetByIds(tagIds);
-        component.Tags = tags.ToList();
-        await Repository.UpdateAsync(component);
-    }
-
-    public async Task<IEnumerable<T?>> GetByFilterAsync(FilterDto filterDto)
-    {
-        var components = await Repository.GetAll(q => q.Include(c => c.Tags)
-            .Where(c => (!filterDto.SchoolArea.HasValue || filterDto.SchoolArea == c.AreaId) &&
-                        (!filterDto.Tags.Any() || c.Tags.All(t => filterDto.Tags.Contains(t.Id))) &&
-                        (filterDto.TeacherId != null || filterDto.TeacherId == c.TeacherId)).Skip(filterDto.Skip)
-            .Take(filterDto.PageSize));
+        var components = await Repository.GetAll(q =>
+        {
+            if (filterDto.Tags is not null)
+                q = q.Include(c => c.Tags)
+                    .Where(c => c.Tags.All(t => filterDto.Tags.Contains(t.Id)));
+            if (filterDto.SchoolArea is not null)
+                q = q.Where(c => filterDto.SchoolArea == c.AreaId);
+            if (filterDto.DateTime is not null)
+                q = q.Where(c => c.CreatedAt >= filterDto.DateTime);
+            if (filterDto.TeacherId is not null)
+                q = q.Where(c => c.CreatedById == filterDto.TeacherId);
+            return q.Skip(filterDto.Skip)
+                .Take(filterDto.PageSize);
+        });
         return components;
     }
 }

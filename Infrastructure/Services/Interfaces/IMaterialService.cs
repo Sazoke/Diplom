@@ -4,12 +4,13 @@ using Infrastructure.Models;
 
 namespace Infrastructure.Services.Interfaces;
 
-public interface IMaterialService : IComponentService<Material>
+public interface IMaterialService
 {
-    public Task EditTypeAsync(long id, string type);
-    public Task<Content> AddFragmentAsync(long id);
+    public Task<Material> GetByIdAsync(long id);
 
-    public Task EditFragmentAsync(FragmentDto fragmentDto);
+    public Task<IEnumerable<Material>> GetByFilterAsync(FilterDto filter);
+    
+    public Task AddOrUpdateAsync(MaterialEditDto materialDto);
 
-    public Task RemoveFragmentAsync(long id);
+    public Task RemoveAsync(long id);
 }

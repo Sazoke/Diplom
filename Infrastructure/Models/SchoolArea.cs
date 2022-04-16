@@ -2,7 +2,7 @@ using Infrastructure.Models.Base;
 
 namespace Infrastructure.Models;
 
-public class SchoolArea : BaseEntity
+public class SchoolArea : BaseAuditableEntity
 {
     public string Name { get; set; }
     

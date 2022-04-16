@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure;
-using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -13,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220416144930_CreatedBy")]
+    partial class CreatedBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,6 +282,40 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Infrastructure.Models.Content", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsFile")
+                        .HasColumnType("boolean");
+
+                    b.Property<long?>("MaterialId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("Content");
+                });
+
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
                     b.Property<long>("Id")
@@ -292,10 +327,6 @@ namespace Infrastructure.Migrations
                     b.Property<long?>("AreaId")
                         .IsRequired()
                         .HasColumnType("bigint");
-
-                    b.Property<List<Content>>("Content")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -334,20 +365,11 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("SchoolAreas");
                 });
@@ -663,6 +685,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("CreatedBy");
                 });
 
+            modelBuilder.Entity("Infrastructure.Models.Content", b =>
+                {
+                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infrastructure.Models.Material", null)
+                        .WithMany("Content")
+                        .HasForeignKey("MaterialId");
+
+                    b.Navigation("CreatedBy");
+                });
+
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
                     b.HasOne("Infrastructure.Models.SchoolArea", "Area")
@@ -678,17 +715,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Area");
-
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.SchoolArea", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("CreatedBy");
                 });
@@ -840,6 +866,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
+                    b.Navigation("Content");
+
                     b.Navigation("Tags");
                 });
 

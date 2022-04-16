@@ -6,5 +6,5 @@ public class TagDto
     
     public string? Name { get; set; }
     
-    public long? SchoolAreaId { get; set; }
+    public long SchoolAreaId { get; set; }
 }

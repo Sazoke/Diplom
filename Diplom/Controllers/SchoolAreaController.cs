@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.SchoolArea;
@@ -23,36 +24,44 @@ public class SchoolAreaController : Controller
     [HttpGet]
     public async Task<IActionResult> GetById([FromQuery] long id)
     {
-        var result = await _schoolAreaService.GetByIdAsync(id);
-        if (result is null)
-            return NotFound();
-        var dto = _mapper.Map<SchoolAreaDto>(result);
-        return Ok(dto);
+        try
+        {
+            var result = await _schoolAreaService.GetByIdAsync(id);
+            var dto = _mapper.Map<SchoolAreaDto>(result);
+            return Ok(dto);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
     }
     
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var result = await _schoolAreaService.GetAllAsync();
-        return Ok(result);
+        try
+        {
+            var result = await _schoolAreaService.GetAllAsync();
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
     }
     
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> AddOrUpdate([FromBody] SchoolAreaDto schoolAreaDto)
     {
-        var result = await _schoolAreaService.CreateAsync();
-        var dto = _mapper.Map<SchoolAreaDto>(result);
-        return Ok(dto);
-    }
-    
-    [HttpPut]
-    [Authorize]
-    public async Task<IActionResult> EditName([FromBody] SchoolAreaDto areaDto)
-    {
-        if (areaDto.Id is null || areaDto.Name is null)
-            return BadRequest("Id is null");
-        var result = await _schoolAreaService.TryEditNameAsync(areaDto.Id.Value, areaDto.Name);
-        return result ? Ok() : BadRequest();
+        try
+        {
+            await _schoolAreaService.AddOrUpdate(schoolAreaDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
     }
 }

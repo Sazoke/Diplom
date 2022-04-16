@@ -8,4 +8,6 @@ public interface IComponentService<T> where T : TeacherComponent
     public Task<T> GetByIdAsync(long id);
 
     public Task<IEnumerable<T>> GetByFilterAsync(FilterDto filterDto);
+    
+    public Task RemoveAsync(long id);
 }

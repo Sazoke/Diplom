@@ -16,7 +16,7 @@ public abstract class BaseComponentService<T> where T : TeacherComponent
         Repository = repository;
     }
 
-    public async Task<IEnumerable<T>> GetByFilterAsync(FilterDto filterDto)
+    public virtual async Task<IEnumerable<T>> GetByFilterAsync(FilterDto filterDto)
     {
         var components = await Repository.GetAll(q =>
         {

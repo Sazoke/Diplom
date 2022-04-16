@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Infrastructure.Dtos.Activity;
 using Infrastructure.Dtos.Base;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -49,8 +50,31 @@ public class ActivityController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddOrUpdate()
+    public async Task<IActionResult> AddOrUpdate([FromBody] ActivityEditDto activityEditDto)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _activityService.AddOrUpdateAsync(activityEditDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpDelete]
+    [Authorize]
+    public async Task<IActionResult> Remove([FromQuery] long id)
+    {
+        try
+        {
+            await _activityService.RemoveAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
     }
 }

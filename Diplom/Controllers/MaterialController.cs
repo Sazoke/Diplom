@@ -44,7 +44,7 @@ public class MaterialController : Controller
         try
         {
             var materials = await _materialService.GetByFilterAsync(filter);
-            var dtos = materials.Select(m => _mapper.Map<MaterialSearchPreview>(m))
+            var dtos = materials.Select(m => _mapper.Map<FilterResultDto>(m))
                 .ToList();
             return Ok(dtos);
         }

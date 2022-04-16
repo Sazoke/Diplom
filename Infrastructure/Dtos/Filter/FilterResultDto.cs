@@ -1,6 +1,6 @@
-namespace Infrastructure.Dtos.Material;
+namespace Infrastructure.Dtos.Base;
 
-public class MaterialSearchPreview
+public class FilterResultDto
 {
     public long Id { get; set; }
     

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.SchoolArea;
@@ -41,8 +42,9 @@ public class SchoolAreaController : Controller
     {
         try
         {
-            var result = await _schoolAreaService.GetAllAsync();
-            return Ok(result);
+            var schoolAreas = await _schoolAreaService.GetAllAsync();
+            var dtos = schoolAreas.Select(a => _mapper.Map<SchoolAreaDto>(a));
+            return Ok(dtos);
         }
         catch (Exception e)
         {

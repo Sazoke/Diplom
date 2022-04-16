@@ -21,8 +21,17 @@ export const Material = () => {
     config["toolbar"] = changable;
     config["readonly"] = !changable;
 
+    const materilal = {
+        Id: null,
+        Description: 'Opisanie',
+    }
+
     const getMaterial = async() => {
-        await fetch('/Material/GetById/').then(response => console.log(response))
+        await fetch('/Material/CreateOrUpdate/',
+            {
+                method: 'POST',
+                body: JSON.stringify(materilal),
+            }).then(response => console.log(response))
             .catch(error => console.log(error));
     };
 

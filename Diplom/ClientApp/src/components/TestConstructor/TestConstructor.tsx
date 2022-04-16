@@ -1,36 +1,46 @@
 import React, {useState} from "react";
 import {QuestionContainer} from "../Question/QuestionContainer";
+import './TestConsctructor.css';
 
 export const TestConstructor = () => {
-    const [questionsState, setQuestionsState] = useState<{question: string, variants: {value: string, isRightAnswer: boolean}[]}[]>([]);
-
+    const [changing, setChanging] = useState<boolean>(false);
+    const [testState, setTestState] = useState<{question: string, variants: {value: string, isRightAnswer: boolean}[]}[]>([]);
     const addQuestion = () => {
-        setQuestionsState([...questionsState, {question: 'Новый вопрос', variants: [{value: 'вариант 1', isRightAnswer: false}, {value: 'вариант 2', isRightAnswer: false}]}]);
+        setTestState([...testState, {question: 'Новый вопрос', variants: [{value: 'вариант 1', isRightAnswer: false}, {value: 'вариант 2', isRightAnswer: false}]}]);
     }
     const removeQuestion = (index: number) => {
-        setQuestionsState([...questionsState.splice(index, 1)]);
+        console.log(testState);
+        let copy = [...testState];
+        copy.splice(index, 1);
+        setTestState([...copy]);
     }
     const changeQuestion = (value: string, index: number) => {
-        let copy = [...questionsState];
+        let copy = [...testState];
         copy[index].question = value;
-        setQuestionsState(copy);
+        setTestState([...copy]);
     }
     const resetVariants = (value: {value: string, isRightAnswer: boolean}[], index: number) => {
-        let copy = [...questionsState];
+        let copy = [...testState];
         copy[index].variants = value;
-        setQuestionsState(copy);
+        setTestState([...copy]);
     }
 
     return <div className={'questions-container'}>
-        {questionsState.map((e, index) =>
+        {testState.map((e, index) =>
             <QuestionContainer
-                key={e.question}
                 question={e}
                 changeQuestion={(el) => changeQuestion(el, index)}
                 removeQuestion={() => removeQuestion(index)}
                 resetVariants={(variants) => resetVariants(variants, index)}
+                changing={changing}
             />
         )}
-        <button onClick={() => addQuestion()}>Добавить вопрос</button>
+        {changing && <div>
+            <button onClick={() => addQuestion()}>Добавить вопрос</button>
+            <button onClick={() => console.log(testState)}>Отправить</button>
+        </div>
+        }
+        <button onClick={() => setChanging(!changing)}>{changing ? 'Сохранить' : 'Редактировать'}</button>
+        <button onClick={() => console.log(testState)}>State</button>
     </div>
 }

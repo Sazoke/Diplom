@@ -1,0 +1,8 @@
+.questions-container {
+    background-color: white;
+    padding: 5px;
+}
+.question-container {
+    display: flex;
+    flex-direction: column;
+}

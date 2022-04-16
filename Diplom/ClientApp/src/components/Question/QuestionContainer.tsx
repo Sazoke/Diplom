@@ -1,21 +1,21 @@
 import React, {useState} from "react";
 import {Radio, RadioGroup, Gapped, Toggle, Checkbox} from "@skbkontur/react-ui";
+import '../TestConstructor/TestConsctructor.css';
 
 interface IQuestionContainerProps {
     question: {question: string, variants: {value: string, isRightAnswer: boolean}[]}
     changeQuestion: (value: string) => void;
     removeQuestion: () => void;
     resetVariants: (value: {value: string, isRightAnswer: boolean}[]) => void;
+    changing: boolean;
 }
 
 export const QuestionContainer = (props: IQuestionContainerProps) => {
     const [multiVariant, setMultiVariant] = useState(false);
-    const [question, setQuestion] = useState('');
     const variants: {value: string, isRightAnswer: boolean}[] = props.question.variants;
 
     const addVariant = () => {
         variants.push({value: 'Вариант ответа', isRightAnswer: false});
-        console.log(variants);
         props.resetVariants(variants);
     }
     const changeVariant = (value: string, index: number) => {
@@ -28,32 +28,51 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
     }
     
     return <div>
-        <Gapped>
+        {props.changing && <Gapped>
             <Toggle checked={multiVariant} onValueChange={setMultiVariant}/>
             <label>Несколько вариантов ответов</label>
-        </Gapped>
-        <div>
-            <input value={props.question.question} onChange={(e) => props.changeQuestion(e.currentTarget.value)}/>
-            <button onClick={() => props.removeQuestion()}>Убрать</button>
+        </Gapped>}
+        <div className={'question-container'}>
+            {props.changing
+                ? <div>
+                    <input
+                    value={props.question.question}
+                    onChange={(e) => props.changeQuestion(e.currentTarget.value)}
+                    onBlur={e => props.changeQuestion(e.currentTarget.value)}
+                    />
+                    <button onClick={() => props.removeQuestion()}>Убрать</button>
+                </div>
+                : <label>{props.question.question}</label>
+            }
             {!multiVariant && <RadioGroup>
                 {variants.map((e, index) =>
-                    <Gapped>
-                        <Radio value={e.value} />
+                props.changing
+                ? <Gapped>
+                        <Radio value={e.value}/>
                         <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
                         <button onClick={() => removeVariant(index)}>Убрать вариант</button>
+                    </Gapped>
+                : <Gapped>
+                        <Radio value={e.value}/>
+                        <label>{e.value}</label>
                     </Gapped>
                 )}
             </RadioGroup>}
             {multiVariant && <div>
                 {variants.map((e, index) =>
-                    <Gapped>
-                        <Checkbox value={e.value} />
-                        <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
-                        <button onClick={() => removeVariant(index)}>Убрать вариант</button>
-                    </Gapped>
+                    props.changing
+                    ? <Gapped>
+                            <Checkbox value={e.value} />
+                            <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
+                            <button onClick={() => removeVariant(index)}>Убрать вариант</button>
+                        </Gapped>
+                    : <Gapped>
+                            <Checkbox value={e.value} />
+                            <label>{e.value}</label>
+                        </Gapped>
                 )}
             </div>}
         </div>
-        <button onClick={() => addVariant()}>Добавить вариант</button>
+        {props.changing && <button onClick={() => addVariant()}>Добавить вариант</button>}
     </div>
 }

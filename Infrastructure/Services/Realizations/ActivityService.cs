@@ -8,15 +8,42 @@ namespace Infrastructure.Services.Realizations;
 
 public class ActivityService : BaseComponentService<Activity>, IActivityService
 {
-    public ActivityService(BaseRepository<Activity> repository) : base(repository)
+    private readonly TagRepository _tagRepository;
+    
+    public ActivityService(BaseRepository<Activity> repository, TagRepository tagRepository) : base(repository)
     {
+        _tagRepository = tagRepository;
     }
 
     public async Task<Activity> GetByIdAsync(long id) =>
         await Repository.GetById(id, q => q.Include(a => a.Tags));
 
-    public Task AddOrUpdateAsync(ActivityDto activityDto)
+    public async Task RemoveAsync(long id)
     {
-        throw new NotImplementedException();
+        await Repository.Delete(id);
     }
+
+    public async Task AddOrUpdateAsync(ActivityEditDto activityDto)
+    {
+        
+        var activity = activityDto.Id is null ? new Activity() : await GetByIdAsync(activityDto.Id.Value);
+        await UpdateActivity(activity, activityDto);
+        if (activityDto.Id is null)
+        {
+            await Repository.AddAsync(activity);
+            activity.Tags = (await _tagRepository.GetByIds(activityDto.Tags)).ToList();
+            await Repository.UpdateAsync(activity);
+        }
+        else
+            await Repository.UpdateAsync(activity);
+    }
+    
+    private async Task UpdateActivity(Activity activity, ActivityEditDto activityDto)
+    {
+        activity.Name = activityDto.Name;
+        activity.Description = activityDto.Description;
+        activity.Image = activityDto.Image;
+        activity.Date = activityDto.DateTime;
+        activity.AreaId = activityDto.AreaId;
+    }  
 }

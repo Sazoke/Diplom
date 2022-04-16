@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Infrastructure.Models.Application;
 
 namespace Infrastructure.Models.Base;
 

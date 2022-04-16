@@ -23,7 +23,11 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
         var material = materialDto.Id is null ? new Material() : await GetByIdAsync(materialDto.Id.Value);
         await UpdateMaterial(material, materialDto);
         if (materialDto.Id is null)
+        {
             await Repository.AddAsync(material);
+            material.Tags = (await _tagRepository.GetByIds(materialDto.Tags)).ToList();
+            await Repository.UpdateAsync(material);
+        }
         else
             await Repository.UpdateAsync(material);
     }
@@ -40,6 +44,5 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
         material.Image = materialDto.Image;
         material.AreaId = materialDto.AreaId;
         material.Type = materialDto.Type;
-        material.Tags = (await _tagRepository.GetByIds(materialDto.Tags)).ToList();;
     }  
 }

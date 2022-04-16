@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@skbkontur/react-icons": "^5.2.1",
     "@skbkontur/react-ui": "^3.11.0-latest",
     "@types/react": "^17.0.39",
     "@types/react-router-dom": "^5.3.3",

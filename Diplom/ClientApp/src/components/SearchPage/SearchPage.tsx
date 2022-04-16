@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {SearchElement} from "../Elements/SearchElement";
 import './SearchPage.css';
-import {Dropdown, Modal, MenuItem, ComboBox, MenuSeparator} from "@skbkontur/react-ui";
+import {Modal, ComboBox, Input} from "@skbkontur/react-ui";
+import SearchIcon from "@skbkontur/react-icons/Search";
 
 export const SearchPage = () => {
 
@@ -86,7 +87,7 @@ export const SearchPage = () => {
 
     return <div className={'search-area'}>
         <div className={'input-area'}>
-            <input id={'search-input'} className={'search-input'}/>
+            <Input width={'100%'} size='large' leftIcon={<SearchIcon />} />
             <button className={'search-button'}> Поиск </button>
         </div>
         <button className={'filter-button'} onClick={() => setFiltersOpened(true)}>Фильтры</button>

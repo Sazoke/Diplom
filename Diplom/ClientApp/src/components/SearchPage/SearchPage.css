@@ -18,13 +18,13 @@
     display: flex;
     flex-direction: row;
 }
-.search-input {
-    width: 92%;
-}
 .search-button {
     width: 8%;
 }
 .filter-button {
     width: 10%;
     margin: 1vh;
+}
+.search-text {
+    width: 100%;
 }

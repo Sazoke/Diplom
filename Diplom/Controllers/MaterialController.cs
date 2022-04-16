@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Infrastructure.Dtos.Base;
 using Infrastructure.Dtos.Material;
-using Infrastructure.Models;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +13,10 @@ namespace Diplom.Controllers;
 public class MaterialController : Controller
 {
     private readonly IMaterialService _materialService;
-    private readonly IMapper _mapper;
 
-    public MaterialController(IMaterialService materialService, IMapper mapper)
+    public MaterialController(IMaterialService materialService)
     {
         _materialService = materialService;
-        _mapper = mapper;
     }
 
     [HttpGet]
@@ -28,9 +24,8 @@ public class MaterialController : Controller
     {
         try
         {
-            var material = await _materialService.GetByIdAsync(id);
-            var dto = _mapper.Map<MaterialDto>(material);
-            return Ok(dto);
+            var result = await _materialService.GetByIdAsync(id);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -43,10 +38,8 @@ public class MaterialController : Controller
     {
         try
         {
-            var materials = await _materialService.GetByFilterAsync(filter);
-            var dtos = materials.Select(m => _mapper.Map<MaterialSearchPreview>(m))
-                .ToList();
-            return Ok(dtos);
+            var result = await _materialService.GetByFilterAsync(filter);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -56,12 +49,12 @@ public class MaterialController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddOrUpdate([FromBody] MaterialEditDto materialDto)
+    public async Task<IActionResult> Create()
     {
         try
         {
-            await _materialService.AddOrUpdateAsync(materialDto);
-            return Ok();
+            var result = await _materialService.CreateAsync();
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -69,13 +62,133 @@ public class MaterialController : Controller
         }
     }
 
-    [HttpDelete]
+    [HttpPut]
     [Authorize]
-    public async Task<IActionResult> Remove([FromQuery] long id)
+    public async Task<IActionResult> EditName([FromQuery] long id, [FromBody] string name)
     {
         try
         {
-            await _materialService.RemoveAsync(id);
+            await _materialService.EditNameAsync(id, name);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditType([FromQuery] long id, [FromBody] string type)
+    {
+        try
+        {
+            await _materialService.EditTypeAsync(id, type);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditSchoolArea([FromQuery] long id, [FromBody] long areaId)
+    {
+        try
+        {
+            await _materialService.EditSchoolAreaAsync(id, areaId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditImage([FromQuery] long id, [FromBody] string file)
+    {
+        try
+        {
+            await _materialService.EditImageAsync(id, file);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditTags([FromQuery] long id, [FromBody] List<long> tags)
+    {
+        try
+        {
+            await _materialService.EditTagsAsync(id, tags);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditDescription([FromQuery] long id, [FromBody] string description)
+    {
+        try
+        {
+            await _materialService.EditDescriptionAsync(id, description);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> AddFragment([FromQuery] long id)
+    {
+        try
+        {
+            var result = await _materialService.AddFragmentAsync(id);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditFragment([FromBody] FragmentDto fragmentDto)
+    {
+        try
+        {
+            await _materialService.EditFragmentAsync(fragmentDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+    
+    [HttpDelete]
+    [Authorize]
+    public async Task<IActionResult> RemoveFragment([FromQuery] long fragmentId)
+    {
+        try
+        {
+            await _materialService.RemoveFragmentAsync(fragmentId);
             return Ok();
         }
         catch (Exception e)

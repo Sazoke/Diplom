@@ -1,4 +1,3 @@
-using Infrastructure.Dtos.SchoolArea;
 using Infrastructure.Models;
 
 namespace Infrastructure.Services.Interfaces;
@@ -9,5 +8,7 @@ public interface ISchoolAreaService
 
     public Task<IEnumerable<SchoolArea>> GetAllAsync();
 
-    public Task AddOrUpdate(SchoolAreaDto schoolAreaDto);
+    public Task<SchoolArea> CreateAsync();
+    
+    public Task<bool> TryEditNameAsync(long id, string name);
 }

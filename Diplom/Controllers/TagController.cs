@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.Tag;
@@ -35,14 +34,12 @@ public class TagController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetBySchoolArea([FromQuery] long schoolAreaId)
+    public IActionResult GetBySchoolArea([FromQuery] long schoolAreaId)
     {
         try
         {
-            var result = await _tagService.GetBySchoolArea(schoolAreaId);
-            var dtos = result.Select(t => _mapper.Map<TagDto>(t))
-                .ToList();
-            return Ok(dtos);
+            var result = _tagService.GetBySchoolArea(schoolAreaId);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -52,16 +49,30 @@ public class TagController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddOrUpdate([FromBody] TagDto tagDto)
+    public async Task<IActionResult> Create()
     {
-        try
-        {
-            await _tagService.AddOrUpdate(tagDto);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e);
-        }
+        var result = await _tagService.CreateAsync();
+        var dto = _mapper.Map<TagDto>(result);
+        return Ok(dto);
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditName([FromBody] TagDto tagDto)
+    {
+        if (tagDto.Id is null || tagDto.Name is null)
+            return BadRequest("Id is null");
+        var result = await _tagService.TryEditNameAsync(tagDto.Id.Value, tagDto.Name);
+        return result ? Ok() : BadRequest();
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> EditSchoolArea([FromBody] TagDto tagDto)
+    {
+        if (tagDto.Id is null || tagDto.SchoolAreaId is null)
+            return BadRequest("Id is null");
+        var result = await _tagService.TryEditSchoolAreaAsync(tagDto.Id.Value, tagDto.SchoolAreaId.Value);
+        return result ? Ok() : BadRequest();
     }
 }

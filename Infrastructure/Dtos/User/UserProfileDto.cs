@@ -12,8 +12,9 @@ public class UserProfileDto
 
     public string Description { get; set; }
     
-    public string Image { get; set; }
+    public IFormFile Image { get; set; }
     
+    public List<PreviewActivityDto> Activities { get; set; }
     
-    public List<MaterialProfilePreview> Materials { get; set; }
+    public List<PreviewMaterialDto> Materials { get; set; }
 }

@@ -2,7 +2,7 @@ using Infrastructure.Models.Base;
 
 namespace Infrastructure.Models;
 
-public class Content
+public class Content : BaseAuditableEntity
 {
     public bool IsFile { get; set; }
     

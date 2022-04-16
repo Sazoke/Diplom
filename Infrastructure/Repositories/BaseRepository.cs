@@ -55,7 +55,3 @@ public class BaseRepository<T> where T : BaseAuditableEntity
 
     public virtual async Task SaveChangesAsync() => await Context.SaveChangesAsync();
 }
-    }
-
-    public virtual async Task SaveChangesAsync() => await _context.SaveChangesAsync();
-}

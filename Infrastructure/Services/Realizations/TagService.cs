@@ -1,4 +1,3 @@
-using Infrastructure.Dtos.Tag;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 using Infrastructure.Services.Interfaces;
@@ -14,19 +13,44 @@ public class TagService : ITagService
         _repository = repository;
     }
 
-    public async Task<Tag> GetByIdAsync(long id) => await _repository.GetById(id);
+    public async Task<Tag?> GetByIdAsync(long id) => await _repository.GetById(id);
 
-    public async Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId) =>
+    public async Task<IEnumerable<Tag?>> GetBySchoolArea(long schoolAreaId) =>
         await _repository.GetBySchoolArea(schoolAreaId);
 
-    public async Task AddOrUpdate(TagDto tagDto)
+    public async Task<Tag> CreateAsync()
     {
-        var tag = tagDto.Id is null ? new Tag() : await GetByIdAsync(tagDto.Id.Value);
-        tag.Name = tagDto.Name;
-        tag.SchoolAreaId = tagDto.SchoolAreaId;
-        if (tagDto.Id is null)
-            await _repository.AddAsync(tag);
-        else
+        var result = await _repository.AddAsync(new Tag());
+        return result;
+    }
+
+    public async Task<bool> TryEditNameAsync(long id, string name)
+    {
+        try
+        {
+            var tag = await _repository.GetById(id);
+            tag.Name = name;
             await _repository.UpdateAsync(tag);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    
+    public async Task<bool> TryEditSchoolAreaAsync(long id, long schoolAreaId)
+    {
+        try
+        {
+            var tag = await _repository.GetById(id);
+            tag.SchoolAreaId = schoolAreaId;
+            await _repository.UpdateAsync(tag);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

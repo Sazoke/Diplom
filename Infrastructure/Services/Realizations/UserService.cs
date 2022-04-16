@@ -15,12 +15,14 @@ public class UserService : IUserService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationContext _applicationContext;
     private readonly DbContext _dbContext;
+    private readonly IBucket _bucket;
     private readonly IMapper _mapper;
 
-    public UserService(SignInManager<ApplicationUser> signInManager, DbContext dbContext, IMapper mapper, ApplicationContext applicationContext, UserManager<ApplicationUser> userManager)
+    public UserService(SignInManager<ApplicationUser> signInManager, DbContext dbContext, IBucket bucket, IMapper mapper, ApplicationContext applicationContext, UserManager<ApplicationUser> userManager)
     {
         _signInManager = signInManager;
         _dbContext = dbContext;
+        _bucket = bucket;
         _mapper = mapper;
         _applicationContext = applicationContext;
         _userManager = userManager;
@@ -43,15 +45,21 @@ public class UserService : IUserService
         id ??= _applicationContext.CurrentUserId;
 
         var user = _dbContext.Set<ApplicationUser>()
+            .Include(u => u.Activities)
             .Include(u => u.Materials)
+            .Include(u => u.Tests)
+            .ThenInclude(t => t.Questions)
+            .ThenInclude(q => q.Options)
+            .Include(u => u.Tests)
+            .ThenInclude(t => t.Results)
             .FirstOrDefault(u => u.Id == id);
         
         var dto = _mapper.Map<UserProfileDto>(user);
-        /*dto.Activities = user.Activities.Take(countOfComponents)
+        dto.Activities = user.Activities.Take(countOfComponents)
             .Select(_mapper.Map<PreviewActivityDto>)
-            .ToList();*/
+            .ToList();
         dto.Materials = user.Materials.Take(countOfComponents)
-            .Select(_mapper.Map<MaterialProfilePreview>)
+            .Select(_mapper.Map<PreviewMaterialDto>)
             .ToList();
 
         return dto;

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure;
-using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -177,12 +176,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -196,11 +191,15 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Activities");
                 });
@@ -281,6 +280,34 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Infrastructure.Models.Content", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsFile")
+                        .HasColumnType("boolean");
+
+                    b.Property<long?>("MaterialId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("Content");
+                });
+
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
                     b.Property<long>("Id")
@@ -293,16 +320,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("bigint");
 
-                    b.Property<List<Content>>("Content")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -313,6 +332,10 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -321,7 +344,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Materials");
                 });
@@ -334,20 +357,11 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("SchoolAreas");
                 });
@@ -363,12 +377,8 @@ namespace Infrastructure.Migrations
                     b.Property<long?>("ActivityId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<long?>("MaterialId")
                         .HasColumnType("bigint");
@@ -386,8 +396,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityId");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("MaterialId");
 
@@ -410,12 +418,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<List<string>>("Options")
                         .IsRequired()
@@ -429,8 +433,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("TestId");
 
@@ -449,12 +451,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -465,11 +463,15 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Tests");
                 });
@@ -482,12 +484,8 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("Percent")
                         .HasColumnType("integer");
@@ -500,8 +498,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("TestId");
 
@@ -652,15 +648,22 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
+                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "Teacher")
                         .WithMany("Activities")
-                        .HasForeignKey("CreatedById")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Area");
 
-                    b.Navigation("CreatedBy");
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Content", b =>
+                {
+                    b.HasOne("Infrastructure.Models.Material", null)
+                        .WithMany("Content")
+                        .HasForeignKey("MaterialId");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
@@ -671,26 +674,15 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
+                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "Teacher")
                         .WithMany("Materials")
-                        .HasForeignKey("CreatedById")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Area");
 
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.SchoolArea", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Tag", b =>
@@ -698,12 +690,6 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Models.Activity", null)
                         .WithMany("Tags")
                         .HasForeignKey("ActivityId");
-
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.HasOne("Infrastructure.Models.Material", null)
                         .WithMany("Tags")
@@ -719,24 +705,14 @@ namespace Infrastructure.Migrations
                         .WithMany("Tags")
                         .HasForeignKey("TestId");
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("SchoolArea");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.Question", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Infrastructure.Models.Test.Test", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestId");
-
-                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.Test", b =>
@@ -747,30 +723,22 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
+                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "Teacher")
                         .WithMany("Tests")
-                        .HasForeignKey("CreatedById")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Area");
 
-                    b.Navigation("CreatedBy");
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.UserResult", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Application.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Infrastructure.Models.Test.Test", null)
                         .WithMany("Results")
                         .HasForeignKey("TestId");
-
-                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -840,6 +808,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Material", b =>
                 {
+                    b.Navigation("Content");
+
                     b.Navigation("Tags");
                 });
 

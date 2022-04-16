@@ -1,5 +1,6 @@
-using Infrastructure.Dtos.Activity;
+using Infrastructure.Dtos.Base;
 using Infrastructure.Models;
+using Infrastructure.Models.Application;
 using Infrastructure.Repositories;
 using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,15 +9,21 @@ namespace Infrastructure.Services.Realizations;
 
 public class ActivityService : BaseComponentService<Activity>, IActivityService
 {
-    public ActivityService(BaseRepository<Activity> repository) : base(repository)
+    private readonly BaseRepository<Activity?> _repository;
+
+    public ActivityService(BaseRepository<Activity?> repository, TagRepository tagRepository, ApplicationContext applicationContext) : base(repository,
+        applicationContext, tagRepository)
     {
+        _repository = repository;
     }
 
-    public async Task<Activity> GetByIdAsync(long id) =>
-        await Repository.GetById(id, q => q.Include(a => a.Tags));
+    public async Task<Activity?> GetByIdAsync(long id) =>
+        await _repository.GetById(id, q => q.Include(a => a.Tags));
 
-    public Task AddOrUpdateAsync(ActivityDto activityDto)
+    public async Task EditDate(long id, DateTime date)
     {
-        throw new NotImplementedException();
+        var activity = await GetByIdAsync(id);
+        activity.Date = date;
+        await _repository.UpdateAsync(activity);
     }
 }

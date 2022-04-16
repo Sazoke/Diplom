@@ -12,7 +12,7 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         Context = context;
     }
     
-    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? queries = null) => queries(await GetAll())
+    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? queries) => queries(await GetAll())
         .FirstOrDefault(e => e.Id == id);
 
     public async Task<IEnumerable<T>> GetByIds (IEnumerable<long> ids, Func<IQueryable<T>, IQueryable<T>>? queries = null) =>

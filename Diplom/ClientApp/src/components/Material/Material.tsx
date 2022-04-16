@@ -22,12 +22,7 @@ export const Material = () => {
     config["readonly"] = !changable;
 
     const getMaterial = async() => {
-        await fetch('/Material/GetById/',
-            {
-                method: 'GET',
-                body: '0',
-            }
-            ).then(response => console.log(response))
+        await fetch('/Material/GetById/').then(response => console.log(response))
             .catch(error => console.log(error));
     };
 

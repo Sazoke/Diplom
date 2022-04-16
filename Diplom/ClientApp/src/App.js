@@ -11,6 +11,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 
 import './custom.css'
 import {SearchPage} from './components/SearchPage/SearchPage';
+import {TestConstructor} from "./components/TestConstructor/TestConstructor";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -27,6 +28,7 @@ export default class App extends Component {
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
         <Route path='/profile' component={Profile} />
         <Route path='/search' component={SearchPage} />
+          <Route path='/test' component={TestConstructor} />
       </Layout>
     );
   }

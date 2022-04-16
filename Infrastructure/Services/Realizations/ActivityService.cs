@@ -29,7 +29,11 @@ public class ActivityService : BaseComponentService<Activity>, IActivityService
         var activity = activityDto.Id is null ? new Activity() : await GetByIdAsync(activityDto.Id.Value);
         await UpdateActivity(activity, activityDto);
         if (activityDto.Id is null)
+        {
             await Repository.AddAsync(activity);
+            activity.Tags = (await _tagRepository.GetByIds(activityDto.Tags)).ToList();
+            await Repository.UpdateAsync(activity);
+        }
         else
             await Repository.UpdateAsync(activity);
     }
@@ -41,6 +45,5 @@ public class ActivityService : BaseComponentService<Activity>, IActivityService
         activity.Image = activityDto.Image;
         activity.Date = activityDto.DateTime;
         activity.AreaId = activityDto.AreaId;
-        activity.Tags = (await _tagRepository.GetByIds(activityDto.Tags)).ToList();;
     }  
 }

@@ -1,17 +1,19 @@
+using Infrastructure.Dtos.Base;
 using Infrastructure.Models;
 using Infrastructure.Models.Application;
 using Infrastructure.Models.Base;
 using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
 
 public abstract class BaseComponentService<T> where T : TeacherComponent
 {
-    protected readonly BaseRepository<T> Repository;
+    protected readonly BaseRepository<T?> Repository;
     private readonly TagRepository _tagRepository;
     private readonly ApplicationContext _applicationContext;
 
-    protected BaseComponentService(BaseRepository<T> repository, ApplicationContext applicationContext, TagRepository tagRepository)
+    protected BaseComponentService(BaseRepository<T?> repository, ApplicationContext applicationContext, TagRepository tagRepository)
     {
         Repository = repository;
         _applicationContext = applicationContext;
@@ -63,5 +65,15 @@ public abstract class BaseComponentService<T> where T : TeacherComponent
         var tags = await _tagRepository.GetByIds(tagIds);
         component.Tags = tags.ToList();
         await Repository.UpdateAsync(component);
+    }
+
+    public async Task<IEnumerable<T?>> GetByFilterAsync(FilterDto filterDto)
+    {
+        var components = await Repository.GetAll(q => q.Include(c => c.Tags)
+            .Where(c => (!filterDto.SchoolArea.HasValue || filterDto.SchoolArea == c.AreaId) &&
+                        (!filterDto.Tags.Any() || c.Tags.All(t => filterDto.Tags.Contains(t.Id))) &&
+                        (filterDto.TeacherId != null || filterDto.TeacherId == c.TeacherId)).Skip(filterDto.Skip)
+            .Take(filterDto.PageSize));
+        return components;
     }
 }

@@ -64,7 +64,7 @@ public class MaterialController : Controller
 
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> EditName([FromBody] long id, [FromBody] string name)
+    public async Task<IActionResult> EditName([FromQuery] long id, [FromBody] string name)
     {
         try
         {
@@ -79,7 +79,7 @@ public class MaterialController : Controller
     
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> EditType([FromBody] long id, [FromBody] string type)
+    public async Task<IActionResult> EditType([FromQuery] long id, [FromBody] string type)
     {
         try
         {
@@ -94,7 +94,7 @@ public class MaterialController : Controller
     
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> EditSchoolArea([FromBody] long id, [FromBody] long areaId)
+    public async Task<IActionResult> EditSchoolArea([FromQuery] long id, [FromBody] long areaId)
     {
         try
         {
@@ -109,7 +109,7 @@ public class MaterialController : Controller
     
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> EditImage([FromBody] long id, [FromBody] string file)
+    public async Task<IActionResult> EditImage([FromQuery] long id, [FromBody] string file)
     {
         try
         {
@@ -124,7 +124,7 @@ public class MaterialController : Controller
     
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> EditTags([FromBody] long id, [FromBody] List<long> tags)
+    public async Task<IActionResult> EditTags([FromQuery] long id, [FromBody] List<long> tags)
     {
         try
         {
@@ -139,7 +139,7 @@ public class MaterialController : Controller
     
     [HttpPut]
     [Authorize]
-    public async Task<IActionResult> EditDescription([FromBody] long id, [FromBody] string description)
+    public async Task<IActionResult> EditDescription([FromQuery] long id, [FromBody] string description)
     {
         try
         {
@@ -154,7 +154,7 @@ public class MaterialController : Controller
     
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddFragment([FromBody] long id)
+    public async Task<IActionResult> AddFragment([FromQuery] long id)
     {
         try
         {
@@ -184,7 +184,7 @@ public class MaterialController : Controller
     
     [HttpDelete]
     [Authorize]
-    public async Task<IActionResult> RemoveFragment([FromBody] long fragmentId)
+    public async Task<IActionResult> RemoveFragment([FromQuery] long fragmentId)
     {
         try
         {

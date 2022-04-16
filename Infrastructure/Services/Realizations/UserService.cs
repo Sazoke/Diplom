@@ -4,10 +4,8 @@ using Infrastructure.Dtos.Material;
 using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
 using Infrastructure.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Infrastructure.Services.Realizations;
 
@@ -74,12 +72,10 @@ public class UserService : IUserService
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<string> EditImage(IFormFile formFile)
+    public async Task EditImage(string fileName)
     {
         var user = _dbContext.Set<ApplicationUser>().FirstOrDefault(u => u.Id == _applicationContext.CurrentUserId);
-        var fileName = await _bucket.WriteFileAsync(formFile);
         user.Image = fileName;
         await _dbContext.SaveChangesAsync();
-        return fileName;
     }
 }

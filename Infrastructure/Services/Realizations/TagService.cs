@@ -13,9 +13,9 @@ public class TagService : ITagService
         _repository = repository;
     }
 
-    public async Task<Tag> GetByIdAsync(long id) => await _repository.GetById(id);
+    public async Task<Tag?> GetByIdAsync(long id) => await _repository.GetById(id);
 
-    public async Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId) =>
+    public async Task<IEnumerable<Tag?>> GetBySchoolArea(long schoolAreaId) =>
         await _repository.GetBySchoolArea(schoolAreaId);
 
     public async Task<Tag> CreateAsync()

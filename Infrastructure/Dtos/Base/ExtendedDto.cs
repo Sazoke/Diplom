@@ -5,9 +5,9 @@ namespace Infrastructure.Dtos.Base;
 
 public class ExtendedDto : BaseDto
 {
-    public string Description { get; set; }
+    public string Image { get; set; }
     
-    public List<string> Content { get; set; }
+    public string Description { get; set; }
     
     public List<TagDto> Tags { get; set; }
 

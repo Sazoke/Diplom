@@ -40,8 +40,10 @@ namespace Diplom
             
             services.AddDatabaseDeveloperPageExceptionFilter();
             
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/account/login");
+
+            services.AddAuthentication();
+            services.AddAuthorization();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

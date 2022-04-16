@@ -7,10 +7,6 @@ public class ApplicationContext
 {
     public ApplicationContext(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
     {
-        if (httpContextAccessor.HttpContext?.User.Identity != null && 
-            httpContextAccessor.HttpContext != null && 
-            !httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-            return;
         CurrentUserId = userManager.GetUserId(httpContextAccessor.HttpContext?.User);
     }
     

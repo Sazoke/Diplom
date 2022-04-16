@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Infrastructure.Dtos.Activity;
 using Infrastructure.Dtos.Base;
 using Infrastructure.Services.Interfaces;
@@ -14,10 +16,12 @@ namespace Diplom.Controllers;
 public class ActivityController : Controller
 {
     private readonly IActivityService _activityService;
+    private readonly IMapper _mapper;
     
-    public ActivityController(IActivityService activityService)
+    public ActivityController(IActivityService activityService, IMapper mapper)
     {
         _activityService = activityService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,8 +29,9 @@ public class ActivityController : Controller
     {
         try
         {
-            var result = await _activityService.GetByIdAsync(id);
-            return Ok(result);
+            var activity = await _activityService.GetByIdAsync(id);
+            var dto = _mapper.Map<ActivityDto>(activity);
+            return Ok(dto);
         }
         catch (Exception e)
         {
@@ -39,8 +44,9 @@ public class ActivityController : Controller
     {
         try
         {
-            var result = await _activityService.GetByFilterAsync(filter);
-            return Ok(result);
+            var activities = await _activityService.GetByFilterAsync(filter);
+            var dtos = activities.Select(a => _mapper.Map<FilterResultDto>(a)).ToList();
+            return Ok(dtos);
         }
         catch (Exception e)
         {

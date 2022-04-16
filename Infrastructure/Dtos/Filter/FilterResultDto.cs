@@ -6,5 +6,5 @@ public class FilterResultDto
     
     public string Name { get; set; }
     
-    public DateTime DateTime { get; set; }
+    public DateTime Date { get; set; }
 }

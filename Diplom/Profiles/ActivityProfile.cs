@@ -2,18 +2,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.Activity;
+using Infrastructure.Dtos.Base;
 using Infrastructure.Models;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace Diplom.Profiles;
 
-public class ActivityMapping : Profile
+public class ActivityProfile : Profile
 {
-    public ActivityMapping()
+    public ActivityProfile()
     {
-        CreateMap<Activity, PreviewActivityDto>();
         CreateMap<Activity, ActivityDto>();
-        CreateMap<ActivityDto, Activity>();
+        CreateMap<Activity, FilterResultDto>();
     }
 }

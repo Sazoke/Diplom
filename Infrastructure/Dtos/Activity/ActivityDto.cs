@@ -10,5 +10,5 @@ public class ActivityDto
     
     public string Description { get; set; }
     
-    public DateTime Time { get; set; }
+    public DateTime Date { get; set; }
 }

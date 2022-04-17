@@ -1,6 +1,5 @@
 import React, {ReactNode, useState} from 'react';
 import './Profile.css';
-import styled from 'styled-components';
 import {ProfileTabs} from "../ProfileTabs/ProfileTabs";
 import {Block} from "../Block/Block";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
@@ -53,9 +52,6 @@ export const Profile = () => {
             </div>
             <ProfileTabs active={active} setActive={setActive}/>
             {selectRender()}
-        </div>
-    )
-}
         </div>
     )
 }

@@ -1,6 +1,4 @@
 using AutoMapper;
-using Infrastructure.Dtos.Activity;
-using Infrastructure.Dtos.Material;
 using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
 using Infrastructure.Services.Interfaces;
@@ -13,7 +11,6 @@ public class UserService : IUserService
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ApplicationContext _applicationContext;
     private readonly DbContext _dbContext;
     private readonly IMapper _mapper;
 
@@ -22,7 +19,6 @@ public class UserService : IUserService
         _signInManager = signInManager;
         _dbContext = dbContext;
         _mapper = mapper;
-        _applicationContext = applicationContext;
         _userManager = userManager;
     }
 
@@ -37,37 +33,23 @@ public class UserService : IUserService
         return user.Id;
     }
 
-    public async Task<UserProfileDto> GetProfile(string id)
+    public async Task<ApplicationUser> GetProfile(string id)
     {
-        var countOfComponents = id is null ? 3 : 4;
-        id ??= _applicationContext.CurrentUserId;
-
         var user = _dbContext.Set<ApplicationUser>()
             .Include(u => u.Materials)
+            .Include(u => u.Activities)
             .FirstOrDefault(u => u.Id == id);
-        
-        var dto = _mapper.Map<UserProfileDto>(user);
-        /*dto.Activities = user.Activities.Take(countOfComponents)
-            .Select(_mapper.Map<PreviewActivityDto>)
-            .ToList();*/
-        dto.Materials = user.Materials.Take(countOfComponents)
-            .Select(_mapper.Map<MaterialProfilePreview>)
-            .ToList();
-
-        return dto;
+        return user;
     }
 
-    public async Task EditDescription(string description)
+    public async Task UpdateProfile(ProfileEditDto profileEditDto)
     {
-        var user = _dbContext.Set<ApplicationUser>().FirstOrDefault(u => u.Id == _applicationContext.CurrentUserId);
-        user.Description = description;
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task EditImage(string fileName)
-    {
-        var user = _dbContext.Set<ApplicationUser>().FirstOrDefault(u => u.Id == _applicationContext.CurrentUserId);
-        user.Image = fileName;
+        var user = _dbContext.Set<ApplicationUser>()
+            .FirstOrDefault(u => u.Id == profileEditDto.Id);
+        user.Name = profileEditDto.Name;
+        user.Description = profileEditDto.Description;
+        user.Image = profileEditDto.Image;
+        _dbContext.Update(user);
         await _dbContext.SaveChangesAsync();
     }
 }

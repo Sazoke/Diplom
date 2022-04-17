@@ -1,4 +1,5 @@
 using Infrastructure.Dtos.User;
+using Infrastructure.Models.Application;
 using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services.Interfaces;
@@ -7,9 +8,7 @@ public interface IUserService
 {
     Task<string> CreateUserAsync(CreateUserDto userDto);
 
-    Task<UserProfileDto> GetProfile(string id);
+    Task<ApplicationUser> GetProfile(string id);
 
-    Task EditDescription(string description);
-
-    Task EditImage(string formFile);
+    Task UpdateProfile(ProfileEditDto profileEditDto);
 }

@@ -14,6 +14,7 @@ public class UserProfileDto
     
     public string Image { get; set; }
     
-    
     public List<MaterialProfilePreview> Materials { get; set; }
+    
+    public List<ActivityProfilePreview> Activities { get; set; }
 }

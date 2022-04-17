@@ -14,7 +14,9 @@ namespace Infrastructure.Models.Application
         public List<Material> Materials { get; set; } = new ();
     
         public List<Activity> Activities { get; set; } = new ();
-    
+
+        public List<EducationalMaterial> EducationalMaterials { get; set; } = new();
+
         public List<Test.Test> Tests { get; set; } = new ();
     }
 }

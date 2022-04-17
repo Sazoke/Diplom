@@ -24,6 +24,7 @@ public static class ServiceExtensions
         services.AddScoped<IMaterialService, MaterialService>();
         services.AddScoped<ISchoolAreaService, SchoolAreaService>();
         services.AddScoped<ITagService, TagService>();
+        services.AddScoped<IEducationalMaterialService, EducationalMaterialService>();
         return services;
     }
 }

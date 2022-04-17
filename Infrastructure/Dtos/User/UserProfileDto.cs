@@ -1,6 +1,6 @@
 using Infrastructure.Dtos.Activity;
+using Infrastructure.Dtos.EducationalMaterial;
 using Infrastructure.Dtos.Material;
-using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Dtos.User;
 
@@ -17,4 +17,6 @@ public class UserProfileDto
     public List<MaterialProfilePreview> Materials { get; set; }
     
     public List<ActivityProfilePreview> Activities { get; set; }
+    
+    public List<EducationalMaterialProfilePreview> EducationalMaterials { get; set; }
 }

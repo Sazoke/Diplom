@@ -8,7 +8,7 @@ using Infrastructure.Dtos.Material;
 using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
 using Infrastructure.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diplom.Controllers;
@@ -49,15 +49,37 @@ public class UserController : Controller
             return NotFound();
         try
         {
-            var countOfComponents = id is null ? 3 : 4;
-            id ??= _applicationContext.CurrentUserId;
+            if (id == _applicationContext.CurrentUserId)
+                return await GetCurrentUserProfile();
 
             var user = await _userService.GetProfile(id);
             var dto = _mapper.Map<UserProfileDto>(user);
-            dto.Activities = user.Activities.Take(countOfComponents)
+            dto.Activities = user.Activities.Take(4)
                 .Select(_mapper.Map<ActivityProfilePreview>)
                 .ToList();
-            dto.Materials = user.Materials.Take(countOfComponents)
+            dto.Materials = user.Materials.Take(4)
+                .Select(_mapper.Map<MaterialProfilePreview>)
+                .ToList();
+            return Ok(dto);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetCurrentUserProfile()
+    {
+        try
+        {
+            var user = await _userService.GetProfile(_applicationContext.CurrentUserId);
+            var dto = _mapper.Map<UserProfileDto>(user);
+            dto.Activities = user.Activities.Take(3)
+                .Select(_mapper.Map<ActivityProfilePreview>)
+                .ToList();
+            dto.Materials = user.Materials.Take(3)
                 .Select(_mapper.Map<MaterialProfilePreview>)
                 .ToList();
             return Ok(dto);
@@ -69,6 +91,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> UpdateProfile([FromBody] ProfileEditDto profileEditDto)
     {
         try

@@ -5,6 +5,7 @@ import {Block} from "../Block/Block";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
 import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
 import { profileObject } from '../../fakeApi';
+import {Material} from "../Material/Material";
 
 export const Profile = () => {
 
@@ -25,6 +26,8 @@ export const Profile = () => {
             case 'tests':
                 return <div className='def'>
             </div>
+            case 'prez':
+                return <Material />
             default:
                 return <div className='def'>
                 </div>

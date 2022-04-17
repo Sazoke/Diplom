@@ -72,3 +72,7 @@
     margin: 0;
     background: #0366d6;
 }
+}
+.preview {
+    height: 130vh;
+}

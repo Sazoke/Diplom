@@ -25,3 +25,7 @@ export const ProfileTabs = (props: IProfileTabsProps) => {
             </div>
     )
 }
+                <div id='tests' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab'>Онлайн-тесты</div>
+            </div>
+    )
+}

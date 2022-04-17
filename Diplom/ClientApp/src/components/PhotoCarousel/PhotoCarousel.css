@@ -1,0 +1,102 @@
+.carousel {
+    margin: 2vh 0;
+    position: relative;
+    width: 100%;
+    padding: 1vh 2vh;
+    border: 1px solid #CCC;
+    border-radius: 15px;
+    background: #9eb3ff;
+    display: flex;
+    flex-direction: row;
+    height: 220px;
+}
+.carousel-container {
+    height: 100%;
+    width: 88vw;
+    overflow: hidden;
+}
+.carousel-container ul {
+    height: 100%;
+    width: 9999px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transition: margin-left 1s;
+}
+.carousel-container li {
+    height: 100%;
+    width: 22vw;
+    display: inline-block;
+}
+.carousel-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+.arrow {
+    width: 2vw;
+    height: 100%;
+    padding: 0;
+    background: #536cc9;
+    font-size: 24px;
+    line-height: 24px;
+    color: white;
+    border: none;
+}
+
+.arrow:focus {
+    outline: none;
+}
+
+.arrow:hover {
+    background: #ccc;
+    cursor: pointer;
+}
+
+.prev {
+    border-radius: 50% 0 0 50%;
+    left: 7px;
+}
+
+.next {
+    border-radius: 0 50% 50% 0;
+    right: 7px;
+}
+.current-photo {
+    z-index: 0;
+    display: flex;
+    padding: 5vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 160vh;
+}
+.overlay {
+    z-index: 19;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 160vh;
+    background-color:rgba(0,0,0,0.5);
+}
+.photo-with-description {
+    display: flex;
+    flex-direction: row;
+    margin: 2vh;
+    height: 89vh;
+    width: 100%;
+    z-index: 20;
+}
+.current-photo img {
+    z-index: inherit;
+    width: 80%;
+    object-fit: contain;
+    background: #303133;
+}
+.photo-description {
+    width: 20%;
+    background: white;
+    z-index: inherit;
+}

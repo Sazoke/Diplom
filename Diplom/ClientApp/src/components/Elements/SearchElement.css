@@ -1,0 +1,15 @@
+.element-container {
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid 2px #0366d6;
+    background-color: white;
+}
+.img-area {
+    width: 200px;
+    height: 160px;
+    background-color: #cccccc;
+}
+.name-area {
+    padding: 1vh;
+    align-content: center;
+}

@@ -44,5 +44,6 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
         material.Image = materialDto.Image;
         material.AreaId = materialDto.AreaId;
         material.Type = materialDto.Type;
+        material.Content = materialDto.Content;
     }  
 }

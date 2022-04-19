@@ -1,13 +1,14 @@
 using Infrastructure.Dtos.Base;
+using Infrastructure.Models;
 using Infrastructure.Models.Base;
 
 namespace Infrastructure.Services.Interfaces;
 
 public interface IComponentService<T> where T : TeacherComponent
 {
-    public Task<T> GetByIdAsync(long id);
+    public T GetById(long id);
 
-    public Task<IEnumerable<T>> GetByFilterAsync(FilterDto filterDto);
+    public IEnumerable<T> GetByFilter(Filter filter);
     
     public Task RemoveAsync(long id);
 }

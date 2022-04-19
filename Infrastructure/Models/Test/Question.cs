@@ -3,13 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Models.Test;
 
-public class Question : BaseAuditableEntity
+public class Question
 {
-    public string QuestionText { get; set; }
+    public string Text { get; set; }
     
-    public List<string> Options { get; set; }
-    
-    public string Answer { get; set; }
-
-    public bool IsCorrectAnswer(string answer) => answer == Answer;
+    public List<Answer> Answers { get; set; }
 }

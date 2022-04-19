@@ -9,6 +9,6 @@ public class TagRepository : BaseRepository<Tag>
     {
     }
 
-    public async Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId) =>
-        await GetAll(q => q.Where(t => t.SchoolAreaId == schoolAreaId));
+    public IEnumerable<Tag> GetBySchoolArea(long schoolAreaId) =>
+        GetAll(q => q.Where(t => t.SchoolAreaId == schoolAreaId));
 }

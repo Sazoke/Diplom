@@ -24,11 +24,11 @@ public class MaterialController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromQuery] long id)
+    public IActionResult GetById([FromQuery] long id)
     {
         try
         {
-            var material = await _materialService.GetByIdAsync(id);
+            var material = _materialService.GetById(id);
             var dto = _mapper.Map<MaterialDto>(material);
             return Ok(dto);
         }
@@ -39,11 +39,11 @@ public class MaterialController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetByFilter([FromBody] FilterDto filter)
+    public IActionResult GetByFilter([FromBody] Filter filter)
     {
         try
         {
-            var materials = await _materialService.GetByFilterAsync(filter);
+            var materials = _materialService.GetByFilter(filter);
             var dtos = materials.Select(m => _mapper.Map<FilterResultDto>(m))
                 .ToList();
             return Ok(dtos);

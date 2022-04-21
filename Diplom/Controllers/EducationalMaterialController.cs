@@ -20,11 +20,11 @@ public class EducationalMaterialController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromQuery] long id)
+    public IActionResult GetById([FromQuery] long id)
     {
         try
         {
-            var material = await _educationalMaterialService.GetByIdAsync(id);
+            var material = _educationalMaterialService.GetById(id);
             var dto = _mapper.Map<EducationalMaterialDto>(material);
             return Ok(dto);
         }
@@ -36,11 +36,11 @@ public class EducationalMaterialController : Controller
     
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddOrUpdate([FromBody] EducationalMaterialEditDto materialDto)
+    public IActionResult AddOrUpdate([FromBody] EducationalMaterialEditDto materialDto)
     {
         try
         {
-            await _educationalMaterialService.AddOrUpdateAsync(materialDto);
+            _educationalMaterialService.AddOrUpdateAsync(materialDto);
             return Ok();
         }
         catch (Exception e)

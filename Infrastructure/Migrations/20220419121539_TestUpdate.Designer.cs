@@ -6,6 +6,7 @@ using Infrastructure.Models;
 using Infrastructure.Models.Test;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -14,9 +15,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220419121539_TestUpdate")]
+    partial class TestUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -450,9 +452,14 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
+                    b.Property<long?>("TagId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("Tests");
                 });
@@ -744,6 +751,10 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Infrastructure.Models.Tag", null)
+                        .WithMany("Tests")
+                        .HasForeignKey("TagId");
+
                     b.Navigation("CreatedBy");
                 });
 
@@ -842,6 +853,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Models.SchoolArea", b =>
                 {
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Tag", b =>
+                {
+                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Test.Test", b =>

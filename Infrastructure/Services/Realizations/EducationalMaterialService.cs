@@ -14,13 +14,13 @@ public class EducationalMaterialService : IEducationalMaterialService
         _repository = repository;
     }
 
-    public async Task<EducationalMaterial> GetByIdAsync(long id) => await _repository.GetById(id);
+    public EducationalMaterial GetById(long id) => _repository.GetById(id);
 
-    public async Task RemoveAsync(long id) => await _repository.Delete(id);
+    public async Task RemoveAsync(long id) => await _repository.RemoveAsync(id);
 
     public async Task AddOrUpdateAsync(EducationalMaterialEditDto editDto)
     {
-        var material = editDto.Id is null ? new EducationalMaterial() : await GetByIdAsync(editDto.Id.Value);
+        var material = editDto.Id is null ? new EducationalMaterial() : GetById(editDto.Id.Value);
         material.Image = editDto.Image;
         material.Name = editDto.Name;
         if (editDto.Id is null)

@@ -15,17 +15,17 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
         _tagRepository = tagRepository;
     }
 
-    public async Task<Material> GetByIdAsync(long id) =>
-        await Repository.GetById(id, q => q.Include(a => a.Tags));
+    public Material GetById(long id) =>
+        Repository.GetById(id, q => q.Include(a => a.Tags));
 
     public async Task AddOrUpdateAsync(MaterialEditDto materialDto)
     {
-        var material = materialDto.Id is null ? new Material() : await GetByIdAsync(materialDto.Id.Value);
-        await UpdateMaterial(material, materialDto);
+        var material = materialDto.Id is null ? new Material() : GetById(materialDto.Id.Value);
+        UpdateMaterial(material, materialDto);
         if (materialDto.Id is null)
         {
             await Repository.AddAsync(material);
-            material.Tags = (await _tagRepository.GetByIds(materialDto.Tags)).ToList();
+            material.Tags = _tagRepository.GetByIds(materialDto.Tags).ToList();
             await Repository.UpdateAsync(material);
         }
         else
@@ -34,10 +34,10 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
 
     public async Task RemoveAsync(long id)
     {
-        await Repository.Delete(id);
+        await Repository.RemoveAsync(id);
     }
 
-    private async Task UpdateMaterial(Material material, MaterialEditDto materialDto)
+    private void UpdateMaterial(Material material, MaterialEditDto materialDto)
     {
         material.Name = materialDto.Name;
         material.Description = materialDto.Description;

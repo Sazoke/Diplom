@@ -15,30 +15,26 @@ public class ActivityService : BaseComponentService<Activity>, IActivityService
         _tagRepository = tagRepository;
     }
 
-    public async Task<Activity> GetByIdAsync(long id) =>
-        await Repository.GetById(id, q => q.Include(a => a.Tags));
+    public Activity GetById(long id) =>
+        Repository.GetById(id, q => q.Include(a => a.Tags));
 
-    public async Task RemoveAsync(long id)
-    {
-        await Repository.Delete(id);
-    }
+    public async Task RemoveAsync(long id) => await Repository.RemoveAsync(id);
 
     public async Task AddOrUpdateAsync(ActivityEditDto activityDto)
     {
-        
-        var activity = activityDto.Id is null ? new Activity() : await GetByIdAsync(activityDto.Id.Value);
-        await UpdateActivity(activity, activityDto);
+        var activity = activityDto.Id is null ? new Activity() : GetById(activityDto.Id.Value);
+        UpdateActivity(activity, activityDto);
         if (activityDto.Id is null)
         {
             await Repository.AddAsync(activity);
-            activity.Tags = (await _tagRepository.GetByIds(activityDto.Tags)).ToList();
+            activity.Tags = _tagRepository.GetByIds(activityDto.Tags).ToList();
             await Repository.UpdateAsync(activity);
         }
         else
             await Repository.UpdateAsync(activity);
     }
     
-    private async Task UpdateActivity(Activity activity, ActivityEditDto activityDto)
+    private static void UpdateActivity(Activity activity, ActivityEditDto activityDto)
     {
         activity.Name = activityDto.Name;
         activity.Description = activityDto.Description;

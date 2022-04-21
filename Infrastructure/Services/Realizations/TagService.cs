@@ -14,14 +14,14 @@ public class TagService : ITagService
         _repository = repository;
     }
 
-    public async Task<Tag> GetByIdAsync(long id) => await _repository.GetById(id);
+    public Tag GetByIdAsync(long id) => _repository.GetById(id);
 
-    public async Task<IEnumerable<Tag>> GetBySchoolArea(long schoolAreaId) =>
-        await _repository.GetBySchoolArea(schoolAreaId);
+    public IEnumerable<Tag> GetBySchoolArea(long schoolAreaId) =>
+        _repository.GetBySchoolArea(schoolAreaId);
 
     public async Task AddOrUpdate(TagDto tagDto)
     {
-        var tag = tagDto.Id is null ? new Tag() : await GetByIdAsync(tagDto.Id.Value);
+        var tag = tagDto.Id is null ? new Tag() : GetByIdAsync(tagDto.Id.Value);
         tag.Name = tagDto.Name;
         tag.SchoolAreaId = tagDto.SchoolAreaId;
         if (tagDto.Id is null)

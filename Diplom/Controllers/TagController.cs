@@ -25,9 +25,9 @@ public class TagController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromQuery] long id)
+    public IActionResult GetById([FromQuery] long id)
     {
-        var result = await _tagService.GetByIdAsync(id);
+        var result = _tagService.GetByIdAsync(id);
         if (result is null)
             return NotFound();
         var dto = _mapper.Map<TagDto>(result);
@@ -35,11 +35,11 @@ public class TagController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetBySchoolArea([FromQuery] long schoolAreaId)
+    public IActionResult GetBySchoolArea([FromQuery] long schoolAreaId)
     {
         try
         {
-            var result = await _tagService.GetBySchoolArea(schoolAreaId);
+            var result = _tagService.GetBySchoolArea(schoolAreaId);
             var dtos = result.Select(t => _mapper.Map<TagDto>(t))
                 .ToList();
             return Ok(dtos);

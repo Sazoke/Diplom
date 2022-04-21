@@ -16,21 +16,23 @@ public abstract class BaseComponentService<T> where T : TeacherComponent
         Repository = repository;
     }
 
-    public virtual async Task<IEnumerable<T>> GetByFilterAsync(FilterDto filterDto)
+    public virtual IEnumerable<T> GetByFilter(Filter filter)
     {
-        var components = await Repository.GetAll(q =>
+        var components = Repository.GetAll(q =>
         {
-            if (filterDto.Tags is not null)
+            if (filter.Text is not null)
+                q = q.Where(c => c.Name.Contains(filter.Text));
+            if (filter.Tags is not null)
                 q = q.Include(c => c.Tags)
-                    .Where(c => c.Tags.All(t => filterDto.Tags.Contains(t.Id)));
-            if (filterDto.SchoolArea is not null)
-                q = q.Where(c => filterDto.SchoolArea == c.AreaId);
-            if (filterDto.DateTime is not null)
-                q = q.Where(c => c.CreatedAt >= filterDto.DateTime);
-            if (filterDto.TeacherId is not null)
-                q = q.Where(c => c.CreatedById == filterDto.TeacherId);
-            return q.Skip(filterDto.Skip)
-                .Take(filterDto.PageSize);
+                    .Where(c => c.Tags.All(t => filter.Tags.Contains(t.Id)));
+            if (filter.SchoolArea is not null)
+                q = q.Where(c => filter.SchoolArea == c.AreaId);
+            if (filter.DateTime is not null)
+                q = q.Where(c => c.CreatedAt >= filter.DateTime);
+            if (filter.TeacherId is not null)
+                q = q.Where(c => c.CreatedById == filter.TeacherId);
+            return q.Skip(filter.Skip)
+                .Take(filter.PageSize);
         });
         return components;
     }

@@ -15,26 +15,27 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         _applicationContext = applicationContext;
     }
     
-    public async Task<T> GetById(long id, Func<IQueryable<T>, IQueryable<T>>? queries = null)
+    public T GetById(long id, Func<IQueryable<T>, IQueryable<T>>? queries = null)
     {
         return queries is null
-            ? (await GetAll()).FirstOrDefault(e => e.Id == id)
-            : queries(await GetAll()).FirstOrDefault(e => e.Id == id);
+            ? GetAll().FirstOrDefault(e => e.Id == id)
+            : queries(GetAll()).FirstOrDefault(e => e.Id == id);
     }
 
-    public async Task<IEnumerable<T>> GetByIds (IEnumerable<long> ids, Func<IQueryable<T>, IQueryable<T>>? queries = null)
+    public IEnumerable<T> GetByIds (IEnumerable<long> ids, Func<IQueryable<T>, IQueryable<T>>? queries = null)
     { 
         return queries is null
-            ? (await GetAll()).Where(e => ids.Contains(e.Id))
-            : queries(await GetAll()).Where(e => ids.Contains(e.Id));
+            ? GetAll().Where(e => ids.Contains(e.Id))
+            : queries(GetAll()).Where(e => ids.Contains(e.Id));
     }
 
-    public async Task<IEnumerable<T>> GetAll(Func<IQueryable<T>, IQueryable<T>>? queries = null)
+    public IEnumerable<T> GetAll(Func<IQueryable<T>, IQueryable<T>>? queries = null)
     {
-        return queries is null ? await GetAll() : queries(await GetAll());
+        return queries is null ? GetAll() : queries( GetAll());
     }
 
-    private async Task<IQueryable<T>> GetAll() => _context.Set<T>().AsQueryable();
+    protected IQueryable<T> GetAll() => _context.Set<T>().OrderByDescending(e => e.CreatedAt)
+        .AsQueryable();
 
     public async Task<T> AddAsync(T entity)
     {
@@ -51,7 +52,7 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         await _context.SaveChangesAsync();
     }
     
-    public virtual async Task Delete(long id)
+    public virtual async Task RemoveAsync(long id)
     {
         var entity = await _context.Set<T>().FindAsync(id);
         if(entity is null)
@@ -60,7 +61,7 @@ public class BaseRepository<T> where T : BaseAuditableEntity
         await _context.SaveChangesAsync();
     }
 
-    public virtual async Task Delete(T entity)
+    public virtual async Task RemoveAsync(T entity)
     {
         _context.Remove(entity);
         await _context.SaveChangesAsync();

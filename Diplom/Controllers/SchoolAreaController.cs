@@ -23,11 +23,11 @@ public class SchoolAreaController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromQuery] long id)
+    public IActionResult GetById([FromQuery] long id)
     {
         try
         {
-            var result = await _schoolAreaService.GetByIdAsync(id);
+            var result = _schoolAreaService.GetById(id);
             var dto = _mapper.Map<SchoolAreaDto>(result);
             return Ok(dto);
         }
@@ -38,11 +38,11 @@ public class SchoolAreaController : Controller
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public IActionResult GetAll()
     {
         try
         {
-            var schoolAreas = await _schoolAreaService.GetAllAsync();
+            var schoolAreas = _schoolAreaService.GetAll();
             var dtos = schoolAreas.Select(a => _mapper.Map<SchoolAreaDto>(a));
             return Ok(dtos);
         }

@@ -25,6 +25,8 @@ public static class ServiceExtensions
         services.AddScoped<ISchoolAreaService, SchoolAreaService>();
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<IEducationalMaterialService, EducationalMaterialService>();
+        services.AddScoped<TestRepository>();
+        services.AddScoped<ITestService, TestService>();
         return services;
     }
 }

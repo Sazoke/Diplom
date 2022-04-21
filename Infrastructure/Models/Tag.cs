@@ -15,6 +15,4 @@ public class Tag : BaseAuditableEntity
     public List<Material> Materials { get; set; } = new ();
     
     public List<Activity> Activities { get; set; } = new ();
-    
-    public List<Test.Test> Tests { get; set; } = new ();
 }

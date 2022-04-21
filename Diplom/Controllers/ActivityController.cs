@@ -25,11 +25,11 @@ public class ActivityController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetById([FromQuery] long id)
+    public IActionResult GetById([FromQuery] long id)
     {
         try
         {
-            var activity = await _activityService.GetByIdAsync(id);
+            var activity = _activityService.GetById(id);
             var dto = _mapper.Map<ActivityDto>(activity);
             return Ok(dto);
         }
@@ -40,11 +40,11 @@ public class ActivityController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetByFilter([FromBody] FilterDto filter)
+    public IActionResult GetByFilter([FromBody] Filter filter)
     {
         try
         {
-            var activities = await _activityService.GetByFilterAsync(filter);
+            var activities = _activityService.GetByFilter(filter);
             var dtos = activities.Select(a => _mapper.Map<FilterResultDto>(a)).ToList();
             return Ok(dtos);
         }

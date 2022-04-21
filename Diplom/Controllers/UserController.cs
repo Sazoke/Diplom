@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Duende.IdentityServer.Extensions;
 using Infrastructure.Dtos.Activity;
+using Infrastructure.Dtos.Base;
 using Infrastructure.Dtos.Material;
 using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
@@ -45,21 +46,11 @@ public class UserController : Controller
     [HttpGet]
     public async Task<IActionResult> GetProfile([FromQuery] string id)
     {
-        if (id is null && !User.IsAuthenticated())
+        if (id is null)
             return NotFound();
         try
         {
-            if (id == _applicationContext.CurrentUserId)
-                return await GetCurrentUserProfile();
-
-            var user = await _userService.GetProfile(id);
-            var dto = _mapper.Map<UserProfileDto>(user);
-            dto.Activities = user.Activities.Take(4)
-                .Select(_mapper.Map<ActivityProfilePreview>)
-                .ToList();
-            dto.Materials = user.Materials.Take(4)
-                .Select(_mapper.Map<MaterialProfilePreview>)
-                .ToList();
+            var dto = await GetProfileDto(4);
             return Ok(dto);
         }
         catch (Exception e)
@@ -72,22 +63,30 @@ public class UserController : Controller
     [Authorize]
     public async Task<IActionResult> GetCurrentUserProfile()
     {
+        if (!User.IsAuthenticated())
+            return BadRequest();
         try
         {
-            var user = await _userService.GetProfile(_applicationContext.CurrentUserId);
-            var dto = _mapper.Map<UserProfileDto>(user);
-            dto.Activities = user.Activities.Take(3)
-                .Select(_mapper.Map<ActivityProfilePreview>)
-                .ToList();
-            dto.Materials = user.Materials.Take(3)
-                .Select(_mapper.Map<MaterialProfilePreview>)
-                .ToList();
+            var dto = await GetProfileDto(3);
             return Ok(dto);
         }
         catch (Exception e)
         {
             return BadRequest(e);
         }
+    }
+
+    private async Task<UserProfileDto> GetProfileDto(int countOfMaterials)
+    {
+        var user = await _userService.GetProfile(_applicationContext.CurrentUserId);
+        var dto = _mapper.Map<UserProfileDto>(user);
+        dto.Activities = user.Activities.Take(countOfMaterials)
+            .Select(_mapper.Map<ActivityProfilePreview>)
+            .ToList();
+        dto.Materials = user.Materials.Take(countOfMaterials)
+            .Select(_mapper.Map<MaterialProfilePreview>)
+            .ToList();
+        return dto;
     }
 
     [HttpPost]
@@ -98,6 +97,21 @@ public class UserController : Controller
         {
             await _userService.UpdateProfile(profileEditDto);
             return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetByFilter(Filter filter)
+    {
+        try
+        {
+            var users = _userService.GetByFilter(filter);
+            var dtos = users.Select(_mapper.Map<ProfileFilterPreview>).ToList();
+            return Ok(dtos);
         }
         catch (Exception e)
         {

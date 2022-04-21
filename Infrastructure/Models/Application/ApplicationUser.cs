@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Models.Application
@@ -10,6 +11,8 @@ namespace Infrastructure.Models.Application
         public string Image { get; set; } = string.Empty;
     
         public string Description { get; set; } = string.Empty;
+        
+        public long SchoolAreaId { get; set; }
 
         public List<Material> Materials { get; set; } = new ();
     

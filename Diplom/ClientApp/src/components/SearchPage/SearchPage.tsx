@@ -4,7 +4,7 @@ import './SearchPage.css';
 import {Modal, ComboBox, Input} from "@skbkontur/react-ui";
 import SearchIcon from "@skbkontur/react-icons/Search";
 import {getEvents, getMaterials, getTeachers} from "../../api/fetches";
-import {useSearchParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 export const SearchPage = () => {
 
@@ -12,16 +12,24 @@ export const SearchPage = () => {
     const [materials, setMaterials] = useState<any[]>([]);
     const [events, setEvents] = useState<any[]>([]);
     const [teachers, setTeachers] = useState<any[]>([]);
-    const [searchText, setSearchText] = useState<string>('')
+    const [searchText, setSearchText] = useState<string>('');
 
-    const [query,setQuery] = useSearchParams();
+    const search = useLocation().search;
+    const searchQuery = new URLSearchParams(search).get('searchText') ?? '';
 
     useEffect(() => {
-        setSearchText(query.get('searchText') ?? '');
-        getMaterials(undefined,undefined, 'футболист').then(result => result.length > 0 ? setMaterials([...result]) : null);
-        getEvents(undefined,undefined, searchText).then(result => result.length > 0 ? setEvents([...result]) : null);
-        getTeachers(undefined,undefined, searchText).then(result => result.length > 0 ? setTeachers([...result]) : null);
+        setSearchText(searchQuery);
+        getMaterials(undefined, undefined, searchQuery).then(result => result.length > 0 ? setMaterials([...result]) : null);
+        getEvents(undefined, undefined, searchQuery).then(result => result.length > 0 ? setEvents([...result]) : null);
+        getTeachers(undefined, undefined, searchQuery).then(result => result.length > 0 ? setTeachers([...result]) : null);
     }, []);
+
+    const startSearch = (text: string) => {
+
+        getMaterials(undefined, undefined, text).then(result => result.length > 0 ? setMaterials([...result]) : null);
+        getEvents(undefined, undefined, text).then(result => result.length > 0 ? setEvents([...result]) : null);
+        getTeachers(undefined, undefined, text).then(result => result.length > 0 ? setTeachers([...result]) : null);
+    };
 
     let schoolAreas = [{value: 0, label: 'Русский язык'}, {value: 1, label: 'Математика'}, {value: 2, label: 'Литература'}]
 
@@ -93,29 +101,29 @@ export const SearchPage = () => {
             />
         </Modal.Body>
     </Modal>
-
+    
     return <div className={'search-area'}>
         <div className={'input-area'}>
             <Input value={searchText} onValueChange={e => setSearchText(e)} width={'100%'} size='large' leftIcon={<SearchIcon />} />
-            <button className={'search-button'}> Поиск </button>
+            <button onClick={() => startSearch(searchText)} className={'search-button'}> Поиск </button>
         </div>
         <button className={'filter-button'} onClick={() => setFiltersOpened(true)}>Фильтры</button>
         {materials.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Материалы</div>
             {materials.map((e: any) =>
-                <SearchElement name={e.name} id={e.id} teacherId={e} element={'material'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'material'}/>
             )}
         </div>}
         {teachers.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Преподаватели</div>
             {teachers.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'teacher'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherid} element={'teacher'}/>
             )}
         </div>}
         {events.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Мероприятия</div>
             {events.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'event'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherid} element={'event'}/>
             )}
         </div>}
         {filtersOpened && renderModal()}

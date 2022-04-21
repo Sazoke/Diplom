@@ -10,7 +10,7 @@ interface ContentProps {
 
 export const BlockContent = (props: ContentProps) => {
 
-    const typeOrDate = typeof props.contentTypeOrDate === "string" ? props.contentTypeOrDate : props.contentTypeOrDate.toString();
+    const typeOrDate = props.contentTypeOrDate !== undefined ? typeof props.contentTypeOrDate === "string" ? props.contentTypeOrDate : props.contentTypeOrDate.toString() : 'Нет типа';
     return (
         <div className='content-container'>
             <div className='content-type'>

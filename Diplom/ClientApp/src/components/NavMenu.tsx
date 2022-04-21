@@ -22,7 +22,8 @@ export const NavMenu = () => {
 
 
   const redirectToSearch = () => {
-      navigation(`./search?searchText=${searchText}`, {replace: true});
+      const queryString = searchText !== '' ? `?searchText=${searchText}` : '';
+      navigation(`./search${queryString}`, {replace: true});
   }
   const input = document.getElementById('searchInput');
 
@@ -37,7 +38,10 @@ export const NavMenu = () => {
         <Container>
           <NavbarBrand tag={Link} to="/">Информационный ресурс</NavbarBrand>
           <NavbarToggler onClick={() => setCollapsed(!collapsed)} className="mr-2" />
-          <Input id={'searchInput'} value={searchText} onValueChange={(value) => setSearchText(value)} onSubmit={redirectToSearch} leftIcon={<SearchIcon />}/>
+          <Input id={'searchInput'} value={searchText} onValueChange={(value) => {
+            setSearchText(value);
+            console.log(searchText);
+          }} onSubmit={redirectToSearch} leftIcon={<SearchIcon />}/>
           <Button data-tid={'searchBtn'} onClick={redirectToSearch}>Поиск</Button>
           <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
             <ul className="navbar-nav flex-grow">

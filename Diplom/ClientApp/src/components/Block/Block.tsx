@@ -5,7 +5,7 @@ import { Content } from "../../fakeApi";
 
 interface IBlockProps {
     header: string;
-    content: Content[];
+    content: any[];
 }
 
 
@@ -16,18 +16,22 @@ export const Block = (props: IBlockProps) => {
             <div className='block-header'>{props.header}</div>
             <div className='row'>
                 <div className='col'>
-                    <BlockContent contentName={props.content[0].contentName} contentImage={props.content[0].contentImage} contentTypeOrDate={props.content[0].contentTypeOrDate}/>
+                    {props.content[0] && <BlockContent contentName={props.content[0].name} contentImage={props.content[0].image}
+                                   contentTypeOrDate={props.content[0].type}/>}
                 </div>
                 <div className='col'>
-                    <BlockContent contentName={props.content[1].contentName} contentImage={props.content[1].contentImage} contentTypeOrDate={props.content[1].contentTypeOrDate}/>
+                    {props.content[1] && <BlockContent contentName={props.content[1].name} contentImage={props.content[1].image}
+                                   contentTypeOrDate={props.content[1].type}/>}
                 </div>
             </div>
             <div className='row'>
                 <div className='col'>
-                    <BlockContent contentName={props.content[2].contentName} contentImage={props.content[2].contentImage} contentTypeOrDate={props.content[2].contentTypeOrDate}/>
+                    {props.content[2] && <BlockContent contentName={props.content[2].name} contentImage={props.content[2].image}
+                                   contentTypeOrDate={props.content[2].type}/>}
                 </div>
                 <div className='col'>
-                    <BlockContent contentName={props.content[3].contentName} contentImage={props.content[3].contentImage} contentTypeOrDate={props.content[3].contentTypeOrDate}/>
+                    {props.content[3] && <BlockContent contentName={props.content[3].name} contentImage={props.content[3].image}
+                                   contentTypeOrDate={props.content[3].type}/>}
                 </div>
             </div>
         </div>

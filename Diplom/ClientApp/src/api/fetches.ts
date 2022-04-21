@@ -61,7 +61,8 @@ export const getTeachers = async (page?: number,
                            tags?: string[] | null,
                            schoolArea?: string | null,
                            teacherId?: number): Promise<any[]> => {
-    return await fetch('/Material/',
+    console.log(text);
+    return await fetch('/User/GetByFilter',
         {
             method: 'POST',
             headers: {

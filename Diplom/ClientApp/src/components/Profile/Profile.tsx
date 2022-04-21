@@ -47,14 +47,13 @@ export const Profile = () => {
         }
         return;
     }, [changing])
-
     const selectRender = () => {
         switch(active) {
             case "preview":
                 return (
                     <div className='preview'>
                         <div className='blocks-area'>
-                            <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
+                            <Block header={'Блок новых материалов'} content={profile.materials}/>
                             <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
                         </div>
                         <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>

@@ -17,6 +17,7 @@ public class ActivityProfile : Profile
             .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
         CreateMap<Activity, ActivityProfilePreview>()
             .ForMember(a => a.DateTime, expression => expression.MapFrom(a => a.Date));
-        CreateMap<Activity, FilterResultDto>();
+        CreateMap<Activity, FilterResultDto>()
+            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
     }
 }

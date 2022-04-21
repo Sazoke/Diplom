@@ -10,7 +10,7 @@ public class ActivityEditDto
     
     public string Description { get; set; }
     
-    public DateTime DateTime { get; set; }
+    public string DateTime { get; set; }
     
     public long? AreaId { get; set; }
     

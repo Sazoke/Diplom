@@ -39,7 +39,8 @@ public class ActivityService : BaseComponentService<Activity>, IActivityService
         activity.Name = activityDto.Name;
         activity.Description = activityDto.Description;
         activity.Image = activityDto.Image;
-        activity.Date = activityDto.DateTime;
+        var dateArray = activityDto.DateTime.Split('.').Select(int.Parse).ToArray();
+        activity.Date = new DateTime(dateArray[2], dateArray[1], dateArray[0]);
         activity.AreaId = activityDto.AreaId;
     }  
 }

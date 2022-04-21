@@ -51,6 +51,8 @@ public class UserController : Controller
         try
         {
             var dto = await GetProfileDto(4);
+            if (dto is null)
+                return NotFound();
             return Ok(dto);
         }
         catch (Exception e)
@@ -79,6 +81,8 @@ public class UserController : Controller
     private async Task<UserProfileDto> GetProfileDto(int countOfMaterials)
     {
         var user = await _userService.GetProfile(_applicationContext.CurrentUserId);
+        if (user is null)
+            return null;
         var dto = _mapper.Map<UserProfileDto>(user);
         dto.Activities = user.Activities.Take(countOfMaterials)
             .Select(_mapper.Map<ActivityProfilePreview>)

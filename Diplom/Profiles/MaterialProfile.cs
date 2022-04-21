@@ -9,8 +9,8 @@ public class MaterialProfile : Profile
 {
     public MaterialProfile()
     {
-        CreateMap<MaterialDto, Material>();
-        CreateMap<Material, MaterialDto>();
+        CreateMap<Material, MaterialDto>()
+            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
         CreateMap<Material, MaterialProfilePreview>();
         CreateMap<Material, FilterResultDto>()
             .ForMember(m => m.Date, expression => expression.MapFrom(f => f.CreatedAt));

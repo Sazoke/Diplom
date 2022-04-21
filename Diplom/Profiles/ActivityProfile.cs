@@ -13,7 +13,8 @@ public class ActivityProfile : Profile
 {
     public ActivityProfile()
     {
-        CreateMap<Activity, ActivityDto>();
+        CreateMap<Activity, ActivityDto>()
+            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
         CreateMap<Activity, ActivityProfilePreview>()
             .ForMember(a => a.DateTime, expression => expression.MapFrom(a => a.Date));
         CreateMap<Activity, FilterResultDto>();

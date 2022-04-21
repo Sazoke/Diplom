@@ -14,5 +14,7 @@ public class MaterialDto
     
     public string Type { get; set; }
     
+    public string TeacherId { get; set; }
+    
     public List<Content> Content { get; set; }
 }

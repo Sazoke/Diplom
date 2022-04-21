@@ -1,6 +1,6 @@
 namespace Infrastructure.Dtos.User;
 
-public class ProfileEditDto
+public class ProfileFilterPreview
 {
     public string Id { get; set; }
     

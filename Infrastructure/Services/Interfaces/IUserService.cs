@@ -1,3 +1,4 @@
+using Infrastructure.Dtos.Base;
 using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
 using Microsoft.AspNetCore.Http;
@@ -11,4 +12,6 @@ public interface IUserService
     Task<ApplicationUser> GetProfile(string id);
 
     Task UpdateProfile(ProfileEditDto profileEditDto);
+
+    IEnumerable<ApplicationUser> GetByFilter(Filter filter);
 }

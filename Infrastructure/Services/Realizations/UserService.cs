@@ -1,4 +1,5 @@
 using AutoMapper;
+using Infrastructure.Dtos.Base;
 using Infrastructure.Dtos.User;
 using Infrastructure.Models.Application;
 using Infrastructure.Services.Interfaces;
@@ -49,7 +50,17 @@ public class UserService : IUserService
         user.Name = profileEditDto.Name;
         user.Description = profileEditDto.Description;
         user.Image = profileEditDto.Image;
+        user.SchoolAreaId = profileEditDto.SchoolAreaId;
         _dbContext.Update(user);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public IEnumerable<ApplicationUser> GetByFilter(Filter filter)
+    {
+        var users = _dbContext.Set<ApplicationUser>()
+            .Where(u => (filter.Text == null || u.Name.Contains(filter.Text)) &&
+                        (filter.SchoolArea == null || u.SchoolAreaId == filter.SchoolArea)).Skip(filter.Skip)
+            .Take(filter.PageSize);
+        return users;
     }
 }

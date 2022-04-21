@@ -1,3 +1,4 @@
+using Infrastructure.Models.Application;
 using Infrastructure.Models.Base;
 
 namespace Infrastructure.Models;

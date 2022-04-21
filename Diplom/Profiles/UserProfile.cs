@@ -4,13 +4,14 @@ using Infrastructure.Models.Application;
 
 namespace Diplom.Profiles;
 
-public class UserMapping : Profile
+public class UserProfile : Profile
 {
-    public UserMapping()
+    public UserProfile()
     {
         CreateMap<ApplicationUser, UserProfileDto>()
             .ForMember(u => u.Activities, o => o.Ignore())
             .ForMember(u => u.Materials, o => o.Ignore())
             .ForMember(u => u.EducationalMaterials, o => o.Ignore());
+        CreateMap<ApplicationUser, ProfileFilterPreview>();
     }
 }

@@ -19,7 +19,8 @@ public class AttachmentController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] IFormFile file)
+    [Authorize]
+    public async Task<IActionResult> Add(IFormFile file)
     {
         try
         {
@@ -33,7 +34,8 @@ public class AttachmentController : Controller
     }
 
     [HttpDelete]
-    public IActionResult Delete([FromBody] string name)
+    [Authorize]
+    public IActionResult Delete(string name)
     {
         try
         {

@@ -13,6 +13,7 @@ public class MaterialProfile : Profile
             .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
         CreateMap<Material, MaterialProfilePreview>();
         CreateMap<Material, FilterResultDto>()
-            .ForMember(m => m.Date, expression => expression.MapFrom(f => f.CreatedAt));
+            .ForMember(m => m.Date, expression => expression.MapFrom(f => f.CreatedAt))
+            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
     }
 }

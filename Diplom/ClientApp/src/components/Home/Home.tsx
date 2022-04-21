@@ -8,11 +8,6 @@ export const Home = () => {
 
     return <div className='main'>
         <div className='preview'>
-            <div className='blocks-area'>
-                <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
-                <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
-            </div>
-            <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
         </div>
         </div>
 }

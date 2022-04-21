@@ -1,17 +1,20 @@
 import React from "react";
 import './Block.css';
+import '../BlockContent/BlockContent.css';
 import { BlockContent } from '../BlockContent/BlockContent';
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
 interface IBlockProps {
     header: string;
     content: any[];
+    setActive: () => void;
 }
 
 
 export const Block = (props: IBlockProps) => {
 
-    const url = new URLSearchParams();
+    const search = useLocation().search;
+    const url = new URLSearchParams(search);
 
     return (
         <div className='block'>
@@ -21,7 +24,7 @@ export const Block = (props: IBlockProps) => {
                     {props.content[0] && <BlockContent contentName={props.content[0].name}
                                                        contentImage={props.content[0].image}
                                                        contentTypeOrDate={props.content[0].type}
-                                                       onClick={() => url.append('materialId', props.content[0].id)}
+                                                       onClick={() => console.log('clicked')}
                     />}
                 </div>
                 <div className='col'>
@@ -41,11 +44,11 @@ export const Block = (props: IBlockProps) => {
                     />}
                 </div>
                 <div className='col'>
-                    {props.content[3] && <BlockContent contentName={props.content[3].name}
-                                                       contentImage={props.content[3].image}
-                                                       contentTypeOrDate={props.content[3].type}
-                                                       onClick={() => url.append('materialId', props.content[1].id)}
-                    />}
+                    <div className={'content-container'} onClick={props.setActive}>
+                        <div className={'add-button'}>
+                        Добавить
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

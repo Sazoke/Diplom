@@ -9,6 +9,7 @@ import {Material} from "../Material/Material";
 import {useLocation, useSearchParams} from "react-router-dom";
 import {getProfile, updateProfile} from "../../api/fetches";
 import { Input } from '@skbkontur/react-ui/cjs/components/Input';
+import {Event} from "../Event/Event";
 
 export const Profile = () => {
 
@@ -28,7 +29,9 @@ export const Profile = () => {
     const profileId = query.get('teacherId') ?? '';
     const [changing, setChanging] = useState(false);
     const search = useLocation().search;
-    const materialQuery = new URLSearchParams(search).get('materialId') ?? '';
+    const searchParams = new URLSearchParams(search)
+    const materialQuery = searchParams.get('materialId') ?? '';
+    const eventQuery = searchParams.get('eventId') ?? '';
 
 
     useEffect(() => {
@@ -43,7 +46,10 @@ export const Profile = () => {
             }
         ));
         if (materialQuery !== '') {
-            setActive('material');
+            return setActive('material');
+        }
+        if (eventQuery !== '') {
+            return setActive('event');
         }
     }, []);
 
@@ -61,8 +67,8 @@ export const Profile = () => {
                 return (
                     <div className='preview'>
                         <div className='blocks-area'>
-                            <Block header={'Блок новых материалов'} content={profile.materials}/>
-                            <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
+                            <Block header={'Блок новых материалов'} setActive={() => setActive('material')} content={profile.materials}/>
+                            <Block header={'Блок свежих мероприятий'} setActive={() => setActive('event')} content={profileObject.blocksEvents}/>
                         </div>
                         <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
                     </div>
@@ -72,6 +78,8 @@ export const Profile = () => {
             </div>
             case 'material':
                 return <Material id={parseInt(materialQuery)} teacherId={profile.id}/>
+            case 'event':
+                return <Event id={parseInt(eventQuery)} />
             default:
                 return <div className='def'>
                 </div>

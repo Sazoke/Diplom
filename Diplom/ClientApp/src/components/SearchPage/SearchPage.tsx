@@ -25,7 +25,7 @@ export const SearchPage = () => {
     }, []);
 
     const startSearch = (text: string) => {
-
+        setSearchText(searchText);
         getMaterials(undefined, undefined, text).then(result => result.length > 0 ? setMaterials([...result]) : null);
         getEvents(undefined, undefined, text).then(result => result.length > 0 ? setEvents([...result]) : null);
         getTeachers(undefined, undefined, text).then(result => result.length > 0 ? setTeachers([...result]) : null);

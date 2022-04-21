@@ -43,9 +43,9 @@ export const getEvents = async (page?: number,
             body: JSON.stringify({
                 page: 1,
                 pageSize: 5,
-                text: text ?? null,
-                tags: null,
-                schoolArea: null,
+                text: text ?? '',
+                tags: [],
+                schoolArea: 1,
                 teacherId: null,
                 dateTime: null
             })
@@ -84,10 +84,7 @@ export const getTeachers = async (page?: number,
 }
 
 export const getCurrentUser = async () => {
-    return await fetch('/User/GetCurrentUserProfile',
-        {
-            method: 'GET',
-        })
+    return await fetch('/User/GetCurrentUserProfile')
         .then(response => response.json())
         .then(result => result)
         .catch(error => console.log(error));
@@ -125,6 +122,13 @@ export const updateProfile = async (
 
 export const getMaterial = async (id: number) => {
     return await fetch(`/Material/GetById?id=${id}`,)
+        .then(response => response.json())
+        .then(result => result)
+        .catch(error => console.log(error));
+}
+
+export const getEvent = async (id: number) => {
+    return await fetch(`/Activity/GetById?id=${id}`)
         .then(response => response.json())
         .then(result => result)
         .catch(error => console.log(error));

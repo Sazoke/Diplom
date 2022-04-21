@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -20,11 +22,11 @@ public class AttachmentController : Controller
     
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Add(IFormFile file)
+    public async Task<IActionResult> Add(IEnumerable<IFormFile> file)
     {
         try
         {
-            var storageName = await _bucket.WriteFileAsync(file);
+            var storageName = await _bucket.WriteFileAsync(file.First());
             return Ok(storageName);
         }
         catch (Exception e)

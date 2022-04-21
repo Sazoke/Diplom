@@ -3,14 +3,25 @@ import JoditEditor from "jodit-react";
 import './Material.css';
 import {getMaterial} from "../../api/fetches";
 import { Input } from "@skbkontur/react-ui/cjs/components/Input";
+import {ComboBox, Dropdown, MenuItem} from "@skbkontur/react-ui";
+import ImageUploading, { ImageListType } from "react-images-uploading";
 
 interface IMaterial {
     id?: number;
-    content?: string;
     teacherId: string;
 }
 
 export const Material = (props: IMaterial) => {
+
+    const [images, setImages] = React.useState([]);
+    const maxNumber = 10;
+
+    const onChange = (
+        imageList: ImageListType,
+        addUpdateIndex: number[] | undefined
+    ) => {
+        setImages(imageList as never[]);
+    };
 
     useEffect(() => {
         if(props.id) {
@@ -21,22 +32,27 @@ export const Material = (props: IMaterial) => {
                     description: res.description,
                     image: res.image,
                     type: res.type,
+                    areaId: res.areaId,
+                    tags: res.tags,
                     teacherId: res.teacherId,
                     content: res.content
                 })
             });
-            console.log(material);
         }
+        getAreas().then(e => console.log(areas));
     }, []);
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
+    const [areas, setAreas] = useState<any[]>([]);
     const editor = useRef(null);
     const [material, setMaterial] = useState({
         id: null,
-        name: 'Название предмета',
+        name: 'Название материала',
         description: '',
         image: null,
-        type: null,
+        type: 'Нет типа',
+        areaId: null,
+        tags: [],
         teacherId: props.teacherId,
         content: [{
             text: '',
@@ -73,6 +89,27 @@ export const Material = (props: IMaterial) => {
             .catch(error => console.log(error));
     };
 
+    const getAreas = async() => {
+        await fetch('/SchoolArea/GetAll')
+            .then(response => response.json())
+            .then(result => setAreas([...result]))
+            .catch(err => console.log(err));
+    }
+
+    const formData = new FormData();
+    formData.append('file', images[0]);
+
+    const setImage = async() => {
+        console.log(images);
+        await fetch('/Attachment/Add',
+            {
+                method: 'POST',
+                body: formData,
+            })
+    }
+
+    const [selectedArea, setSelectedArea] = useState<any>();
+
     return (
         <div className='material' onDoubleClick={() => setChangeableContent(!changeableContent)}>
             <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
@@ -82,6 +119,21 @@ export const Material = (props: IMaterial) => {
                         name: e
                     }));
                 }}/> : material.name}
+            </div>
+            <div>
+                <Dropdown caption={selectedArea.name ? selectedArea.name : "Название предмета"}>
+                    {areas.map((el:any) => <MenuItem onClick={() => {
+                        setMaterial(prevState => ({
+                            ...prevState,
+                            areaId: el.id
+                        }));
+                        setSelectedArea(el);
+                    }} > {el.name} </MenuItem>)}
+                </Dropdown>
+                <Input value={material.type} onValueChange={(e) => setMaterial(prevState => ({
+                    ...prevState,
+                    type: e
+                }))} />
             </div>
             <JoditEditor
                     ref={editor}
@@ -98,7 +150,46 @@ export const Material = (props: IMaterial) => {
                     Прикрепленные файлы
                 </div>
             </div>
-            <button onClick={() => saveMaterial()}>Отправить</button>
+            <ImageUploading
+                multiple
+                value={images}
+                onChange={onChange}
+                maxNumber={maxNumber}
+            >
+                {({
+                      imageList,
+                      onImageUpload,
+                      onImageRemoveAll,
+                      onImageUpdate,
+                      onImageRemove,
+                      isDragging,
+                      dragProps
+                  }) => (
+                    <div className="upload__image-wrapper">
+                        <button
+                            style={isDragging ? { color: "red" } : undefined}
+                            onClick={onImageUpload}
+                            {...dragProps}
+                        >
+                            Click or Drop here
+                        </button>
+                        &nbsp;
+                        <button onClick={onImageRemoveAll}>Remove all images</button>
+                        {imageList.map((image, index) => (
+                            <div key={index} className="image-item">
+                                <img src={image.dataURL} alt="" width="100" />
+                                <div className="image-item__btn-wrapper">
+                                    <button onClick={() => onImageUpdate(index)}>Update</button>
+                                    <button onClick={() => onImageRemove(index)}>Remove</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </ImageUploading>
+            <button onClick={() => {
+                saveMaterial();
+            }}>Сохранить материал</button>
         </div>
     )
 }

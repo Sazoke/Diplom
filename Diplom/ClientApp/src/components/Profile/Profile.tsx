@@ -6,7 +6,7 @@ import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
 import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
 import { profileObject } from '../../fakeApi';
 import {Material} from "../Material/Material";
-import {useSearchParams} from "react-router-dom";
+import {useLocation, useSearchParams} from "react-router-dom";
 import {getProfile, updateProfile} from "../../api/fetches";
 import { Input } from '@skbkontur/react-ui/cjs/components/Input';
 
@@ -23,9 +23,13 @@ export const Profile = () => {
         educationalMaterials: null
     });
     const [changingName, setChangingName] = useState(false);
+    const [changingDescription, setChangingDescription] = useState(false);
     const [query,setQuery] = useSearchParams();
     const profileId = query.get('teacherId') ?? '';
     const [changing, setChanging] = useState(false);
+    const search = useLocation().search;
+    const materialQuery = new URLSearchParams(search).get('materialId') ?? '';
+
 
     useEffect(() => {
         getProfile(profileId).then(result => setProfile({
@@ -38,6 +42,9 @@ export const Profile = () => {
                 educationalMaterials: result.educationalMaterials
             }
         ));
+        if (materialQuery !== '') {
+            setActive('material');
+        }
     }, []);
 
     useEffect(() => {
@@ -46,7 +53,8 @@ export const Profile = () => {
             setChanging(!changing);
         }
         return;
-    }, [changing])
+    }, [changing]);
+
     const selectRender = () => {
         switch(active) {
             case "preview":
@@ -62,8 +70,8 @@ export const Profile = () => {
             case 'tests':
                 return <div className='def'>
             </div>
-            case 'prez':
-                return <Material />
+            case 'material':
+                return <Material id={parseInt(materialQuery)} teacherId={profile.id}/>
             default:
                 return <div className='def'>
                 </div>
@@ -92,9 +100,17 @@ export const Profile = () => {
                         :<div className='fio' onDoubleClick={() => setChangingName(!changingName)}>
                             {profile.name}
                         </div>}
-                    <div className='additional-info'>
-                        {profileObject.description}
-                    </div>
+                    {changingDescription
+                        ?<Input className='additional-info'
+                                 value={profile.description}
+                                 onValueChange={(e) => {
+                                     setProfile(prevState => ({...prevState, description: e}));
+                                     setChanging(!changing);
+                                 }
+                                 } onBlur={() => setChangingDescription(!changingDescription)} />
+                        :<div className='additional-info' onDoubleClick={() => setChangingDescription(!changingDescription)}>
+                        {profile.description !== '' ? profile.description : 'Добавьте описание'}
+                    </div>}
                 </div>
             </div>
             <ProfileTabs active={active} setActive={setActive}/>

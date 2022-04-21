@@ -61,7 +61,6 @@ export const getTeachers = async (page?: number,
                            tags?: string[] | null,
                            schoolArea?: string | null,
                            teacherId?: number): Promise<any[]> => {
-    console.log(text);
     return await fetch('/User/GetByFilter',
         {
             method: 'POST',
@@ -95,10 +94,7 @@ export const getCurrentUser = async () => {
 }
 
 export const getProfile = async (id: string) => {
-    return await fetch(`/User/GetProfile?id=${id}`,
-        {
-            method: 'GET',
-        })
+    return await fetch(`/User/GetProfile?id=${id}`)
         .then(response => response.json())
         .then(result => result)
         .catch(error => console.log(error));
@@ -126,4 +122,13 @@ export const updateProfile = async (
         })
         .then()
 }
+
+export const getMaterial = async (id: number) => {
+    return await fetch(`/Material/GetById?id=${id}`,)
+        .then(response => response.json())
+        .then(result => result)
+        .catch(error => console.log(error));
+}
+
+
 

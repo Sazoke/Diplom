@@ -101,7 +101,7 @@ export const SearchPage = () => {
             />
         </Modal.Body>
     </Modal>
-    
+
     return <div className={'search-area'}>
         <div className={'input-area'}>
             <Input value={searchText} onValueChange={e => setSearchText(e)} width={'100%'} size='large' leftIcon={<SearchIcon />} />
@@ -117,13 +117,13 @@ export const SearchPage = () => {
         {teachers.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Преподаватели</div>
             {teachers.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherid} element={'teacher'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'teacher'}/>
             )}
         </div>}
         {events.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Мероприятия</div>
             {events.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherid} element={'event'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'event'}/>
             )}
         </div>}
         {filtersOpened && renderModal()}

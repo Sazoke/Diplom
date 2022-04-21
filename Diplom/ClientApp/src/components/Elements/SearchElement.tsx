@@ -8,7 +8,7 @@ interface ISearchElement {
     img?: string;
     isTest?: boolean;
     id: number;
-    teacherId: number;
+    teacherId: string;
     element: string;
 }
 
@@ -27,7 +27,7 @@ export const SearchElement = (props: ISearchElement) => {
         }
     }
 
-    return <div className={'element-container'} onClick={() => navigate(getNavString())}>
+    return <div className={'element-container'} onDoubleClick={() => navigate(getNavString())}>
         {!props.isTest && <div className={'img-area'}>
             <img src={props.img} alt={'IMAGE'}/>
         </div>}

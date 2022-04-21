@@ -4,8 +4,10 @@ import './Material.css';
 
 export const Material = () => {
 
-    const [changable, setChangable] = useState(false);
+    const [changeableContent, setChangeableContent] = useState(false);
+    const [changeableName, setChangeableName] = useState(false);
     const editor = useRef(null);
+    const [name, setName] = useState('Название материала');
     const [content, setContent] = useState(localStorage.getItem('temp') ?? 'Start typing....');
     const config = {
         readonly: false,
@@ -18,41 +20,60 @@ export const Material = () => {
         enableDragAndDropFileToEditor: true,
 
     };
-    config["toolbar"] = changable;
-    config["readonly"] = !changable;
+    config["toolbar"] = changeableContent;
+    config["readonly"] = !changeableContent;
 
-    const materilal = {
-        Id: null,
-        Description: 'Opisanie',
-    }
 
-    const getMaterial = async() => {
-        await fetch('/Material/CreateOrUpdate/',
+    const saveMaterial = async() => {
+        await fetch('/Material/AddOrUpdate',
             {
                 method: 'POST',
-                body: JSON.stringify(materilal),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        id: null,
+                        name: name,
+                        description: "string",
+                        image: "string",
+                        areaId: 1,
+                        tags: [
+                            1
+                        ],
+                        type: "string",
+                        content: [
+                            {
+                                isFile: false,
+                                text: content
+                            }
+                        ]
+                    }
+                ),
             }).then(response => console.log(response))
             .catch(error => console.log(error));
     };
 
+
+
     return (
-        <div className='material' onDoubleClick={() => {setChangable(!changable); localStorage.setItem('temp', content); console.log(localStorage.getItem('temp'))}}>
-            <div className='title'>
-                Разновидность материала
+        <div className='material' onClick={() => setChangeableContent(!changeableContent)}>
+            <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
+                { changeableName ? <input defaultValue={name} onBlur={(e) => setName(e.currentTarget.value)}/> : name}
             </div>
             <JoditEditor
                     ref={editor}
                     value={content}
                     config={config}
                     onBlur={(e) => setContent(e)}
-                    onChange={(newContent) => {}}
             />
             <div className='files'>
                 <div className='title'>
                     Прикрепленные файлы
                 </div>
             </div>
-            <button onClick={() => getMaterial()}>Отправить</button>
+            <button onClick={() => saveMaterial()}>Отправить</button>
         </div>
     )
 }

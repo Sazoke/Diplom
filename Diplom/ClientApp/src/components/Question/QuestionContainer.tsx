@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Radio, RadioGroup, Gapped, Toggle, Checkbox} from "@skbkontur/react-ui";
+import {Radio, RadioGroup, Toggle, Gapped, Checkbox} from "@skbkontur/react-ui";
 import '../TestConstructor/TestConsctructor.css';
 
 interface IQuestionContainerProps {

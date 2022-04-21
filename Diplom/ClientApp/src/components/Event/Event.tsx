@@ -14,7 +14,7 @@ export const Event = (props: {id?: number}) => {
         description: "Описание мероприятия",
         areaId: 1,
         tags: [1],
-        date: new Date()
+        dateTime: ''
     });
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export const Event = (props: {id?: number}) => {
                     description: res.description,
                     areaId: res.areaId,
                     tags: res.tags,
-                    date: res.date,
+                    dateTime: res.date,
                 })
             })
         }
@@ -38,7 +38,6 @@ export const Event = (props: {id?: number}) => {
     const [changeableName, setChangeableName] = useState(false);
 
     const saveEvent = async () => {
-        console.log(event.date);
         await fetch('/Activity/AddOrUpdate',
             {
                 method: 'POST',
@@ -78,15 +77,10 @@ export const Event = (props: {id?: number}) => {
                 }));
             }}/> : event.name}
         </div>
-        <DatePicker value={event.date.toString()} onValueChange={(e) => {
-            const dateArray = e.split('.');
-            const date = new Date();
-            date.setDate(Number(dateArray[0]));
-            date.setMonth(Number(dateArray[1]));
-            date.setFullYear(Number(dateArray[2]));
+        <DatePicker value={event.dateTime} onValueChange={(e) => {
             setEvent(prevState => ({
             ...prevState,
-            date: date
+            dateTime: e
         }))}} minDate={minDate}/>
         <JoditEditor
             ref={editor}

@@ -13,6 +13,10 @@ public class MaterialDto
     public string Image { get; set; }
     
     public string Type { get; set; }
+
+    public long? AreaId { get; set; }
+    
+    public HashSet<long> Tags { get; set; }
     
     public string TeacherId { get; set; }
     

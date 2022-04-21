@@ -9,6 +9,10 @@ public class ActivityDto
     public string Image { get; set; }
     
     public string Description { get; set; }
+
+    public long? AreaId { get; set; }
+    
+    public HashSet<long> Tags { get; set; }
     
     public string TeacherId { get; set; }
     

@@ -14,7 +14,12 @@ public class ActivityProfile : Profile
     public ActivityProfile()
     {
         CreateMap<Activity, ActivityDto>()
-            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
+            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById))
+            .ForMember(m => m.Tags, expression => expression.Ignore())
+            .AfterMap(((material, dto) =>
+            {
+                dto.Tags = material.Tags.Select(t => t.Id).ToHashSet();
+            }));;
         CreateMap<Activity, ActivityProfilePreview>()
             .ForMember(a => a.DateTime, expression => expression.MapFrom(a => a.Date));
         CreateMap<Activity, FilterResultDto>()

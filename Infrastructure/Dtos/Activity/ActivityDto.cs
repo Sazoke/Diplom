@@ -10,5 +10,7 @@ public class ActivityDto
     
     public string Description { get; set; }
     
+    public string TeacherId { get; set; }
+    
     public DateTime Date { get; set; }
 }

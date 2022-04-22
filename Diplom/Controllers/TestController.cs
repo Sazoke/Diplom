@@ -36,6 +36,20 @@ public class TestController : Controller
             return BadRequest(e.Message);
         }
     }
+    
+    [HttpGet]
+    public IActionResult GetQuestionsById([FromQuery] long id)
+    {
+        try
+        {
+            var test = _testService.GetById(id);
+            return Ok(test.Questions);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 
     [HttpPost]
     [Authorize]

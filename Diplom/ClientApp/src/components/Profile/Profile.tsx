@@ -10,6 +10,8 @@ import {useLocation, useSearchParams} from "react-router-dom";
 import {getProfile, updateProfile} from "../../api/fetches";
 import { Input } from '@skbkontur/react-ui/cjs/components/Input';
 import {Event} from "../Event/Event";
+import {Tests} from "../Tests/Tests";
+import {TestConstructor} from "../TestConstructor/TestConstructor";
 
 export const Profile = () => {
 
@@ -29,9 +31,10 @@ export const Profile = () => {
     const profileId = query.get('teacherId') ?? '';
     const [changing, setChanging] = useState(false);
     const search = useLocation().search;
-    const searchParams = new URLSearchParams(search)
+    const searchParams = new URLSearchParams(search);
     const materialQuery = searchParams.get('materialId') ?? '';
     const eventQuery = searchParams.get('eventId') ?? '';
+    const testQuery = searchParams.get('testId') ?? '';
 
 
     useEffect(() => {
@@ -50,6 +53,9 @@ export const Profile = () => {
         }
         if (eventQuery !== '') {
             return setActive('event');
+        }
+        if (testQuery !== '') {
+            return setActive('test');
         }
     }, []);
 
@@ -74,12 +80,13 @@ export const Profile = () => {
                     </div>
                 )
             case 'tests':
-                return <div className='def'>
-            </div>
+                return <Tests teacherId={profile.id}/>
             case 'material':
                 return <Material id={parseInt(materialQuery)} teacherId={profile.id}/>
             case 'event':
                 return <Event id={parseInt(eventQuery)} />
+            case 'test':
+                return <TestConstructor />
             default:
                 return <div className='def'>
                 </div>

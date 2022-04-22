@@ -1,10 +1,25 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {QuestionContainer} from "../Question/QuestionContainer";
 import './TestConsctructor.css';
+import {useLocation, useSearchParams} from "react-router-dom";
+import {getTest} from "../../api/fetches";
 
 export const TestConstructor = () => {
+    const search = useLocation().search;
+    const searchParams = new URLSearchParams(search);
+    const testQuery = searchParams.get('testId');
     const [changing, setChanging] = useState<boolean>(false);
-    const [testState, setTestState] = useState<{question: string, variants: {value: string, isRightAnswer: boolean}[]}[]>([]);
+    const [testState, setTestState] = useState({
+        id: null,
+        name: 'Название теста',
+        questions: [{
+            text: '',
+            answers: [{
+                text: '',
+                isCorrect: false
+            }]
+        }]
+    });
     const addQuestion = () => {
         setTestState([...testState, {question: 'Новый вопрос', variants: [{value: 'вариант 1', isRightAnswer: false}, {value: 'вариант 2', isRightAnswer: false}]}]);
     }
@@ -25,10 +40,19 @@ export const TestConstructor = () => {
         setTestState([...copy]);
     }
 
+    useEffect(() => {
+        if (testQuery) {
+            getTest(parseInt(testQuery)).then(res => setTestState(prevState => ({
+                ...prevState,
+
+            })))
+        }
+    })
+
     return <div className={'questions-container'}>
-        {testState.map((e, index) =>
+        {testState.questions.map((e, index) =>
             <QuestionContainer
-                question={e}
+                question={e.text}
                 changeQuestion={(el) => changeQuestion(el, index)}
                 removeQuestion={() => removeQuestion(index)}
                 resetVariants={(variants) => resetVariants(variants, index)}

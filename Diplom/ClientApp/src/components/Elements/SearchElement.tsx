@@ -8,7 +8,7 @@ interface ISearchElement {
     img?: string;
     isTest?: boolean;
     id: number;
-    teacherId: string;
+    teacherId?: string;
     element: string;
 }
 
@@ -22,6 +22,8 @@ export const SearchElement = (props: ISearchElement) => {
                 return `/profile?teacherId=${props.teacherId}`;
             case 'event':
                 return `/profile?teacherId=${props.teacherId}&eventId=${props.id}`;
+            case 'test':
+                return `/profile?teacherId=${props.teacherId}&testId=${props.id}`;
             default:
                 return '';
         }

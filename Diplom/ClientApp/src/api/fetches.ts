@@ -134,5 +134,35 @@ export const getEvent = async (id: number) => {
         .catch(error => console.log(error));
 }
 
+export const getTests = async (teacherId?: string) => {
+    return await fetch('/Test/GetByFilter',
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                page: 1,
+                pageSize: 5,
+                text: '',
+                tags: [],
+                schoolArea: 1,
+                teacherId: teacherId ?? null,
+                dateTime: null
+            })
+        })
+        .then(response => response.json())
+        .then(result => result)
+        .catch(error => console.log(error));
+}
+
+export const getTest = async (id: number): Promise<any[]> => {
+    return await fetch(`/Test/GetById?id=${id}`)
+        .then(response => response.json())
+        .then(result => result)
+        .catch(error => console.log(error));
+}
+
 
 

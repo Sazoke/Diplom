@@ -45,7 +45,7 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
                 : <label>{props.question.question}</label>
             }
             {!multiVariant && <RadioGroup>
-                {variants.map((e, index) =>
+                {variants && variants.map((e, index) =>
                 props.changing
                 ? <Gapped>
                         <Radio value={e.value}/>

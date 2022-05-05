@@ -10,6 +10,7 @@ interface ISearchElement {
     id: number;
     teacherId?: string;
     element: string;
+    date?: any;
 }
 
 export const SearchElement = (props: ISearchElement) => {
@@ -36,5 +37,6 @@ export const SearchElement = (props: ISearchElement) => {
         <div className={'name-area'}>
             {props.name ?? 'Название элемента'}
         </div>
+        {props.date && <div>{props.date}</div>}
     </div>
 }

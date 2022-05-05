@@ -57,6 +57,7 @@ export const Profile = () => {
         if (testQuery !== '') {
             return setActive('test');
         }
+        return setActive('preview');
     }, []);
 
     useEffect(() => {
@@ -80,7 +81,7 @@ export const Profile = () => {
                     </div>
                 )
             case 'tests':
-                return <Tests teacherId={profile.id}/>
+                return <Tests setActive={setActive} teacherId={profile.id}/>
             case 'material':
                 return <Material id={parseInt(materialQuery)} teacherId={profile.id}/>
             case 'event':
@@ -96,12 +97,7 @@ export const Profile = () => {
         <div className='main'>
             <div className='about'>
                 <div className='profilePic'>
-                    {profileObject.avatar
-                        ?
-                        <img src={profileObject.avatar} />
-                        :
-                        <AvatarPlaceholder />
-                    }
+                    <AvatarPlaceholder />
                 </div>
                 <div className='info'>
                     {changingName

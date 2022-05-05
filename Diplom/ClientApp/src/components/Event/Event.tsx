@@ -1,21 +1,23 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Input} from "@skbkontur/react-ui/cjs/components/Input";
 import '../Material/Material.css';
-import {getEvent} from "../../api/fetches";
+import {getEvent, removeActivity} from "../../api/fetches";
 import JoditEditor from "jodit-react";
 import {DatePicker} from "@skbkontur/react-ui";
+import {useNavigate} from "react-router-dom";
 
 export const Event = (props: {id?: number}) => {
 
     const [event, setEvent] = useState({
         id: null,
         name: "Название мероприятия",
-        image: '',
+        image: 'string',
         description: "Описание мероприятия",
         areaId: 1,
-        tags: [1],
+        tags: [],
         dateTime: ''
     });
+    const [changed, setChanged] = useState(false);
 
     useEffect(() => {
         if (props.id) {
@@ -31,6 +33,7 @@ export const Event = (props: {id?: number}) => {
                     dateTime: res.date,
                 })
             })
+            setChanged(!changed);
         }
     },[]);
 
@@ -67,6 +70,14 @@ export const Event = (props: {id?: number}) => {
     config["toolbar"] = changeableContent;
     config["readonly"] = !changeableContent;
 
+    const navigation = useNavigate();
+
+    const removeEvent = () => {
+        if (event.id) {
+            removeActivity(event.id).then(e => navigation(`/`, {replace: true}));
+        }
+    }
+
     const minDate = (new Date()).toDateString();
     return <div className='material' onDoubleClick={() => setChangeableContent(!changeableContent)}>
         <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
@@ -94,5 +105,6 @@ export const Event = (props: {id?: number}) => {
         <button onClick={() => {
             saveEvent();
         }}>Сохранить мероприятие</button>
+        <button onClick={() => removeEvent()}>Удалить мероприятие</button>
     </div>
 }

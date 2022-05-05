@@ -1,10 +1,11 @@
 import React, {useState, useRef, useEffect} from "react";
 import JoditEditor from "jodit-react";
 import './Material.css';
-import {getMaterial} from "../../api/fetches";
+import {getMaterial, removeMaterial} from "../../api/fetches";
 import { Input } from "@skbkontur/react-ui/cjs/components/Input";
 import {ComboBox, Dropdown, MenuItem} from "@skbkontur/react-ui";
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import {useNavigate} from "react-router-dom";
 
 interface IMaterial {
     id?: number;
@@ -22,6 +23,8 @@ export const Material = (props: IMaterial) => {
     ) => {
         setImages(imageList as never[]);
     };
+
+    const navigation = useNavigate();
 
     useEffect(() => {
         if(props.id) {
@@ -110,6 +113,12 @@ export const Material = (props: IMaterial) => {
 
     const [selectedArea, setSelectedArea] = useState<any>();
 
+    const deleteMaterial = () => {
+        if (material.id) {
+            removeMaterial(material.id).then(e => navigation(`/`, {replace: true}));
+        }
+    }
+
     return (
         <div className='material' onDoubleClick={() => setChangeableContent(!changeableContent)}>
             <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
@@ -121,7 +130,7 @@ export const Material = (props: IMaterial) => {
                 }}/> : material.name}
             </div>
             <div>
-                <Dropdown caption={selectedArea.name ? selectedArea.name : "Название предмета"}>
+                <Dropdown caption={selectedArea?.name ? selectedArea.name : "Название предмета"}>
                     {areas.map((el:any) => <MenuItem onClick={() => {
                         setMaterial(prevState => ({
                             ...prevState,
@@ -190,6 +199,7 @@ export const Material = (props: IMaterial) => {
             <button onClick={() => {
                 saveMaterial();
             }}>Сохранить материал</button>
+            <button onClick={() => deleteMaterial()}>Удалить материал</button>
         </div>
     )
 }

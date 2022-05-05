@@ -158,11 +158,26 @@ export const getTests = async (teacherId?: string) => {
 }
 
 export const getTest = async (id: number): Promise<any[]> => {
-    return await fetch(`/Test/GetById?id=${id}`)
+    return await fetch(`/Test/GetQuestionsById?id=${id}`)
         .then(response => response.json())
         .then(result => result)
         .catch(error => console.log(error));
 }
 
+export const removeMaterial = async (id: number) => {
+    return await fetch(`/Material/Remove?id=${id}`,
+        {
+            method: 'DELETE'
+        })
+        .then()
+        .catch(err => console.log(err))
+}
 
-
+export const removeActivity = async (id: number) => {
+    return await fetch(`/Activity/Remove?id=${id}`,
+        {
+            method: 'DELETE'
+        })
+        .then()
+        .catch(err => console.log(err))
+}

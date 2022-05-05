@@ -19,16 +19,16 @@ export const SearchPage = () => {
 
     useEffect(() => {
         setSearchText(searchQuery);
-        getMaterials(undefined, undefined, searchQuery).then(result => result.length > 0 ? setMaterials([...result]) : null);
-        getEvents(undefined, undefined, searchQuery).then(result => result.length > 0 ? setEvents([...result]) : null);
-        getTeachers(undefined, undefined, searchQuery).then(result => result.length > 0 ? setTeachers([...result]) : null);
+        getMaterials(undefined, undefined, searchQuery).then(result => result.length > 0 ? setMaterials([...result]) : setMaterials([]));
+        getEvents(undefined, undefined, searchQuery).then(result => result.length > 0 ? setEvents([...result]) : setEvents([]));
+        getTeachers(undefined, undefined, searchQuery).then(result => result.length > 0 ? setTeachers([...result]) : setTeachers([]));
     }, []);
 
     const startSearch = (text: string) => {
         setSearchText(searchText);
-        getMaterials(undefined, undefined, text).then(result => result.length > 0 ? setMaterials([...result]) : null);
-        getEvents(undefined, undefined, text).then(result => result.length > 0 ? setEvents([...result]) : null);
-        getTeachers(undefined, undefined, text).then(result => result.length > 0 ? setTeachers([...result]) : null);
+        getMaterials(undefined, undefined, text).then(result => result.length > 0 ? setMaterials([...result]) : setMaterials([]));
+        getEvents(undefined, undefined, text).then(result => result.length > 0 ? setEvents([...result]) : setEvents([]));
+        getTeachers(undefined, undefined, text).then(result => result.length > 0 ? setTeachers([...result]) : setTeachers([]));
     };
 
     let schoolAreas = [{value: 0, label: 'Русский язык'}, {value: 1, label: 'Математика'}, {value: 2, label: 'Литература'}]
@@ -122,9 +122,10 @@ export const SearchPage = () => {
         </div>}
         {events.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Мероприятия</div>
-            {events.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'event'}/>
-            )}
+            {events.map(e => {
+                console.log(e.dateTime);
+                return <SearchElement date={e.dateTime} name={e.name} id={e.id} teacherId={e.teacherId} element={'event'}/>
+            })}
         </div>}
         {filtersOpened && renderModal()}
     </div>

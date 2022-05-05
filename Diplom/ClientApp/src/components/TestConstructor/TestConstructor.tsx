@@ -5,66 +5,72 @@ import {useLocation, useSearchParams} from "react-router-dom";
 import {getTest} from "../../api/fetches";
 
 export const TestConstructor = () => {
+    let testId: number;
     const search = useLocation().search;
     const searchParams = new URLSearchParams(search);
     const testQuery = searchParams.get('testId');
     const [changing, setChanging] = useState<boolean>(false);
-    const [testState, setTestState] = useState({
-        id: null,
-        name: 'Название теста',
-        questions: [{
-            text: '',
-            answers: [{
-                text: '',
-                isCorrect: false
-            }]
-        }]
-    });
+    const [testState, setTestState] = useState<{text: string, answers: {text: string, isCorrect: boolean}[]}[]>([]);
     const addQuestion = () => {
-        setTestState([...testState, {question: 'Новый вопрос', variants: [{value: 'вариант 1', isRightAnswer: false}, {value: 'вариант 2', isRightAnswer: false}]}]);
+        setTestState([...testState, {text: 'Новый вопрос', answers: [{text: 'вариант 1', isCorrect: false}, {text: 'вариант 2', isCorrect: false}]}]);
     }
     const removeQuestion = (index: number) => {
-        console.log(testState);
+
         let copy = [...testState];
         copy.splice(index, 1);
         setTestState([...copy]);
     }
     const changeQuestion = (value: string, index: number) => {
         let copy = [...testState];
-        copy[index].question = value;
+        copy[index].text = value;
         setTestState([...copy]);
     }
-    const resetVariants = (value: {value: string, isRightAnswer: boolean}[], index: number) => {
+    const resetVariants = (value: {text: string, isCorrect: boolean}[], index: number) => {
         let copy = [...testState];
-        copy[index].variants = value;
+        copy[index].answers = value;
         setTestState([...copy]);
     }
+    const saveTest = async() => {
+        console.log(testState);
+        await fetch('/Test/AddOrUpdate',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                        id: testId,
+                        name: 'testTest',
+                        questions: testState
+                    }
+                ),
+            }).then(response => console.log(response))
+            .catch(error => console.log(error));
+    };
 
     useEffect(() => {
-        if (testQuery) {
-            getTest(parseInt(testQuery)).then(res => setTestState(prevState => ({
-                ...prevState,
-
-            })))
+        if (testQuery && testQuery !== 'new') {
+            testId = parseInt(testQuery);
+            getTest(testId).then(res => setTestState([...res]))
         }
     })
 
     return <div className={'questions-container'}>
-        {testState.questions.map((e, index) =>
+        {testState.map((e, index) =>
             <QuestionContainer
-                question={e.text}
+                question={e}
                 changeQuestion={(el) => changeQuestion(el, index)}
                 removeQuestion={() => removeQuestion(index)}
-                resetVariants={(variants) => resetVariants(variants, index)}
+                resetVariants={(answers) => resetVariants(answers, index)}
                 changing={changing}
             />
         )}
         {changing && <div>
             <button onClick={() => addQuestion()}>Добавить вопрос</button>
-            <button onClick={() => console.log(testState)}>Отправить</button>
         </div>
         }
         <button onClick={() => setChanging(!changing)}>{changing ? 'Сохранить' : 'Редактировать'}</button>
-        <button onClick={() => console.log(testState)}>State</button>
+        <button onClick={() => saveTest()}>Сохранить тест</button>
     </div>
 }

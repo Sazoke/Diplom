@@ -3,28 +3,28 @@ import {Radio, RadioGroup, Toggle, Gapped, Checkbox} from "@skbkontur/react-ui";
 import '../TestConstructor/TestConsctructor.css';
 
 interface IQuestionContainerProps {
-    question: {question: string, variants: {value: string, isRightAnswer: boolean}[]}
+    question: {text: string, answers: {text: string, isCorrect: boolean}[]}
     changeQuestion: (value: string) => void;
     removeQuestion: () => void;
-    resetVariants: (value: {value: string, isRightAnswer: boolean}[]) => void;
+    resetVariants: (answers: {text: string, isCorrect: boolean}[]) => void;
     changing: boolean;
 }
 
 export const QuestionContainer = (props: IQuestionContainerProps) => {
     const [multiVariant, setMultiVariant] = useState(false);
-    const variants: {value: string, isRightAnswer: boolean}[] = props.question.variants;
+    const answers: {text: string, isCorrect: boolean}[] = props.question.answers;
 
     const addVariant = () => {
-        variants.push({value: 'Вариант ответа', isRightAnswer: false});
-        props.resetVariants(variants);
+        answers.push({text: 'Вариант ответа', isCorrect: false});
+        props.resetVariants(answers);
     }
     const changeVariant = (value: string, index: number) => {
-        variants[index].value = value;
-        props.resetVariants(variants);
+        answers[index].text = value;
+        props.resetVariants(answers);
     }
     const removeVariant = (index: number) => {
-        variants.splice(index, 1);
-        props.resetVariants(variants);
+        answers.splice(index, 1);
+        props.resetVariants(answers);
     }
     
     return <div>
@@ -36,39 +36,39 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
             {props.changing
                 ? <div>
                     <input
-                    value={props.question.question}
+                    value={props.question.text}
                     onChange={(e) => props.changeQuestion(e.currentTarget.value)}
                     onBlur={e => props.changeQuestion(e.currentTarget.value)}
                     />
                     <button onClick={() => props.removeQuestion()}>Убрать</button>
                 </div>
-                : <label>{props.question.question}</label>
+                : <label>{props.question.text}</label>
             }
             {!multiVariant && <RadioGroup>
-                {variants && variants.map((e, index) =>
+                {answers && answers.map((e, index) =>
                 props.changing
                 ? <Gapped>
-                        <Radio value={e.value}/>
-                        <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
+                        <Radio value={e.text}/>
+                        <input value={e.text} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
                         <button onClick={() => removeVariant(index)}>Убрать вариант</button>
                     </Gapped>
                 : <Gapped>
-                        <Radio value={e.value}/>
-                        <label>{e.value}</label>
+                        <Radio value={e.text}/>
+                        <label>{e.text}</label>
                     </Gapped>
                 )}
             </RadioGroup>}
             {multiVariant && <div>
-                {variants.map((e, index) =>
+                {answers.map((e, index) =>
                     props.changing
                     ? <Gapped>
-                            <Checkbox value={e.value} />
-                            <input value={e.value} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
+                            <Checkbox value={e.text} />
+                            <input value={e.text} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
                             <button onClick={() => removeVariant(index)}>Убрать вариант</button>
                         </Gapped>
                     : <Gapped>
-                            <Checkbox value={e.value} />
-                            <label>{e.value}</label>
+                            <Checkbox value={e.text} />
+                            <label>{e.text}</label>
                         </Gapped>
                 )}
             </div>}

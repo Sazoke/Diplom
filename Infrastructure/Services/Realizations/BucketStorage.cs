@@ -43,11 +43,7 @@ public class BucketStorage : IBucket
             var fileName = GenerateUniqueFileName(formFile);
             var fullPath = GetPath(fileName);
         
-            var dir = Path.GetDirectoryName(fullPath);
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-        
-            var file = File.OpenWrite(fullPath);
+            var file = File.Create(fullPath);
             await formFile.CopyToAsync(file);
             file.Close();
 

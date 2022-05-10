@@ -14,15 +14,7 @@ interface IMaterial {
 
 export const Material = (props: IMaterial) => {
 
-    const [images, setImages] = React.useState([]);
-    const maxNumber = 10;
-
-    const onChange = (
-        imageList: ImageListType,
-        addUpdateIndex: number[] | undefined
-    ) => {
-        setImages(imageList as never[]);
-    };
+    const [images, setImages] = React.useState<FileList | null>();
 
     const navigation = useNavigate();
 
@@ -43,6 +35,11 @@ export const Material = (props: IMaterial) => {
             });
         }
         getAreas().then(e => console.log(areas));
+        const image = document.getElementById('picForMaterial');
+        image.addEventListener('change', (e) => {
+            const target = e.target as HTMLInputElement;
+            setImages(target.files)
+        });
     }, []);
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
@@ -78,6 +75,7 @@ export const Material = (props: IMaterial) => {
 
 
     const saveMaterial = async() => {
+        await setImage();
         await fetch('/Material/AddOrUpdate',
             {
                 method: 'POST',
@@ -99,11 +97,13 @@ export const Material = (props: IMaterial) => {
             .catch(err => console.log(err));
     }
 
-    const formData = new FormData();
-    formData.append('file', images[0]);
 
     const setImage = async() => {
-        console.log(images);
+        const formData = new FormData();
+        if (images) {
+            formData.append('new', images[0], 'filename');
+        }
+        console.log(formData.getAll('new'));
         await fetch('/Attachment/Add',
             {
                 method: 'POST',
@@ -158,44 +158,9 @@ export const Material = (props: IMaterial) => {
                 <div className='title'>
                     Прикрепленные файлы
                 </div>
+                <input type='file' id='picForMaterial'/>
             </div>
-            <ImageUploading
-                multiple
-                value={images}
-                onChange={onChange}
-                maxNumber={maxNumber}
-            >
-                {({
-                      imageList,
-                      onImageUpload,
-                      onImageRemoveAll,
-                      onImageUpdate,
-                      onImageRemove,
-                      isDragging,
-                      dragProps
-                  }) => (
-                    <div className="upload__image-wrapper">
-                        <button
-                            style={isDragging ? { color: "red" } : undefined}
-                            onClick={onImageUpload}
-                            {...dragProps}
-                        >
-                            Click or Drop here
-                        </button>
-                        &nbsp;
-                        <button onClick={onImageRemoveAll}>Remove all images</button>
-                        {imageList.map((image, index) => (
-                            <div key={index} className="image-item">
-                                <img src={image.dataURL} alt="" width="100" />
-                                <div className="image-item__btn-wrapper">
-                                    <button onClick={() => onImageUpdate(index)}>Update</button>
-                                    <button onClick={() => onImageRemove(index)}>Remove</button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </ImageUploading>
+
             <button onClick={() => {
                 saveMaterial();
             }}>Сохранить материал</button>

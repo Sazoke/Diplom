@@ -21,6 +21,7 @@
     "rimraf": "^2.6.2"
   },
   "devDependencies": {
+    "@types/jquery": "^3.5.14",
     "@types/react": "^17.0.44",
     "@types/reactstrap": "^8.7.2",
     "ajv": "^6.9.1",

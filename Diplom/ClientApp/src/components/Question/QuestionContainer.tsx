@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Radio, RadioGroup, Toggle, Gapped, Checkbox} from "@skbkontur/react-ui";
 import '../TestConstructor/TestConsctructor.css';
 
@@ -11,8 +11,20 @@ interface IQuestionContainerProps {
 }
 
 export const QuestionContainer = (props: IQuestionContainerProps) => {
-    const [multiVariant, setMultiVariant] = useState(false);
+    const [multiVariant, setMultiVariant] = useState<boolean>();
     const answers: {text: string, isCorrect: boolean}[] = props.question.answers;
+    let correctCounter: number = 0;
+
+    useEffect(() => {
+        answers.forEach((answer) => {
+            if (answer.isCorrect) {
+                correctCounter++;
+            }
+        });
+        console.log(correctCounter);
+        correctCounter > 1 ? setMultiVariant(true) : setMultiVariant(false);
+        console.log(multiVariant);
+    },  []);
 
     const addVariant = () => {
         answers.push({text: 'Вариант ответа', isCorrect: false});
@@ -62,7 +74,14 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
                 {answers.map((e, index) =>
                     props.changing
                     ? <Gapped>
-                            <Checkbox value={e.text} />
+                            <Checkbox checked={e.isCorrect}
+                                      value={e.text}
+                                      onValueChange={() => {
+                                    e.isCorrect = !e.isCorrect;
+                                    props.resetVariants(answers);
+                                    console.log(answers);
+                                }}
+                            />
                             <input value={e.text} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
                             <button onClick={() => removeVariant(index)}>Убрать вариант</button>
                         </Gapped>

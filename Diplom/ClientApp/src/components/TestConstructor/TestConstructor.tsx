@@ -54,7 +54,7 @@ export const TestConstructor = () => {
             testId = parseInt(testQuery);
             getTest(testId).then(res => setTestState([...res]))
         }
-    })
+    }, [])
 
     return <div className={'questions-container'}>
         {testState.map((e, index) =>

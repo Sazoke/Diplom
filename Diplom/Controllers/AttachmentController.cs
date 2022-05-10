@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Diplom.Controllers;
@@ -26,6 +25,8 @@ public class AttachmentController : Controller
         try
         {
             var file = Request.Form.Files.FirstOrDefault();
+            if (file is null)
+                return BadRequest();
             var storageName = await _bucket.WriteFileAsync(file);
             return Ok(storageName);
         }

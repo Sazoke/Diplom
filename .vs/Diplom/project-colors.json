@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "f3608089-91cc-4da0-ac7b-ce7f46a154d5": {
+      "ProjectGuid": "f3608089-91cc-4da0-ac7b-ce7f46a154d5",
+      "DisplayName": "Diplom",
+      "ColorIndex": 0
+    },
+    "7a284a44-18fa-483e-885f-c58159a5146e": {
+      "ProjectGuid": "7a284a44-18fa-483e-885f-c58159a5146e",
+      "DisplayName": "Infrastructure",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}

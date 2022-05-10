@@ -43,8 +43,12 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/profile">Профиль</NavLink>
                 </NavItem>
+<<<<<<< HEAD
+                <LoginMenu />
+=======
                 <LoginMenu>
                 </LoginMenu>
+>>>>>>> origin/back_new
               </ul>
             </Collapse>
           </Container>

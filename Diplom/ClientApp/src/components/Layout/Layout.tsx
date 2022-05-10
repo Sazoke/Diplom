@@ -8,12 +8,12 @@ export class Layout extends Component {
   render () {
     return (
       <div>
-
+        <NavMenu />
         <div className='mainContainer'>
           {this.props.children}
         </div>
           <div className='footer'>
-              <p className='footerText'>Образовательное учреждение "МОУ СОШ", 2022</p>
+              <span className='footerText'>Образовательное учреждение "МОУ СОШ", 2022</span>
           </div>
       </div>
     );

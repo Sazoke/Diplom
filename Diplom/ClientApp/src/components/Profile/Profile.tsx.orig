@@ -1,0 +1,79 @@
+import React, {ReactNode, useState} from 'react';
+import './Profile.css';
+<<<<<<< HEAD
+=======
+import styled from 'styled-components';
+>>>>>>> origin/back_new
+import {ProfileTabs} from "../ProfileTabs/ProfileTabs";
+import {Block} from "../Block/Block";
+import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
+import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
+import { profileObject } from '../../fakeApi';
+<<<<<<< HEAD
+import {Material} from "../Material/Material";
+import {List} from "../List/List";
+
+=======
+>>>>>>> origin/back_new
+
+export const Profile = () => {
+
+    const [active, setActive] = useState<string>("preview");
+
+    const selectRender = () => {
+        switch(active) {
+            case "preview":
+                return (
+<<<<<<< HEAD
+                    <div>
+=======
+                    <div className='preview'>
+>>>>>>> origin/back_new
+                        <div className='blocks-area'>
+                            <Block header={'Блок новых материалов'} content={profileObject.blocksMaterials}/>
+                            <Block header={'Блок свежих мероприятий'} content={profileObject.blocksEvents}/>
+                        </div>
+                        <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
+                    </div>
+                )
+<<<<<<< HEAD
+            case 'prez':
+                return <Material />
+            case 'events':
+                return <List />
+                default:
+=======
+            case 'tests':
+                return <div className='def'>
+            </div>
+            default:
+>>>>>>> origin/back_new
+                return <div className='def'>
+                </div>
+        }
+    }
+    return (
+        <div className='main'>
+            <div className='about'>
+                <div className='profilePic'>
+                    {profileObject.avatar
+                        ?
+                        <img src={profileObject.avatar} />
+                        :
+                        <AvatarPlaceholder />
+                    }
+                </div>
+                <div className='info'>
+                    <div className='fio'>
+                        {profileObject.name}
+                    </div>
+                    <div className='additional-info'>
+                        {profileObject.description}
+                    </div>
+                </div>
+            </div>
+            <ProfileTabs active={active} setActive={setActive}/>
+            {selectRender()}
+        </div>
+    )
+}

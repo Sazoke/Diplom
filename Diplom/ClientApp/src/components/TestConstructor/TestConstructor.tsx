@@ -31,7 +31,6 @@ export const TestConstructor = () => {
         setTestState([...copy]);
     }
     const saveTest = async() => {
-        console.log(testState);
         await fetch('/Test/AddOrUpdate',
             {
                 method: 'POST',

@@ -23,16 +23,32 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
-    public async Task<string> CreateUserAsync(CreateUserDto userDto)
+    public async Task<string> CreateUserAsync(CreateUserDto createUserDto)
     {
-        var user = _mapper.Map<ApplicationUser>(userDto);
+        var user = _mapper.Map<ApplicationUser>(createUserDto);
         user.UserName = user.Email;
-        var result = await _userManager.CreateAsync(user, userDto.Password);
+        var result = await _userManager.CreateAsync(user, createUserDto.Password);
         if (result.Succeeded)
             await _signInManager.SignInAsync(user, false);
         await _dbContext.SaveChangesAsync();
         return user.Id;
     }
+
+    public async Task LoginAsync(LoginDto loginDto)
+    {
+        var normalizedName = loginDto.Name.Normalize();
+        var user = _dbContext.Set<ApplicationUser>()
+            .FirstOrDefault(u => u.NormalizedUserName == normalizedName || u.NormalizedEmail == normalizedName);
+        if (user is null)
+            throw new Exception("Wrong login");
+        var result =
+            await _signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.RememberMe,
+                lockoutOnFailure: false);
+        if (result.Succeeded)
+            throw new Exception("Wrong password");
+    }
+
+    public async Task LogoutAsync() => await _signInManager.SignOutAsync();
 
     public async Task<ApplicationUser> GetProfile(string id)
     {

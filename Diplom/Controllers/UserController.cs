@@ -30,17 +30,38 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateUserDto userDto)
+    public async Task<IActionResult> Create([FromBody] CreateUserDto createUserDto)
     {
         try
         {
-            var newId = await _userService.CreateUserAsync(userDto);
+            var newId = await _userService.CreateUserAsync(createUserDto);
             return Ok(newId);
         }
         catch (Exception e)
         {
             return BadRequest(e);
         }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    {
+        try
+        {
+            await _userService.LoginAsync(loginDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _userService.LogoutAsync();
+        return Ok();
     }
 
     [HttpGet]

@@ -1,3 +1,4 @@
+using System.IO;
 using Infrastructure;
 using Infrastructure.Models.Application;
 using Infrastructure.Repositories;
@@ -17,7 +18,8 @@ public static class ServiceExtensions
         services.AddAutoMapper(typeof(Startup));
         services.AddScoped<DbContext, ApplicationDbContext>();
         services.AddScoped<ApplicationContext>();
-        services.AddScoped<IBucket, BucketStorage>(b => new BucketStorage(appEnvironment.WebRootPath));
+        services.AddScoped<IBucket, BucketStorage>(b =>
+            new BucketStorage(Path.Combine(appEnvironment.ContentRootPath, appEnvironment.WebRootPath ?? "")));
         services.AddScoped<IActivityService, ActivityService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<TagRepository>();

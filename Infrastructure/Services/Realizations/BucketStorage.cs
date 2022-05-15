@@ -64,8 +64,8 @@ public class BucketStorage : IBucket
             return stream;
         }
 
-        private string GetPath(string fileName) => $"{_directory}\\{fileName}";
+        private string GetPath(string fileName) => Path.Combine(_directory, fileName);
 
         private static string GenerateUniqueFileName(IFormFile formFile) =>
-            Guid.NewGuid().ToString("N") + Path.GetExtension(formFile.FileName).ToLower();
+            $"{Guid.NewGuid():N}.{formFile.ContentType.Split('/').LastOrDefault()}";
 }

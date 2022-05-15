@@ -1,3 +1,4 @@
+using System.IO;
 using Diplom.Extensions;
 using Infrastructure;
 using Infrastructure.Models.Application;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace Diplom
@@ -71,7 +73,12 @@ namespace Diplom
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Files")),
+                RequestPath = "/files"
+            });
+
             app.UseSpaStaticFiles();
 
             if (env.IsDevelopment())

@@ -20,7 +20,7 @@ export const BlockContent = (props: ContentProps) => {
             <div className='block-content'>
                 <div className='content-image'>
                     {props.contentImage
-                        ? <img src={props.contentImage}/>
+                        ? <img src={`Files/${props.contentImage}`}/>
                         : <ImagePlaceholder />
                     }
                 </div>

@@ -105,10 +105,12 @@ public class UserController : Controller
         if (user is null)
             return null;
         var dto = _mapper.Map<UserProfileDto>(user);
-        dto.Activities = user.Activities.Take(countOfMaterials)
+        dto.Activities = user.Activities.OrderByDescending(a => a.CreatedAt)
+            .Take(countOfMaterials)
             .Select(_mapper.Map<ActivityProfilePreview>)
             .ToList();
         dto.Materials = user.Materials.Take(countOfMaterials)
+            .OrderByDescending(a => a.CreatedAt)
             .Select(_mapper.Map<MaterialProfilePreview>)
             .ToList();
         return dto;

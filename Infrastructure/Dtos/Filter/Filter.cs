@@ -6,9 +6,9 @@ public class Filter
     
     public int PageSize { get; set; }
     
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
-    public HashSet<long> Tags { get; set; } = new();
+    public HashSet<long>? Tags { get; set; }
     
     public long? SchoolArea { get; set; }
     

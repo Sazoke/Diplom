@@ -31,15 +31,15 @@ namespace Diplom
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped(typeof(BaseRepository<>));
-            
-            services.AddApplicationServices(Environment);
             
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
             
+            
+            services.AddApplicationServices(Environment);
+
             services.AddDatabaseDeveloperPageExceptionFilter();
             
             services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/account/login");

@@ -14,7 +14,8 @@ interface IMaterial {
 
 export const Material = (props: IMaterial) => {
 
-    const [images, setImages] = React.useState<FileList | null>();
+    const [images, setImages] = useState<FileList | null>();
+    const [content, setContent] = useState<{text: string; isFile: boolean}[]>([]);
 
     const navigation = useNavigate();
 
@@ -33,6 +34,7 @@ export const Material = (props: IMaterial) => {
                     content: res.content
                 })
             });
+            setContent(material.content);
         }
         getAreas().then(e => console.log(areas));
         const image = document.getElementById('picForMaterial');
@@ -61,13 +63,12 @@ export const Material = (props: IMaterial) => {
     });
     const config = {
         readonly: false,
-        height: '95vh',
         allowResizeY: false,
         allowResizeX: false,
         removeButtons: ['source'],
         toolbar: false,
         askBeforePasteHTML: false,
-        enableDragAndDropFileToEditor: true,
+        enableDragAndDropFileToEditor: false,
 
     };
     config["toolbar"] = changeableContent;
@@ -76,6 +77,10 @@ export const Material = (props: IMaterial) => {
 
     const saveMaterial = async() => {
         await setImage();
+        let copy = material;
+        copy.content = content;
+        setMaterial(copy);
+        console.log(material);
         await fetch('/Material/AddOrUpdate',
             {
                 method: 'POST',
@@ -108,7 +113,11 @@ export const Material = (props: IMaterial) => {
             {
                 method: 'POST',
                 body: formData,
-            })
+            }).then(response => response.text().then(text => {
+                let copy = content;
+                copy.push({text: text, isFile: true});
+                setContent([...copy]);
+        }))
     }
 
     const [selectedArea, setSelectedArea] = useState<any>();
@@ -118,7 +127,7 @@ export const Material = (props: IMaterial) => {
             removeMaterial(material.id).then(e => navigation(`/`, {replace: true}));
         }
     }
-
+    console.log(content);
     return (
         <div className='material' onDoubleClick={() => setChangeableContent(!changeableContent)}>
             <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
@@ -144,16 +153,20 @@ export const Material = (props: IMaterial) => {
                     type: e
                 }))} />
             </div>
-            <JoditEditor
-                    ref={editor}
-                    value={material.content[0].text}
-                    config={config}
-                    onBlur={(e) => setMaterial(prevState => ({
-                        ...prevState,
-                        content: [{text: e,
-                        isFile: false}]
-                    }))}
-            />
+            {content.map((item, index) =>
+                item.isFile
+                ? <img alt={item.text} src={`Files/${item.text}`} />
+                : <JoditEditor
+                        ref={editor}
+                        value={material.content[index].text}
+                        config={config}
+                        onBlur={(e) => {
+                            let copy = [...content];
+                            copy[index].text = e;
+                            setContent([...copy]);
+                        }}
+                />
+            )}
             <div className='files'>
                 <div className='title'>
                     Прикрепленные файлы

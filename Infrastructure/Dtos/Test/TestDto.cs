@@ -9,4 +9,6 @@ public class TestDto
     public string Name { get; set; }
     
     public List<Question> Questions { get; set; }
+    
+    public List<TestResultDto> Results { get; set; }
 }

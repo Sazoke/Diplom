@@ -81,13 +81,27 @@ public class TestController : Controller
         }
     }
 
-    [HttpPost]
+    [HttpDelete]
     [Authorize]
     public async Task<IActionResult> Remove([FromQuery] long id)
     {
         try
         {
             await _testService.RemoveAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddTestResult([FromBody] TestResultDto testResultDto)
+    {
+        try
+        {
+            await _testService.AddTestResult(testResultDto.TestId, testResultDto.Username, testResultDto.Percent);
             return Ok();
         }
         catch (Exception e)

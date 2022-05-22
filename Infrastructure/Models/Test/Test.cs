@@ -10,5 +10,5 @@ public class Test : BaseAuditableEntity
     [Column(TypeName = "jsonb")]
     public List<Question> Questions { get; set; }
     
-    public List<UserResult> Results { get; set; }
+    public List<TestResult> Results { get; set; }
 }

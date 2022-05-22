@@ -1,28 +1,29 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Input} from "@skbkontur/react-ui/cjs/components/Input";
 import '../Material/Material.css';
-import {getEvent, removeActivity} from "../../api/fetches";
+import {getCurrentUser, getEvent, removeActivity} from "../../api/fetches";
 import JoditEditor from "jodit-react";
-import {DatePicker} from "@skbkontur/react-ui";
+import {Button, DatePicker, FileUploader} from "@skbkontur/react-ui";
 import {useNavigate} from "react-router-dom";
 
-export const Event = (props: {id?: number}) => {
+export const Event = (props: {id?: number, teacherId: string}) => {
+
+    let pic: File | null;
 
     const [event, setEvent] = useState({
         id: null,
         name: "Название мероприятия",
-        image: 'string',
+        image: '',
         description: "Описание мероприятия",
         areaId: 1,
         tags: [],
+        teacherId: props.teacherId,
         dateTime: ''
     });
-    const [changed, setChanged] = useState(false);
 
     useEffect(() => {
         if (props.id) {
             getEvent(props.id).then(res => {
-                console.log(res);
                 setEvent({
                     id: res.id,
                     name: res.name,
@@ -30,17 +31,40 @@ export const Event = (props: {id?: number}) => {
                     description: res.description,
                     areaId: res.areaId,
                     tags: res.tags,
+                    teacherId: res.teacherId,
                     dateTime: res.date,
                 })
             })
-            setChanged(!changed);
         }
     },[]);
 
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
 
+    const setImage = async() => {
+        const formData = new FormData();
+        if (pic) {
+            formData.append('new', pic, pic.name);
+            await fetch('/Attachment/Add',
+                {
+                    method: 'POST',
+                    body: formData,
+                }).then(response => response.text().then(text => {
+                setEvent(prevState => ({
+                    ...prevState,
+                    image: text
+                }));
+            }))
+        } else {
+            setEvent(prevState => ({
+                ...prevState,
+                image: ''
+            }));
+        }
+    }
+
     const saveEvent = async () => {
+        setImage();
         await fetch('/Activity/AddOrUpdate',
             {
                 method: 'POST',
@@ -58,7 +82,7 @@ export const Event = (props: {id?: number}) => {
     const editor = useRef(null);
     const config = {
         readonly: false,
-        height: '95vh',
+        height: '580px',
         allowResizeY: false,
         allowResizeX: false,
         removeButtons: ['source'],
@@ -78,9 +102,23 @@ export const Event = (props: {id?: number}) => {
         }
     }
 
+    const [canChange, setCanChange] = useState(false);
+    getCurrentUser().then(res => {
+        setCanChange(res.id === event.teacherId);
+    });
+
     const minDate = (new Date()).toDateString();
-    return <div className='material' onDoubleClick={() => setChangeableContent(!changeableContent)}>
-        <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
+    const dateArr = event.dateTime.split('-');
+    let date = dateArr[2]?.slice(0,2) + '.' + dateArr[1] + '.' + dateArr[0];
+    if (event.dateTime.length === 10) {
+        date = event.dateTime;
+    }
+    const deletePic = async (name: string) => {
+        await fetch(`Attachment/Delete?${name}`).then(() => saveEvent());
+    }
+
+    return <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
+        <div className='title' onDoubleClick={() => canChange ? setChangeableName(!changeableName) : null}>
             { changeableName ? <Input value={event.name} onBlur={() => setChangeableName(!changeableName)} onValueChange={(e) => {
                 setEvent(prevState => ({
                     ...prevState,
@@ -88,11 +126,29 @@ export const Event = (props: {id?: number}) => {
                 }));
             }}/> : event.name}
         </div>
-        <DatePicker value={event.dateTime} onValueChange={(e) => {
-            setEvent(prevState => ({
-            ...prevState,
-            dateTime: e
-        }))}} minDate={minDate}/>
+        <div className='date-place'>
+            <span> Дата мероприятия: </span>
+            {
+                !canChange
+                    ? <span>{date}</span>
+                    : <DatePicker value={date} onValueChange={(e) => {
+                        setEvent(prevState => ({
+                            ...prevState,
+                            dateTime: e.toString()
+                        }))
+                    }} minDate={minDate}/>
+            }
+        </div>
+        {event.image !== ''
+            ? <div className={'image-place'}>
+                <img src={`Files/${event.image}`}/>
+                {canChange && <Button width={200} use='danger' onClick={() => deletePic(event.image)}>Удалить изображение</Button>}
+            </div>
+            : canChange && <div className='image-loader'>
+                <FileUploader  onAttach={(e) => {pic = e[0].originalFile; saveEvent()}}/>
+            </div>
+
+        }
         <JoditEditor
             ref={editor}
             value={event.description}
@@ -102,9 +158,9 @@ export const Event = (props: {id?: number}) => {
                 description: e
             }))}
         />
-        <button onClick={() => {
+        {canChange && <Button onClick={() => {
             saveEvent();
-        }}>Сохранить мероприятие</button>
-        <button onClick={() => removeEvent()}>Удалить мероприятие</button>
+        }}>Сохранить мероприятие</Button>}
+        {canChange && <Button onClick={() => removeEvent()}>Удалить мероприятие</Button>}
     </div>
 }

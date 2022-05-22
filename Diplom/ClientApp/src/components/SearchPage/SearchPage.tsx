@@ -6,10 +6,25 @@ import SearchIcon from "@skbkontur/react-icons/Search";
 import {getEvents, getMaterials, getTeachers} from "../../api/fetches";
 import {useLocation} from "react-router-dom";
 
+interface Material {
+    id: string | null,
+    name: string,
+    description: string,
+    image: string,
+    type: string,
+    areaId: number,
+    tags: string[],
+    teacherId: null,
+    content: {
+        text: string,
+        isFile: false
+    }[]
+}
+
 export const SearchPage = () => {
 
     const [filtersOpened, setFiltersOpened] = useState(false);
-    const [materials, setMaterials] = useState<any[]>([]);
+    const [materials, setMaterials] = useState<Material[]>([]);
     const [events, setEvents] = useState<any[]>([]);
     const [teachers, setTeachers] = useState<any[]>([]);
     const [searchText, setSearchText] = useState<string>('');
@@ -101,7 +116,7 @@ export const SearchPage = () => {
             />
         </Modal.Body>
     </Modal>
-
+    console.log(materials);
     return <div className={'search-area'}>
         <div className={'input-area'}>
             <Input value={searchText} onValueChange={e => setSearchText(e)} width={'100%'} size='large' leftIcon={<SearchIcon />} />
@@ -111,20 +126,20 @@ export const SearchPage = () => {
         {materials.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Материалы</div>
             {materials.map((e: any) =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'material'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} img={e.image} element={'material'}/>
             )}
         </div>}
         {teachers.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Преподаватели</div>
             {teachers.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} element={'teacher'}/>
+                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} img={e.image} element={'teacher'}/>
             )}
         </div>}
         {events.length > 0 && <div className={'group-area'}>
             <div className={'group-title'}>Мероприятия</div>
             {events.map(e => {
                 console.log(e.dateTime);
-                return <SearchElement date={e.dateTime} name={e.name} id={e.id} teacherId={e.teacherId} element={'event'}/>
+                return <SearchElement date={e.dateTime} name={e.name} id={e.id} teacherId={e.teacherId} img={e.image} element={'event'}/>
             })}
         </div>}
         {filtersOpened && renderModal()}

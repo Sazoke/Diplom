@@ -85,7 +85,7 @@ export const Profile = () => {
             case 'material':
                 return <Material id={parseInt(materialQuery)} teacherId={profile.id}/>
             case 'event':
-                return <Event id={parseInt(eventQuery)} />
+                return <Event id={parseInt(eventQuery)} teacherId={profile.id} />
             case 'test':
                 return <TestConstructor />
             default:

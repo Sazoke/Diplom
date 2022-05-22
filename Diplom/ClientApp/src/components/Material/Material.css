@@ -1,9 +1,9 @@
 .material {
-    height: 130vh;
+    height: 800px;
     background-color: white;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .files {
     border: solid #cccccc 2px;
@@ -15,4 +15,33 @@
     width: 100%;
     text-align: center;
     height: 5vh;
+}
+.image-place {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 10px;
+}
+.image-place img {
+    height: 360px;
+    width: auto;
+    object-fit: contain;
+}
+.date-place {
+    padding: 5px;
+}
+.image-loader {
+    padding: 5px;
+}
+.material-props {
+    padding: 5px;
+}
+.material-props > div {
+    display: flex;
+    gap: 10px;
+}
+.material-files {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

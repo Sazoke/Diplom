@@ -17,7 +17,7 @@ export const NavMenu = () => {
   const [currentUserId, setCurrentUserId] = useState('');
 
   useEffect(() => {
-    getCurrentUser().then(res => setCurrentUserId(res.id));
+    getCurrentUser().then(res => {if (res) setCurrentUserId(res.id)});
   },[])
 
 
@@ -46,7 +46,7 @@ export const NavMenu = () => {
           <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
             <ul className="navbar-nav flex-grow">
               <NavItem>
-                <NavLink tag={Link} className="text-dark" to={`/profile?teacherId=${currentUserId}`}>Профиль</NavLink>
+                <NavLink disabled={!currentUserId} tag={Link} className="text-dark" to={`/profile?teacherId=${currentUserId}`}>Профиль</NavLink>
               </NavItem>
               <LoginMenu />
             </ul>

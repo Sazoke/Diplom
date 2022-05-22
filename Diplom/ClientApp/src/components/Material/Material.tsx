@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import JoditEditor from "jodit-react";
 import './Material.css';
-import {getMaterial, removeMaterial} from "../../api/fetches";
+import {getCurrentUser, getMaterial, removeMaterial} from "../../api/fetches";
 import {Input} from "@skbkontur/react-ui/cjs/components/Input";
 import {Button, Dropdown, FileUploader, Link, MenuItem} from "@skbkontur/react-ui";
 import {useNavigate} from "react-router-dom";
@@ -49,7 +49,6 @@ export const Material = (props: IMaterial) => {
             });
         }
         getAreas();
-        setSelectedArea(material.areaId);
     }, []);
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
@@ -88,7 +87,12 @@ export const Material = (props: IMaterial) => {
     const getAreas = async() => {
         await fetch('/SchoolArea/GetAll')
             .then(response => response.json())
-            .then(result => setAreas([...result]))
+            .then(result => {
+                let temp = [];
+                temp = result.map((e: { value: number, name: string }) => e).sort((a: { id: number, name: string }, b: { id: number, name: string }) =>  a.id - b.id);
+                console.log(temp);
+                setAreas(temp);
+            })
             .catch(err => console.log(err));
     }
 
@@ -127,10 +131,6 @@ export const Material = (props: IMaterial) => {
         await fetch(`Attachment/Delete?${name}`).then(() => saveMaterial());
     }
 
-    const addFiles = (files: FileUploaderAttachedFile[]) => {
-        files.forEach(file => addAttachments(file.originalFile))
-    }
-
     const addAttachments = async (file: File) => {
         const formData = new FormData();
         formData.append('new', file, file.name)
@@ -147,9 +147,25 @@ export const Material = (props: IMaterial) => {
         })).catch(err => console.log(err));
     };
 
+    const deleteFile = async (name: string, index: number) => {
+        await fetch(`Attachment/Delete?${name}`);
+        let copy = material.content;
+        copy.splice(index, 1);
+        setMaterial(prevState => ({
+                ...prevState,
+                content: copy
+            }
+        ));
+    }
+
+    const [canChange, setCanChange] = useState(false);
+    getCurrentUser().then(res => {
+        setCanChange(res.id === material.teacherId);
+    });
+
     return (
-        <div className='material' onDoubleClick={() => setChangeableContent(!changeableContent)}>
-            <div className='title' onDoubleClick={() => setChangeableName(!changeableName)}>
+        <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
+            <div className='title' onDoubleClick={() => canChange ? setChangeableName(!changeableName) : null}>
                 { changeableName ? <Input value={material.name} onBlur={() => setChangeableName(!changeableName)} onValueChange={(e) => {
                     setMaterial(prevState => ({
                         ...prevState,
@@ -157,27 +173,38 @@ export const Material = (props: IMaterial) => {
                     }));
                 }}/> : material.name}
             </div>
-            <div>
-                <Dropdown caption={selectedArea?.name ?? "Название предмета"}>
-                    {areas.map((el:any) => <MenuItem onClick={() => {
-                        setMaterial(prevState => ({
+            <div className='material-props'>
+                {canChange
+                    ? <div>
+                        <Dropdown caption={areas[material.areaId - 1]?.name ?? "Не указан"}>
+                            {areas.map((el: { id: number, name: string }, index) => <MenuItem onClick={() => {
+                                setMaterial(prevState => ({
+                                    ...prevState,
+                                    areaId: index + 1
+                                }));
+                                setSelectedArea(el);
+                            }}> {el.name} </MenuItem>)}
+                        </Dropdown>
+                        <span>Тип материала: </span>
+                        <Input value={material.type} onValueChange={(e) => setMaterial(prevState => ({
                             ...prevState,
-                            areaId: el.id
-                        }));
-                        setSelectedArea(el);
-                    }} > {el.name} </MenuItem>)}
-                </Dropdown>
-                <Input value={material.type} onValueChange={(e) => setMaterial(prevState => ({
-                    ...prevState,
-                    type: e
-                }))} />
+                            type: e
+                        }))}/>
+                    </div>
+                    : <div>
+                        <span>Предмет: {areas[material.areaId - 1]?.name ?? 'Не указан'}</span>
+                        <span>Тип материала: {material.type}</span>
+                    </div>
+                }
             </div>
             {material.image !== ''
-                ? <div>
-                    <img src={`Files/${material.image}`} width={800} height={700}/>
-                    <Button onClick={() => deletePic(material.image)}>Удалить изображение</Button>
+                ? <div className='image-place'>
+                    <img src={`Files/${material.image}`}/>
+                    {canChange && <Button width={200} use='danger' onClick={() => deletePic(material.image)}>Удалить изображение</Button>}
                 </div>
-                : <FileUploader onAttach={(e) => {pic = e[0].originalFile}}/>
+                : canChange && <div className='image-loader'>
+                <FileUploader onAttach={(e) => {pic = e[0].originalFile; saveMaterial()}}/>
+            </div>
             }
             <JoditEditor
                         ref={editor}
@@ -193,21 +220,27 @@ export const Material = (props: IMaterial) => {
                 <div className='title'>
                     Прикрепленные файлы
                 </div>
-                <FileUploader multiple onAttach={(e) => addFiles(e)}/>
-                <div>
+                {canChange &&
+                    <div className='image-loader'>
+                        <FileUploader onAttach={(e) => addAttachments(e[0].originalFile)}/>
+                    </div>}
+                <div className='material-files'>
                     {material.content.map((item, index) => {
                             if (index > 0) {
-                                return <Link href={`Files/${item.text}`}>Down</Link>
-                            }
+                                return <div>
+                                    <Link href={`Files/${item.text}`}>{item.text}</Link>
+                                    {canChange && <Button onClick={() => deleteFile(item.text, index)} use='danger'>Удалить файл</Button>}
+                                </div>
+                            } else return null;
                         }
                     )}
                 </div>
             </div>
 
-            <button onClick={() => {
+            {canChange && <Button onClick={() => {
                 saveMaterial();
-            }}>Сохранить материал</button>
-            <button onClick={() => deleteMaterial()}>Удалить материал</button>
+            }}>Сохранить мероприятие</Button>}
+            {canChange && <Button onClick={() => deleteMaterial()}>Удалить мероприятие</Button>}
         </div>
     )
 }

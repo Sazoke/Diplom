@@ -3,6 +3,7 @@ using Infrastructure.Dtos.Test;
 using Infrastructure.Models.Test;
 using Infrastructure.Repositories;
 using Infrastructure.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services.Realizations;
 
@@ -22,10 +23,8 @@ public class TestService : ITestService
         return _testRepository.GetByTeacherId(filter.TeacherId, filter.Page, filter.PageSize);
     }
 
-    public Test GetById(long id)
-    {
-        return _testRepository.GetById(id);
-    }
+    public Test GetById(long id) => 
+        _testRepository.GetById(id, q => q.Include(t => t.Results));
 
     public async Task AddOrUpdateAsync(TestEditDto testEditDto)
     {
@@ -41,5 +40,19 @@ public class TestService : ITestService
     public async Task RemoveAsync(long id)
     {
         await _testRepository.RemoveAsync(id);
+    }
+
+    public async Task AddTestResult(long testId, string username, int percent)
+    {
+        var test = _testRepository.GetById(testId, q => q.Include(t => t.Results));
+        var result = new TestResult()
+        {
+            CreatedById = test.CreatedById,
+            CreatedAt = DateTime.UtcNow,
+            Percent = percent,
+            Username = username
+        };
+        test.Results.Add(result);
+        await _testRepository.SaveChangesAsync();
     }
 }

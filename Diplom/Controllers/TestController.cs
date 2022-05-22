@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Dtos.Base;
 using Infrastructure.Dtos.Test;
+using Infrastructure.Models.Application;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ public class TestController : Controller
 {
     private readonly ITestService _testService;
     private readonly IMapper _mapper;
+    private readonly ApplicationContext _applicationContext;
 
-    public TestController(ITestService testService, IMapper mapper)
+    public TestController(ITestService testService, IMapper mapper, ApplicationContext applicationContext)
     {
         _testService = testService;
         _mapper = mapper;
+        _applicationContext = applicationContext;
     }
 
     [HttpGet]
@@ -29,6 +32,7 @@ public class TestController : Controller
         {
             var test = _testService.GetById(id);
             var dto = _mapper.Map<TestDto>(test);
+            dto.CanEdit = _applicationContext.CurrentUserId == test.CreatedById;
             return Ok(dto);
         }
         catch (Exception e)
@@ -81,13 +85,27 @@ public class TestController : Controller
         }
     }
 
-    [HttpPost]
+    [HttpDelete]
     [Authorize]
     public async Task<IActionResult> Remove([FromQuery] long id)
     {
         try
         {
             await _testService.RemoveAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddTestResult([FromBody] TestResultDto testResultDto)
+    {
+        try
+        {
+            await _testService.AddTestResult(testResultDto.TestId, testResultDto.Username, testResultDto.Percent);
             return Ok();
         }
         catch (Exception e)

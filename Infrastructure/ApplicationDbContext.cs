@@ -21,7 +21,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Activity> Activities { get; set; }
     public DbSet<Material> Materials { get; set; }
     public DbSet<Test> Tests { get; set; }
-    public DbSet<UserResult> Results { get; set; }
+    public DbSet<TestResult> Results { get; set; }
     public DbSet<SchoolArea> SchoolAreas { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<EducationalMaterial> EducationalMaterials { get; set; }

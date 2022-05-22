@@ -13,4 +13,6 @@ public interface ITestService
     public Task AddOrUpdateAsync(TestEditDto testEditDto);
 
     public Task RemoveAsync(long id);
+
+    public Task AddTestResult(long testId, string username, int percent);
 }

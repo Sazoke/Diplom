@@ -71,7 +71,7 @@ public class UserController : Controller
             return NotFound();
         try
         {
-            var dto = await GetProfileDto(4);
+            var dto = await GetProfileDto(id, 4);
             if (dto is null)
                 return NotFound();
             return Ok(dto);
@@ -90,7 +90,7 @@ public class UserController : Controller
             return BadRequest();
         try
         {
-            var dto = await GetProfileDto(3);
+            var dto = await GetProfileDto(_applicationContext.CurrentUserId, 3);
             return Ok(dto);
         }
         catch (Exception e)
@@ -99,16 +99,18 @@ public class UserController : Controller
         }
     }
 
-    private async Task<UserProfileDto> GetProfileDto(int countOfMaterials)
+    private async Task<UserProfileDto> GetProfileDto(string id, int countOfMaterials)
     {
-        var user = await _userService.GetProfile(_applicationContext.CurrentUserId);
+        var user = await _userService.GetProfile(id);
         if (user is null)
             return null;
         var dto = _mapper.Map<UserProfileDto>(user);
-        dto.Activities = user.Activities.Take(countOfMaterials)
+        dto.Activities = user.Activities.OrderByDescending(a => a.CreatedAt)
+            .Take(countOfMaterials)
             .Select(_mapper.Map<ActivityProfilePreview>)
             .ToList();
         dto.Materials = user.Materials.Take(countOfMaterials)
+            .OrderByDescending(a => a.CreatedAt)
             .Select(_mapper.Map<MaterialProfilePreview>)
             .ToList();
         return dto;

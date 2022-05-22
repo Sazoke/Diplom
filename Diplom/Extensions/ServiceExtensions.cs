@@ -13,21 +13,23 @@ namespace Diplom.Extensions;
 
 public static class ServiceExtensions
 {
+        
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IWebHostEnvironment appEnvironment)
     {
-        services.AddAutoMapper(typeof(Startup));
         services.AddScoped<DbContext, ApplicationDbContext>();
+        services.AddScoped(typeof(BaseRepository<>));
+        services.AddScoped<TagRepository>();
+        services.AddScoped<TestRepository>();
+        services.AddAutoMapper(typeof(Startup));
         services.AddScoped<ApplicationContext>();
         services.AddScoped<IBucket, BucketStorage>(b =>
             new BucketStorage(Path.Combine(appEnvironment.ContentRootPath, appEnvironment.WebRootPath ?? "")));
         services.AddScoped<IActivityService, ActivityService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<TagRepository>();
         services.AddScoped<IMaterialService, MaterialService>();
         services.AddScoped<ISchoolAreaService, SchoolAreaService>();
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<IEducationalMaterialService, EducationalMaterialService>();
-        services.AddScoped<TestRepository>();
         services.AddScoped<ITestService, TestService>();
         return services;
     }

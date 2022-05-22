@@ -8,5 +8,7 @@ public class FilterResultDto
     
     public string TeacherId { get; set; }
     
+    public string Image { get; set; }
+    
     public DateTime Date { get; set; }
 }

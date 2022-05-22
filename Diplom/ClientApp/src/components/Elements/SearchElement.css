@@ -3,11 +3,17 @@
     flex-direction: row;
     border-bottom: solid 2px #0366d6;
     background-color: white;
+    width: 100%;
 }
 .img-area {
+    display: flex;
+    flex-direction: column;
     width: 200px;
     height: 160px;
     background-color: #cccccc;
+}
+.img-area img {
+    object-fit: contain;
 }
 .name-area {
     padding: 1vh;

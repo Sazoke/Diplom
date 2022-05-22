@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {QuestionContainer} from "../Question/QuestionContainer";
 import './TestConsctructor.css';
 import {useLocation, useSearchParams} from "react-router-dom";
-import {getTest} from "../../api/fetches";
+import {getCurrentUser, getTest} from "../../api/fetches";
 
 export const TestConstructor = () => {
     let testId: number;
@@ -54,6 +54,11 @@ export const TestConstructor = () => {
             getTest(testId).then(res => setTestState([...res]))
         }
     }, [])
+
+    const [canChange, setCanChange] = useState(false);
+    getCurrentUser().then(res => {
+        setCanChange(res.id === 1);
+    });
 
     return <div className={'questions-container'}>
         {testState.map((e, index) =>

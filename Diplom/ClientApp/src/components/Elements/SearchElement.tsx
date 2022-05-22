@@ -5,7 +5,7 @@ import './SearchElement.css';
 
 interface ISearchElement {
     name: string;
-    img: string;
+    img?: string;
     isTest?: boolean;
     id: number;
     teacherId?: string;
@@ -20,7 +20,7 @@ export const SearchElement = (props: ISearchElement) => {
             case 'material':
                 return `/profile?teacherId=${props.teacherId}&materialId=${props.id}`;
             case 'teacher':
-                return `/profile?teacherId=${props.teacherId}`;
+                return `/profile?teacherId=${props.id}`;
             case 'event':
                 return `/profile?teacherId=${props.teacherId}&eventId=${props.id}`;
             case 'test':

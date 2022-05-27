@@ -157,8 +157,15 @@ export const getTests = async (teacherId?: string) => {
         .catch(error => console.log(error));
 }
 
-export const getTest = async (id: number): Promise<any[]> => {
+export const getTestQuestions = async (id: number): Promise<any[]> => {
     return await fetch(`/Test/GetQuestionsById?id=${id}`)
+        .then(response => response.json())
+        .then(result => result)
+        .catch(error => console.log(error));
+}
+
+export const getTest = async (id: number) => {
+    return await fetch(`/Test/GetById?id=${id}`)
         .then(response => response.json())
         .then(result => result)
         .catch(error => console.log(error));

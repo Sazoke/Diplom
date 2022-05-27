@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Radio, RadioGroup, Toggle, Gapped, Checkbox} from "@skbkontur/react-ui";
+import {Radio, RadioGroup, Toggle, Gapped, Checkbox, Button} from "@skbkontur/react-ui";
 import '../TestConstructor/TestConsctructor.css';
 
 interface IQuestionContainerProps {
@@ -7,12 +7,13 @@ interface IQuestionContainerProps {
     changeQuestion: (value: string) => void;
     removeQuestion: () => void;
     resetVariants: (answers: {text: string, isCorrect: boolean}[]) => void;
+    resetAnswers?: (answers: {text: string, isCorrect: boolean, checked?: boolean}[]) => void;
     changing: boolean;
 }
 
 export const QuestionContainer = (props: IQuestionContainerProps) => {
     const [multiVariant, setMultiVariant] = useState<boolean>();
-    const answers: {text: string, isCorrect: boolean}[] = props.question.answers;
+    const answers: {text: string, isCorrect: boolean, checked?: boolean}[] = props.question.answers;
     let correctCounter: number = 0;
 
     useEffect(() => {
@@ -21,9 +22,7 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
                 correctCounter++;
             }
         });
-        console.log(correctCounter);
         correctCounter > 1 ? setMultiVariant(true) : setMultiVariant(false);
-        console.log(multiVariant);
     },  []);
 
     const addVariant = () => {
@@ -52,20 +51,25 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
                     onChange={(e) => props.changeQuestion(e.currentTarget.value)}
                     onBlur={e => props.changeQuestion(e.currentTarget.value)}
                     />
-                    <button onClick={() => props.removeQuestion()}>Убрать</button>
+                    <Button onClick={() => props.removeQuestion()}>Убрать</Button>
                 </div>
                 : <label>{props.question.text}</label>
             }
-            {!multiVariant && <RadioGroup>
+            {!multiVariant && <RadioGroup onValueChange={(v:{text: string, isCorrect: boolean, checked?: boolean}) => {
+                answers.forEach(ans => ans.checked = false);
+                v.checked = !v.checked;
+                if (props.changing) v.isCorrect = !v.isCorrect;
+                props.resetAnswers!(answers);
+            }}>
                 {answers && answers.map((e, index) =>
                 props.changing
                 ? <Gapped>
-                        <Radio value={e.text}/>
+                        <Radio value={e}/>
                         <input value={e.text} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
-                        <button onClick={() => removeVariant(index)}>Убрать вариант</button>
+                        <Button onClick={() => removeVariant(index)}>Убрать вариант</Button>
                     </Gapped>
                 : <Gapped>
-                        <Radio value={e.text}/>
+                        <Radio value={e} />
                         <label>{e.text}</label>
                     </Gapped>
                 )}
@@ -79,19 +83,19 @@ export const QuestionContainer = (props: IQuestionContainerProps) => {
                                       onValueChange={() => {
                                     e.isCorrect = !e.isCorrect;
                                     props.resetVariants(answers);
-                                    console.log(answers);
                                 }}
                             />
                             <input value={e.text} onChange={(el) => changeVariant(el.currentTarget.value, index)}/>
-                            <button onClick={() => removeVariant(index)}>Убрать вариант</button>
+                            <Button onClick={() => removeVariant(index)}>Убрать вариант</Button>
                         </Gapped>
                     : <Gapped>
-                            <Checkbox value={e.text} />
+                            <Checkbox value={e.text} checked={e.checked} onValueChange={() => {e.checked = !e.checked;
+                                props.resetVariants(answers)}}/>
                             <label>{e.text}</label>
                         </Gapped>
                 )}
             </div>}
         </div>
-        {props.changing && <button onClick={() => addVariant()}>Добавить вариант</button>}
+        {props.changing && <Button onClick={() => addVariant()}>Добавить вариант</Button>}
     </div>
 }

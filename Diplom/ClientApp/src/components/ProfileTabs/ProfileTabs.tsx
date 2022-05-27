@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 interface IProfileTabsProps {
     active: string;
     setActive: (value: string) => void;
+    teacherId: string;
 }
 
 export const ProfileTabs = (props: IProfileTabsProps) => {
@@ -22,7 +23,10 @@ export const ProfileTabs = (props: IProfileTabsProps) => {
                 <div id='events' onClick={() => navigation('/search',{replace: true})} className='profileTab'>Мероприятия</div>
                 <div id='albums' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab'>Фотоальбомы</div>
                 <div id='feedback' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab'>Обратная связь</div>
-                <div id='tests' onClick={(e) => props.setActive(e.currentTarget.id)} className='profileTab'>Онлайн-тесты</div>
+                <div id='tests' onClick={(e) => {
+                    navigation(`/profile/tests?teacherId=${props.teacherId}`);
+                    props.setActive('tests');
+                }} className='profileTab'>Онлайн-тесты</div>
             </div>
     )
 }

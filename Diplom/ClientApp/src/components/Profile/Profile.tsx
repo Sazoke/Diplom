@@ -13,7 +13,7 @@ import {Event} from "../Event/Event";
 import {Tests} from "../Tests/Tests";
 import {TestConstructor} from "../TestConstructor/TestConstructor";
 
-export const Profile = () => {
+export const Profile = (props: {active?: string}) => {
 
     const [active, setActive] = useState<string>("preview");
     const [profile, setProfile] = useState({
@@ -28,10 +28,10 @@ export const Profile = () => {
     const [changingName, setChangingName] = useState(false);
     const [changingDescription, setChangingDescription] = useState(false);
     const [query,setQuery] = useSearchParams();
-    const profileId = query.get('teacherId') ?? '';
     const [changing, setChanging] = useState(false);
     const search = useLocation().search;
     const searchParams = new URLSearchParams(search);
+    const profileId = query.get('teacherId') ?? '';
     const materialQuery = searchParams.get('materialId') ?? '';
     const eventQuery = searchParams.get('eventId') ?? '';
     const testQuery = searchParams.get('testId') ?? '';
@@ -48,17 +48,14 @@ export const Profile = () => {
                 educationalMaterials: result.educationalMaterials
             }
         ));
-        if (materialQuery !== '') {
-            return setActive('material');
-        }
-        if (eventQuery !== '') {
-            return setActive('event');
+        if (props.active) {
+            return setActive(props.active);
         }
         if (testQuery !== '') {
             return setActive('test');
         }
         return setActive('preview');
-    }, []);
+    }, [search]);
 
     useEffect(() => {
         if (changing) {
@@ -83,9 +80,9 @@ export const Profile = () => {
             case 'tests':
                 return <Tests setActive={setActive} teacherId={profile.id}/>
             case 'material':
-                return <Material id={parseInt(materialQuery)} teacherId={profile.id}/>
+                return <Material />
             case 'event':
-                return <Event id={parseInt(eventQuery)} teacherId={profile.id} />
+                return <Event />
             case 'test':
                 return <TestConstructor />
             default:
@@ -124,7 +121,7 @@ export const Profile = () => {
                     </div>}
                 </div>
             </div>
-            <ProfileTabs active={active} setActive={setActive}/>
+            <ProfileTabs teacherId={profile.id} active={active} setActive={setActive}/>
             {selectRender()}
         </div>
     )

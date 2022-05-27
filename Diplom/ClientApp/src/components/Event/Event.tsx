@@ -4,11 +4,16 @@ import '../Material/Material.css';
 import {getCurrentUser, getEvent, removeActivity} from "../../api/fetches";
 import JoditEditor from "jodit-react";
 import {Button, DatePicker, FileUploader} from "@skbkontur/react-ui";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
-export const Event = (props: {id?: number, teacherId: string}) => {
+export const Event = () => {
 
     let pic: File | null;
+    const [query,setQuery] = useSearchParams();
+    const search = useLocation().search;
+    const searchParams = new URLSearchParams(search);
+    const teacherId = query.get('teacherId') ?? '';
+    const id = searchParams.get('eventId');
 
     const [event, setEvent] = useState({
         id: null,
@@ -17,13 +22,13 @@ export const Event = (props: {id?: number, teacherId: string}) => {
         description: "Описание мероприятия",
         areaId: 1,
         tags: [],
-        teacherId: props.teacherId,
+        teacherId: teacherId,
         dateTime: ''
     });
 
     useEffect(() => {
-        if (props.id) {
-            getEvent(props.id).then(res => {
+        if (id) {
+            getEvent(parseInt(id)).then(res => {
                 setEvent({
                     id: res.id,
                     name: res.name,
@@ -36,7 +41,7 @@ export const Event = (props: {id?: number, teacherId: string}) => {
                 })
             })
         }
-    },[]);
+    },[search]);
 
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
@@ -116,7 +121,7 @@ export const Event = (props: {id?: number, teacherId: string}) => {
     const deletePic = async (name: string) => {
         await fetch(`Attachment/Delete?${name}`).then(() => saveEvent());
     }
-
+    console.log(event.description);
     return <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
         <div className='title' onDoubleClick={() => canChange ? setChangeableName(!changeableName) : null}>
             { changeableName ? <Input value={event.name} onBlur={() => setChangeableName(!changeableName)} onValueChange={(e) => {
@@ -153,10 +158,12 @@ export const Event = (props: {id?: number, teacherId: string}) => {
             ref={editor}
             value={event.description}
             config={config}
-            onBlur={(e) => setEvent(prevState => ({
-                ...prevState,
-                description: e
-            }))}
+            onBlur={(e) => {
+                let copy = event;
+                copy.description = e;
+                setEvent(copy);
+                console.log(event.description);
+            }}
         />
         {canChange && <Button onClick={() => {
             saveEvent();

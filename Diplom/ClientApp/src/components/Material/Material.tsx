@@ -4,17 +4,18 @@ import './Material.css';
 import {getCurrentUser, getMaterial, removeMaterial} from "../../api/fetches";
 import {Input} from "@skbkontur/react-ui/cjs/components/Input";
 import {Button, Dropdown, FileUploader, Link, MenuItem} from "@skbkontur/react-ui";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {FileUploaderAttachedFile} from "@skbkontur/react-ui/internal/FileUploaderControl/fileUtils";
 
-interface IMaterial {
-    id?: number;
-    teacherId: string;
-}
 
-export const Material = (props: IMaterial) => {
+export const Material = () => {
 
     let pic: File | null;
+    const [query,setQuery] = useSearchParams();
+    const search = useLocation().search;
+    const searchParams = new URLSearchParams(search);
+    const teacherId = query.get('teacherId') ?? '';
+    const id = searchParams.get('materialId');
 
     const navigation = useNavigate();
     const [material, setMaterial] = useState({
@@ -25,7 +26,7 @@ export const Material = (props: IMaterial) => {
         type: 'Нет типа',
         areaId: 0,
         tags: [],
-        teacherId: props.teacherId,
+        teacherId: teacherId,
         content: [{
             text: '',
             isFile: false
@@ -33,8 +34,8 @@ export const Material = (props: IMaterial) => {
     });
 
     useEffect(() => {
-        if(props.id) {
-            getMaterial(props.id).then(res => {
+        if(id) {
+            getMaterial(parseInt(id)).then(res => {
                 setMaterial({
                     id: res.id,
                     name: res.name,
@@ -49,7 +50,7 @@ export const Material = (props: IMaterial) => {
             });
         }
         getAreas();
-    }, []);
+    }, [search]);
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
     const [areas, setAreas] = useState<any[]>([]);
@@ -160,7 +161,7 @@ export const Material = (props: IMaterial) => {
 
     const [canChange, setCanChange] = useState(false);
     getCurrentUser().then(res => {
-        setCanChange(res.id === material.teacherId);
+        setCanChange(res && res.id === material.teacherId);
     });
 
     return (

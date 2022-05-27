@@ -18,19 +18,19 @@ export const SearchElement = (props: ISearchElement) => {
     const getNavString = () => {
         switch (props.element) {
             case 'material':
-                return `/profile?teacherId=${props.teacherId}&materialId=${props.id}`;
+                return `/profile/material?teacherId=${props.teacherId}&materialId=${props.id}`;
             case 'teacher':
                 return `/profile?teacherId=${props.id}`;
             case 'event':
-                return `/profile?teacherId=${props.teacherId}&eventId=${props.id}`;
+                return `/profile/event?teacherId=${props.teacherId}&eventId=${props.id}`;
             case 'test':
-                return `/profile?teacherId=${props.teacherId}&testId=${props.id}`;
+                return `/profile/test?teacherId=${props.teacherId}&testId=${props.id}`;
             default:
                 return '';
         }
     }
 
-    return <div className={'element-container'} onDoubleClick={() => navigate(getNavString())}>
+    return <div className={'element-container'} onDoubleClick={() => navigate(getNavString(),{ replace: true })}>
         {!props.isTest && <div className={'img-area'}>
             <img src={`Files/${props.img}`} alt={'IMAGE'}/>
         </div>}

@@ -6,7 +6,7 @@ import JoditEditor from "jodit-react";
 import {Button, DatePicker, FileUploader} from "@skbkontur/react-ui";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
-export const Event = () => {
+export const Event = (props: {currentUser: any}) => {
 
     let pic: File | null;
     const [query,setQuery] = useSearchParams();
@@ -107,10 +107,7 @@ export const Event = () => {
         }
     }
 
-    const [canChange, setCanChange] = useState(false);
-    getCurrentUser().then(res => {
-        setCanChange(res.id === event.teacherId);
-    });
+    const canChange = props.currentUser === event.teacherId;
 
     const minDate = (new Date()).toDateString();
     const dateArr = event.dateTime.split('-');

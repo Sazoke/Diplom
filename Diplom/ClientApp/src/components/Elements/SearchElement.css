@@ -18,4 +18,10 @@
 .name-area {
     padding: 1vh;
     align-content: center;
+    width: 100%;
+}
+.date-area {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
 }

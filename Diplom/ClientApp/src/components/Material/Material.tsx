@@ -8,7 +8,7 @@ import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {FileUploaderAttachedFile} from "@skbkontur/react-ui/internal/FileUploaderControl/fileUtils";
 
 
-export const Material = () => {
+export const Material = (props: {currentUser: any}) => {
 
     let pic: File | null;
     const [query,setQuery] = useSearchParams();
@@ -158,11 +158,7 @@ export const Material = () => {
             }
         ));
     }
-
-    const [canChange, setCanChange] = useState(false);
-    getCurrentUser().then(res => {
-        setCanChange(res && res.id === material.teacherId);
-    });
+    const canChange = props.currentUser === material.teacherId;
 
     return (
         <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>

@@ -7,6 +7,8 @@
     height: 8vh;
     background: linear-gradient(180deg, rgba(105,100,87,1) 0%, rgba(173,134,33,1) 50%, rgba(232,179,44,1) 100%);
     font-weight: bold;
+    position: relative;
+    bottom: 0;
 }
 .footerText {
     height: 100%;

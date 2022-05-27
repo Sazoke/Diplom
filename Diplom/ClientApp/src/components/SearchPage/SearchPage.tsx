@@ -5,45 +5,19 @@ import {Modal, ComboBox, Input} from "@skbkontur/react-ui";
 import SearchIcon from "@skbkontur/react-icons/Search";
 import {getEvents, getMaterials, getTeachers} from "../../api/fetches";
 import {useLocation} from "react-router-dom";
-
-interface Material {
-    id: string | null,
-    name: string,
-    description: string,
-    image: string,
-    type: string,
-    areaId: number,
-    tags: string[],
-    teacherId: null,
-    content: {
-        text: string,
-        isFile: false
-    }[]
-}
+import {ElementsList} from "../List/ElementsList";
 
 export const SearchPage = () => {
 
     const [filtersOpened, setFiltersOpened] = useState(false);
-    const [materials, setMaterials] = useState<Material[]>([]);
-    const [events, setEvents] = useState<any[]>([]);
-    const [teachers, setTeachers] = useState<any[]>([]);
     const [searchText, setSearchText] = useState<string>('');
 
     const search = useLocation().search;
     const searchQuery = new URLSearchParams(search).get('searchText') ?? '';
 
-    useEffect(() => {
-        setSearchText(searchQuery);
-        getMaterials(undefined, undefined, searchQuery).then(result => result.length > 0 ? setMaterials([...result]) : setMaterials([]));
-        getEvents(undefined, undefined, searchQuery).then(result => result.length > 0 ? setEvents([...result]) : setEvents([]));
-        getTeachers(undefined, undefined, searchQuery).then(result => result.length > 0 ? setTeachers([...result]) : setTeachers([]));
-    }, []);
 
     const startSearch = (text: string) => {
         setSearchText(searchText);
-        getMaterials(undefined, undefined, text).then(result => result.length > 0 ? setMaterials([...result]) : setMaterials([]));
-        getEvents(undefined, undefined, text).then(result => result.length > 0 ? setEvents([...result]) : setEvents([]));
-        getTeachers(undefined, undefined, text).then(result => result.length > 0 ? setTeachers([...result]) : setTeachers([]));
     };
 
     let schoolAreas = [{value: 0, label: 'Русский язык'}, {value: 1, label: 'Математика'}, {value: 2, label: 'Литература'}]
@@ -116,32 +90,15 @@ export const SearchPage = () => {
             />
         </Modal.Body>
     </Modal>
-    console.log(materials);
     return <div className={'search-area'}>
         <div className={'input-area'}>
             <Input value={searchText} onValueChange={e => setSearchText(e)} width={'100%'} size='large' leftIcon={<SearchIcon />} />
             <button onClick={() => startSearch(searchText)} className={'search-button'}> Поиск </button>
         </div>
         <button className={'filter-button'} onClick={() => setFiltersOpened(true)}>Фильтры</button>
-        {materials.length > 0 && <div className={'group-area'}>
-            <div className={'group-title'}>Материалы</div>
-            {materials.map((e: any) =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} img={e.image} element={'material'}/>
-            )}
-        </div>}
-        {teachers.length > 0 && <div className={'group-area'}>
-            <div className={'group-title'}>Преподаватели</div>
-            {teachers.map(e =>
-                <SearchElement name={e.name} id={e.id} teacherId={e.teacherId} img={e.image} element={'teacher'}/>
-            )}
-        </div>}
-        {events.length > 0 && <div className={'group-area'}>
-            <div className={'group-title'}>Мероприятия</div>
-            {events.map(e => {
-                console.log(e.dateTime);
-                return <SearchElement date={e.dateTime} name={e.name} id={e.id} teacherId={e.teacherId} img={e.image} element={'event'}/>
-            })}
-        </div>}
+        <ElementsList searchText={searchQuery} elementType={'Материалы'}/>
+        <ElementsList searchText={searchQuery} elementType={'Преподаватели'}/>
+        <ElementsList searchText={searchQuery} elementType={'Мероприятия'}/>
         {filtersOpened && renderModal()}
     </div>
 }

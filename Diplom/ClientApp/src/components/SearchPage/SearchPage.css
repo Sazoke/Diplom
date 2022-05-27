@@ -28,3 +28,10 @@
 .search-text {
     width: 100%;
 }
+.paging-area {
+    background-color: #ffffff;
+    display: flex;
+    gap: 5px;
+    width: fit-content;
+    border-radius: 4px;
+}

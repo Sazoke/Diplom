@@ -34,23 +34,37 @@ export const NavMenu = () => {
   });
   return (
     <header>
-      <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
+      <Navbar className="navbar-expand-sm mb-3" light>
         <Container>
+          <div className={'navbar-container'}>
+          <div>
           <NavbarBrand tag={Link} to="/">Информационный ресурс</NavbarBrand>
           <NavbarToggler onClick={() => setCollapsed(!collapsed)} className="mr-2" />
           <Input id={'searchInput'} value={searchText} onValueChange={(value) => {
             setSearchText(value);
-            console.log(searchText);
           }} onSubmit={redirectToSearch} leftIcon={<SearchIcon />}/>
           <Button data-tid={'searchBtn'} onClick={redirectToSearch}>Поиск</Button>
+          </div>
+        <div>
           <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
             <ul className="navbar-nav flex-grow">
               <NavItem>
-                <NavLink disabled={!currentUserId} tag={Link} className="text-dark" to={`/profile?teacherId=${currentUserId}`}>Профиль</NavLink>
+                <NavLink disabled={!currentUserId} tag={Link} className="text-dark" to={`/profile?teacherId=${currentUserId}`}>Личный кабинет</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to={`/teachers`}>Преподаватели</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to={`/materials`}>Материалы</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to={`/events`}>Мероприятия</NavLink>
               </NavItem>
               <LoginMenu />
             </ul>
           </Collapse>
+        </div>
+          </div>
         </Container>
       </Navbar>
     </header>

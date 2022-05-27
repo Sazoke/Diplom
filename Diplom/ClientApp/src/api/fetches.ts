@@ -2,9 +2,10 @@
 export const getMaterials = async (page?: number,
                                    pageSize?: number,
                                    text?: string,
+                                   teacherId?: string,
                                    tags?: string[] | null,
-                                   schoolArea?: string | null,
-                                   teacherId?: number): Promise<any[]> => {
+                                   schoolArea?: string | null
+                                    ): Promise<any[]> => {
     return await fetch('/Material/GetByFilter',
         {
             method: 'POST',
@@ -30,9 +31,10 @@ export const getMaterials = async (page?: number,
 export const getEvents = async (page?: number,
                                 pageSize?: number,
                                 text?: string,
+                                teacherId?: string,
                                 tags?: string[] | null,
                                 schoolArea?: string | null,
-                                teacherId?: number): Promise<any[]> => {
+                                ): Promise<any[]> => {
     return await fetch('/Activity/GetByFilter',
         {
             method: 'POST',
@@ -41,8 +43,8 @@ export const getEvents = async (page?: number,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                page: 1,
-                pageSize: 5,
+                page: page,
+                pageSize: pageSize,
                 text: text ?? '',
                 tags: [],
                 schoolArea: 1,
@@ -59,8 +61,7 @@ export const getTeachers = async (page?: number,
                            pageSize?: number,
                            text?: string,
                            tags?: string[] | null,
-                           schoolArea?: string | null,
-                           teacherId?: number): Promise<any[]> => {
+                           schoolArea?: string | null): Promise<any[]> => {
     return await fetch('/User/GetByFilter',
         {
             method: 'POST',

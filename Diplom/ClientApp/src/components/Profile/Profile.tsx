@@ -6,20 +6,21 @@ import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel";
 import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
 import { profileObject } from '../../fakeApi';
 import {Material} from "../Material/Material";
-import {useLocation, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {getProfile, updateProfile} from "../../api/fetches";
 import { Input } from '@skbkontur/react-ui/cjs/components/Input';
 import {Event} from "../Event/Event";
 import {Tests} from "../Tests/Tests";
 import {TestConstructor} from "../TestConstructor/TestConstructor";
+import {Textarea} from "@skbkontur/react-ui";
 
-export const Profile = (props: {active?: string}) => {
+export const Profile = (props: {active?: string, currentUser: any}) => {
 
     const [active, setActive] = useState<string>("preview");
     const [profile, setProfile] = useState({
         id: '',
         name: 'ФИО',
-        description: 'Краткое описаное',
+        description: 'Краткое описание',
         image: '',
         materials: [{}],
         activities: [{}],
@@ -29,11 +30,10 @@ export const Profile = (props: {active?: string}) => {
     const [changingDescription, setChangingDescription] = useState(false);
     const [query,setQuery] = useSearchParams();
     const [changing, setChanging] = useState(false);
-    const search = useLocation().search;
+    const search = useLocation().pathname;
     const searchParams = new URLSearchParams(search);
+    const navigate = useNavigate();
     const profileId = query.get('teacherId') ?? '';
-    const materialQuery = searchParams.get('materialId') ?? '';
-    const eventQuery = searchParams.get('eventId') ?? '';
     const testQuery = searchParams.get('testId') ?? '';
 
 
@@ -71,18 +71,18 @@ export const Profile = (props: {active?: string}) => {
                 return (
                     <div className='preview'>
                         <div className='blocks-area'>
-                            <Block header={'Блок новых материалов'} setActive={() => setActive('material')} content={profile.materials}/>
-                            <Block header={'Блок свежих мероприятий'} setActive={() => setActive('event')} content={profileObject.blocksEvents}/>
+                            <Block canChange={canChange} teacherId={profile.id} header={'Блок новых материалов'} type={'material'} setActive={() => setActive('material')} content={profile.materials}/>
+                            <Block canChange={canChange} teacherId={profile.id} header={'Блок свежих мероприятий'} type={'event'} setActive={() => setActive('event')} content={profile.activities}/>
                         </div>
                         <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
                     </div>
                 )
             case 'tests':
-                return <Tests setActive={setActive} teacherId={profile.id}/>
+                return <Tests currentUser={props.currentUser} setActive={setActive} teacherId={profile.id}/>
             case 'material':
-                return <Material />
+                return <Material currentUser={props.currentUser}/>
             case 'event':
-                return <Event />
+                return <Event currentUser={props.currentUser} />
             case 'test':
                 return <TestConstructor />
             default:
@@ -90,9 +90,10 @@ export const Profile = (props: {active?: string}) => {
                 </div>
         }
     }
+    const canChange = props.currentUser ? props.currentUser.id === profile.id : false;
     return (
         <div className='main'>
-            <div className='about'>
+            <div className='about' onClick={() => navigate(`/profile?teacherId=${profile.id}`, {replace: true})}>
                 <div className='profilePic'>
                     <AvatarPlaceholder />
                 </div>
@@ -105,19 +106,21 @@ export const Profile = (props: {active?: string}) => {
                                     setChanging(!changing);
                                 }
                         } onBlur={() => setChangingName(!changingName)} />
-                        :<div className='fio' onDoubleClick={() => setChangingName(!changingName)}>
-                            {profile.name}
+                        :<div className='fio'>
+                            <span onClick={() => canChange ? setChangingName(!changingName) : null}>
+                                {profile.name}
+                            </span>
                         </div>}
                     {changingDescription
-                        ?<Input className='additional-info'
+                        ?<Textarea width={'100%'} rows={5} maxRows={5} maxLength={300} lengthCounter={300} showLengthCounter className='additional-info'
                                  value={profile.description}
                                  onValueChange={(e) => {
                                      setProfile(prevState => ({...prevState, description: e}));
                                      setChanging(!changing);
                                  }
                                  } onBlur={() => setChangingDescription(!changingDescription)} />
-                        :<div className='additional-info' onDoubleClick={() => setChangingDescription(!changingDescription)}>
-                        {profile.description !== '' ? profile.description : 'Добавьте описание'}
+                        :<div className='additional-info'>
+                        <span onClick={() => canChange ? setChangingDescription(!changingDescription) : null}>{profile.description !== '' ? profile.description : 'Добавьте описание'}</span>
                     </div>}
                 </div>
             </div>

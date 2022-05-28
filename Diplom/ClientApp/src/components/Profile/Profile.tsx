@@ -13,6 +13,7 @@ import {Event} from "../Event/Event";
 import {Tests} from "../Tests/Tests";
 import {TestConstructor} from "../TestConstructor/TestConstructor";
 import {Textarea} from "@skbkontur/react-ui";
+import {ElementsList} from "../List/ElementsList";
 
 export const Profile = (props: {active?: string, currentUser: any}) => {
 
@@ -85,8 +86,17 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
                 return <Event currentUser={props.currentUser} />
             case 'test':
                 return <TestConstructor />
+            case 'materials':
+                return <div className='preview'>
+                        <ElementsList elementType={'Материалы'} teacherId={profile.id} />
+                    </div>
+            case 'events':
+                return <div className='preview'>
+                        <ElementsList elementType={'Мероприятия'} teacherId={profile.id} />
+                    </div>
             default:
                 return <div className='def'>
+                    Элемент в разработке
                 </div>
         }
     }

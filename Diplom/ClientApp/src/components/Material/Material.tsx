@@ -71,6 +71,7 @@ export const Material = (props: {currentUser: any}) => {
 
     const saveMaterial = async() => {
         await setImage();
+        console.log(material);
         await fetch('/Material/AddOrUpdate',
             {
                 method: 'POST',
@@ -158,7 +159,7 @@ export const Material = (props: {currentUser: any}) => {
             }
         ));
     }
-    const canChange = props.currentUser === material.teacherId;
+    const canChange = props.currentUser.id === material.teacherId;
 
     return (
         <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
@@ -209,7 +210,7 @@ export const Material = (props: {currentUser: any}) => {
                         config={config}
                         onBlur={(e) => {
                             let copy = material;
-                            copy.content[0].text = e;
+                            copy.description = e;
                             setMaterial(copy);
                         }}
             />
@@ -236,8 +237,8 @@ export const Material = (props: {currentUser: any}) => {
 
             {canChange && <Button onClick={() => {
                 saveMaterial();
-            }}>Сохранить мероприятие</Button>}
-            {canChange && <Button onClick={() => deleteMaterial()}>Удалить мероприятие</Button>}
+            }}>Сохранить материал</Button>}
+            {canChange && <Button onClick={() => deleteMaterial()}>Удалить материал</Button>}
         </div>
     )
 }

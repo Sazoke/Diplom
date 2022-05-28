@@ -10,7 +10,7 @@ interface ContentProps {
 }
 
 export const BlockContent = (props: ContentProps) => {
-
+    console.log(props.contentTypeOrDate);
     const typeOrDate = props.contentTypeOrDate !== undefined ? typeof props.contentTypeOrDate === "string" ? props.contentTypeOrDate : props.contentTypeOrDate.toString() : 'Нет типа';
     return (
         <div className='content-container' onClick={props.onClick}>

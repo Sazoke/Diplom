@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {SearchElement} from "../Elements/SearchElement";
 import './SearchPage.css';
-import {Modal, ComboBox, Input} from "@skbkontur/react-ui";
+import {Modal, ComboBox, Input, Button} from "@skbkontur/react-ui";
 import SearchIcon from "@skbkontur/react-icons/Search";
 import {getEvents, getMaterials, getTeachers} from "../../api/fetches";
 import {useLocation} from "react-router-dom";
@@ -93,7 +93,7 @@ export const SearchPage = () => {
     return <div className={'search-area'}>
         <div className={'input-area'}>
             <Input value={searchText} onValueChange={e => setSearchText(e)} width={'100%'} size='large' leftIcon={<SearchIcon />} />
-            <button onClick={() => startSearch(searchText)} className={'search-button'}> Поиск </button>
+            <Button size={"large"} onClick={() => startSearch(searchText)} className={'search-button'}> Поиск </Button>
         </div>
         <button className={'filter-button'} onClick={() => setFiltersOpened(true)}>Фильтры</button>
         <ElementsList searchText={searchQuery} elementType={'Материалы'}/>

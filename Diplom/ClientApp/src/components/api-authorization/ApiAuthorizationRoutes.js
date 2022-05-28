@@ -11,7 +11,7 @@ export default class ApiAuthorizationRoutes extends Component {
     return(
       <Fragment>
           <Routes>
-              <Route path={ApplicationPaths.Login} render={() => loginAction(LoginActions.Login)} />
+              <Route path={ApplicationPaths.Login} element={<Login action={LoginActions.Login} />} />
               <Route path={ApplicationPaths.LoginFailed} render={() => loginAction(LoginActions.LoginFailed)} />
               <Route path={ApplicationPaths.LoginCallback} render={() => loginAction(LoginActions.LoginCallback)} />
               <Route path={ApplicationPaths.Profile} render={() => loginAction(LoginActions.Profile)} />

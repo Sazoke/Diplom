@@ -6,6 +6,7 @@
     background-color: #d6ebff;
     border-radius: 1vh 1vh 0 0;
     padding: 1vh;
+    width: 100%;
 }
 .about {
     gap: 2vh;
@@ -68,10 +69,9 @@
     object-fit: contain;
 }
 .def {
-    height: 130vh;
+    height: 60vh;
     margin: 0;
-    background: #0366d6;
 }
 .preview {
-    height: 130vh;
+    height: 960px;
 }

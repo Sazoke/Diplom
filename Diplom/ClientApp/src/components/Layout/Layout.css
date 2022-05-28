@@ -1,5 +1,6 @@
 .mainContainer {
     margin: 2vh 4vh 0 4vh;
+    display: flex;
 }
 .footer {
     margin: 0;

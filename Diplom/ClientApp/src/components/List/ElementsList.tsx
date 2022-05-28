@@ -23,6 +23,7 @@ export const ElementsList = (props: {elementType: string, searchText?: string, t
                 break;
         }
     }, [page, search])
+    console.log(elements);
     return elements.length > 0 ? <div className={'group-area'}>
         <div className={'group-title'}>{props.elementType}</div>
         {elements.map((e: any) =>
@@ -40,5 +41,11 @@ export const ElementsList = (props: {elementType: string, searchText?: string, t
             <Button disabled={elements.length < 5} onClick={() => setPage(page + 1)}>{'>>'}</Button>
         </div>
     </div>
-        : <></>
+        : <div className={'group-area'}>
+            <div className='paging-area'>
+                <Button disabled={page===1} onClick={() => setPage(page - 1)}>{'<<'}</Button>
+                <span>{page}</span>
+                <Button disabled={elements.length < 5} onClick={() => setPage(page + 1)}>{'>>'}</Button>
+            </div>
+        </div>
 }

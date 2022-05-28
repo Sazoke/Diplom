@@ -12,8 +12,8 @@ export const Material = (props: {currentUser: any}) => {
 
     let pic: File | null;
     const [query,setQuery] = useSearchParams();
-    const search = useLocation().search;
-    const searchParams = new URLSearchParams(search);
+    const search = useLocation();
+    const searchParams = new URLSearchParams(search.search);
     const teacherId = query.get('teacherId') ?? '';
     const id = searchParams.get('materialId');
 
@@ -63,7 +63,7 @@ export const Material = (props: {currentUser: any}) => {
         toolbar: false,
         askBeforePasteHTML: false,
         enableDragAndDropFileToEditor: false,
-
+        buttons: "bold,italic,underline,strikethrough,eraser,ul,ol,font,fontsize,paragraph,classSpan,lineHeight,superscript,subscript,spellcheck,copyformat,cut,copy,paste",
     };
     config["toolbar"] = changeableContent;
     config["readonly"] = !changeableContent;
@@ -71,7 +71,6 @@ export const Material = (props: {currentUser: any}) => {
 
     const saveMaterial = async() => {
         await setImage();
-        console.log(material);
         await fetch('/Material/AddOrUpdate',
             {
                 method: 'POST',
@@ -125,7 +124,7 @@ export const Material = (props: {currentUser: any}) => {
 
     const deleteMaterial = () => {
         if (material.id) {
-            removeMaterial(material.id).then(e => navigation(`/`, {replace: true}));
+            removeMaterial(material.id).then(e => navigation(`/profile?teacherId=${teacherId}`, {replace: true}));
         }
     }
 

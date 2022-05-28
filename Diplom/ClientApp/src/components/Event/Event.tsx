@@ -94,6 +94,7 @@ export const Event = (props: {currentUser: any}) => {
         toolbar: false,
         askBeforePasteHTML: false,
         enableDragAndDropFileToEditor: true,
+        buttons: "bold,italic,underline,strikethrough,eraser,ul,ol,font,fontsize,paragraph,classSpan,lineHeight,superscript,subscript,spellcheck,copyformat,cut,copy,paste",
 
     };
     config["toolbar"] = changeableContent;
@@ -103,7 +104,7 @@ export const Event = (props: {currentUser: any}) => {
 
     const removeEvent = () => {
         if (event.id) {
-            removeActivity(event.id).then(e => navigation(`/`, {replace: true}));
+            removeActivity(event.id).then(e => navigation(`/profile?teacherId=${teacherId}`, {replace: true}));
         }
     }
 
@@ -118,7 +119,7 @@ export const Event = (props: {currentUser: any}) => {
     const deletePic = async (name: string) => {
         await fetch(`Attachment/Delete?${name}`).then(() => saveEvent());
     }
-    console.log(event.description);
+
     return <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
         <div className='title' onDoubleClick={() => canChange ? setChangeableName(!changeableName) : null}>
             { changeableName ? <Input value={event.name} onBlur={() => setChangeableName(!changeableName)} onValueChange={(e) => {
@@ -159,7 +160,6 @@ export const Event = (props: {currentUser: any}) => {
                 let copy = event;
                 copy.description = e;
                 setEvent(copy);
-                console.log(event.description);
             }}
         />
         {canChange && <Button onClick={() => {

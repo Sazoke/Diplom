@@ -6,8 +6,8 @@ import {getCurrentUser, getTest, getTestQuestions} from "../../api/fetches";
 import {Button, Input, Toast} from "@skbkontur/react-ui";
 
 export const TestConstructor = () => {
-    const search = useLocation().search;
-    const searchParams = new URLSearchParams(search);
+    const search = useLocation();
+    const searchParams = new URLSearchParams(search.search);
     const testQuery = searchParams.get('testId');
     const teacherQuery = searchParams.get('teacherId');
     const [changing, setChanging] = useState<boolean>(false);
@@ -119,7 +119,7 @@ export const TestConstructor = () => {
             <Button width={300}>Назад к тестам</Button>
         </Link>
         <div>
-            {canChange ? <input value={testName} onInput={(e) => setTestName(e.currentTarget.value)} />
+            {canChange ? <Input width={400} value={testName} onInput={(e) => setTestName(e.currentTarget.value)} />
             : <span>{testName}</span>}
         </div>
         {canChange ? <div className={'questions-container'}>

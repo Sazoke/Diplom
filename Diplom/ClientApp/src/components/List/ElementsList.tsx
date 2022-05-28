@@ -8,7 +8,7 @@ export const ElementsList = (props: {elementType: string, searchText?: string, t
 
     const [elements, setElements] = useState<any[]>([]);
     const [page, setPage] = useState(1);
-    const search = useLocation().pathname;
+    const search = useLocation();
 
     useEffect(() => {
         switch (props.elementType) {
@@ -22,8 +22,8 @@ export const ElementsList = (props: {elementType: string, searchText?: string, t
                 getTeachers(page, 5, props.searchText).then(result => result.length > 0 ? setElements([...result]) : setElements([]));
                 break;
         }
-    }, [page, search])
-    console.log(elements);
+    })
+    useEffect(() => setPage(1), [search]);
     return elements.length > 0 ? <div className={'group-area'}>
         <div className={'group-title'}>{props.elementType}</div>
         {elements.map((e: any) =>

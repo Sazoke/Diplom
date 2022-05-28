@@ -4,14 +4,16 @@ import {ImagePlaceholder} from "../../Icons/ImagePlaceholder";
 
 interface ContentProps {
     contentName: string,
-    contentTypeOrDate: string | Date,
+    contentTypeOrDate: string,
     contentImage?: string,
     onClick: () => void;
 }
 
 export const BlockContent = (props: ContentProps) => {
-    console.log(props.contentTypeOrDate);
-    const typeOrDate = props.contentTypeOrDate !== undefined ? typeof props.contentTypeOrDate === "string" ? props.contentTypeOrDate : props.contentTypeOrDate.toString() : 'Нет типа';
+    let typeOrDate = props.contentTypeOrDate !== undefined ? props.contentTypeOrDate : 'Нет типа';
+    if (typeOrDate.slice(10,undefined) === 'T00:00:00Z') {
+        typeOrDate = typeOrDate.slice(undefined, 10);
+    }
     return (
         <div className='content-container' onClick={props.onClick}>
             <div className='content-type'>

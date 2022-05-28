@@ -17,13 +17,28 @@
 }
 .profilePic {
     height: 100%;
-    display: flex;
+    display: block;
     border-radius: 1vh;
     width: 15%;
     background-color: #9eb3ff;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
+}
+.change-pic {
+    position: relative;
+    z-index: 9;
+    display: none;
+    margin-top: -100px;
+    background-color: #9eb3ff;
+    opacity: 0.8;
+}
+.change-pic a {
+    padding: 6px;
+}
+.profilePic:hover > .change-pic{
+    display: block;
 }
 .info {
     width: 85%;
@@ -66,7 +81,7 @@
 .profilePic img {
     height: 100%;
     width: 100%;
-    object-fit: contain;
+    object-fit: scale-down;
 }
 .def {
     height: 60vh;

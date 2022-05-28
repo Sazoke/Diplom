@@ -11,9 +11,14 @@
     width: 200px;
     height: 160px;
     background-color: #cccccc;
+    justify-content: center;
+    align-content: center;
+    padding: 2px;
+    gap: 4px;
 }
 .img-area img {
     object-fit: contain;
+    height: 100%;
 }
 .name-area {
     padding: 1vh;

@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useRef, useState} from 'react';
 import './Profile.css';
 import {ProfileTabs} from "../ProfileTabs/ProfileTabs";
 import {Block} from "../Block/Block";
@@ -12,8 +12,9 @@ import { Input } from '@skbkontur/react-ui/cjs/components/Input';
 import {Event} from "../Event/Event";
 import {Tests} from "../Tests/Tests";
 import {TestConstructor} from "../TestConstructor/TestConstructor";
-import {Textarea} from "@skbkontur/react-ui";
+import {FileUploader, Textarea} from "@skbkontur/react-ui";
 import {ElementsList} from "../List/ElementsList";
+import JoditEditor from "jodit-react";
 
 export const Profile = (props: {active?: string, currentUser: any}) => {
 
@@ -31,8 +32,8 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
     const [changingDescription, setChangingDescription] = useState(false);
     const [query,setQuery] = useSearchParams();
     const [changing, setChanging] = useState(false);
-    const search = useLocation().pathname;
-    const searchParams = new URLSearchParams(search);
+    const search = useLocation();
+    const searchParams = new URLSearchParams(search.search);
     const navigate = useNavigate();
     const profileId = query.get('teacherId') ?? '';
     const testQuery = searchParams.get('testId') ?? '';
@@ -66,6 +67,44 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
         return;
     }, [changing]);
 
+    const setImage = async(pic: File) => {
+        const formData = new FormData();
+        if (pic) {
+            formData.append('new', pic, pic.name);
+            await fetch('/Attachment/Add',
+                {
+                    method: 'POST',
+                    body: formData,
+                }).then(response => response.text().then(text => {
+                setProfile(prevState => ({
+                    ...prevState,
+                    image: text
+                }));
+            }))
+        } else {
+            setProfile(prevState => ({
+                ...prevState,
+                image: ''
+            }));
+        }
+        setChanging(!changing);
+    }
+    const canChange = props.currentUser ? props.currentUser.id === profile.id : false;
+    const editor = useRef(null);
+    const config = {
+        readonly: false,
+        allowResizeY: false,
+        allowResizeX: false,
+        removeButtons: ['source'],
+        toolbar: false,
+        askBeforePasteHTML: false,
+        enableDragAndDropFileToEditor: false,
+        buttons: "bold,italic,underline,strikethrough,eraser,ul,ol,font,fontsize,paragraph,classSpan,lineHeight,superscript,subscript,spellcheck,copyformat,cut,copy,paste",
+
+    };
+    config["toolbar"] = canChange;
+    config["readonly"] = !canChange;
+
     const selectRender = () => {
         switch(active) {
             case "preview":
@@ -94,18 +133,38 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
                 return <div className='preview'>
                         <ElementsList elementType={'Мероприятия'} teacherId={profile.id} />
                     </div>
+            case 'about':
+                return <div className='preview'>
+                    {canChange
+                    ?<JoditEditor
+                            ref={editor}
+                            value={profile.description}
+                            config={config}
+                            onBlur={(e) => {
+                                let copy = profile;
+                                copy.description = e;
+                                setProfile(copy); setChanging(!changing);
+                            }}
+                        />
+                    : <span>{profile.description}</span>}
+                </div>
             default:
                 return <div className='def'>
                     Элемент в разработке
                 </div>
         }
     }
-    const canChange = props.currentUser ? props.currentUser.id === profile.id : false;
     return (
         <div className='main'>
             <div className='about' onClick={() => navigate(`/profile?teacherId=${profile.id}`, {replace: true})}>
                 <div className='profilePic'>
-                    <AvatarPlaceholder />
+                    {profile.image && profile.image !== ''
+                        ? <div style={{position: "relative", zIndex: '1', height: '100%'}}><img src={`Files/${profile.image}`} /></div>
+                        : <AvatarPlaceholder/>}
+                    {canChange && <div className={'change-pic'}>
+                            <a>Изменить аватар</a>
+                            <FileUploader style={{width: '100%'}} onAttach={e => setImage(e[0].originalFile)}/>
+                        </div>}
                 </div>
                 <div className='info'>
                     {changingName

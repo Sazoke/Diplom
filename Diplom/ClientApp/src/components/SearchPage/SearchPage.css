@@ -1,6 +1,7 @@
 .search-area {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 .group-area {
     margin: 1vh;

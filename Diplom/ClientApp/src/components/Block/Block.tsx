@@ -17,7 +17,7 @@ interface IBlockProps {
 
 
 export const Block = (props: IBlockProps) => {
-    const path = useLocation().pathname;
+    const path = useLocation();
     const [materials, setMaterials] = useState<any[]>();
     const [events, setEvents] = useState<any[]>();
     useEffect(() => {
@@ -41,14 +41,14 @@ export const Block = (props: IBlockProps) => {
                 <div className='col'>
                     {content[0] && <BlockContent contentName={content[0].name}
                                                        contentImage={content[0].image}
-                                                       contentTypeOrDate={content[0].type ?? content[0].date}
+                                                       contentTypeOrDate={content[0].type ?? content[0].dateTime}
                                                        onClick={() => navigate(`/profile/${props.type}?teacherId=${props.teacherId ?? content[0].teacherId}&${navString + content[0].id}`,{ replace: true })}
                     />}
                 </div>
                 <div className='col'>
                     {content[1] && <BlockContent contentName={content[1].name}
                                                        contentImage={content[1].image}
-                                                       contentTypeOrDate={content[1].type ?? content[0].date}
+                                                       contentTypeOrDate={content[1].type ?? content[0].dateTime}
                                                        onClick={() => navigate(`/profile/${props.type}?teacherId=${props.teacherId ?? content[1].teacherId}&${navString + content[1].id}`,{ replace: true })}
                     />}
                 </div>
@@ -57,14 +57,14 @@ export const Block = (props: IBlockProps) => {
                 <div className='col'>
                     {content[2] && <BlockContent contentName={content[2].name}
                                                        contentImage={content[2].image}
-                                                       contentTypeOrDate={content[2].type ?? content[0].date}
+                                                       contentTypeOrDate={content[2].type ?? content[0].dateTime}
                                                        onClick={() => navigate(`/profile/${props.type}?teacherId=${props.teacherId ?? content[2].teacherId}&${navString + content[2].id}`,{ replace: true })}
                     />}
                 </div>
                 <div className='col'>
                     {content[3] ? <BlockContent contentName={content[3].name}
                                                 contentImage={content[3].image}
-                                                contentTypeOrDate={content[3].type ?? content[0].date}
+                                                contentTypeOrDate={content[3].type ?? content[0].dateTime}
                                                 onClick={() => navigate(`/profile/${props.type}?teacherId=${props.teacherId ?? content[3].teacherId}&${navString +content[3].id}`,{ replace: true })}
                         />
                     : props.canChange && <div className={'content-container'} onClick={props.setActive}>

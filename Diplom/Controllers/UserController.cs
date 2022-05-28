@@ -109,8 +109,8 @@ public class UserController : Controller
             .Take(countOfMaterials)
             .Select(_mapper.Map<ActivityProfilePreview>)
             .ToList();
-        dto.Materials = user.Materials.Take(countOfMaterials)
-            .OrderByDescending(a => a.CreatedAt)
+        dto.Materials = user.Materials.OrderByDescending(a => a.CreatedAt)
+            .Take(countOfMaterials)
             .Select(_mapper.Map<MaterialProfilePreview>)
             .ToList();
         return dto;

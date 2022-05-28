@@ -9,7 +9,8 @@ public class TestProfile : Profile
 {
     public TestProfile()
     {
-        CreateMap<Test, TestDto>().ForMember(t => t.Results, expression => expression.Ignore())
+        CreateMap<Test, TestDto>().ForMember(t => t.Results, 
+                expression => expression.Ignore())
             .AfterMap(((test, dto) =>
             {
                 dto.Results = test.Results.Select(r => new TestResultDto()

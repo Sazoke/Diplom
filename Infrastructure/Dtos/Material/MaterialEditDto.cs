@@ -16,7 +16,7 @@ public class MaterialEditDto
     
     public HashSet<long> Tags { get; set; }
     
-    public string Type { get; set; }
+    public long TypeId { get; set; }
     
     public List<Content> Content { get; set; }
 }

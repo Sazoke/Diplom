@@ -107,7 +107,7 @@ export const Event = (props: {currentUser: any}) => {
         }
     }
 
-    const canChange = props.currentUser === event.teacherId;
+    const canChange = props.currentUser.id === event.teacherId;
 
     const minDate = (new Date()).toDateString();
     const dateArr = event.dateTime.split('-');

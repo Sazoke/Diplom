@@ -39,11 +39,13 @@ public class MaterialController : Controller
     }
 
     [HttpPost]
-    public IActionResult GetByFilter([FromBody] Filter filter)
+    public IActionResult GetByFilter([FromBody] MaterialFilter filter)
     {
         try
         {
             var materials = _materialService.GetByFilter(filter);
+            if (filter.TypeId is not null)
+                materials = materials.Where(m => m.TypeId == filter.TypeId);
             var dtos = materials.Select(m => _mapper.Map<FilterResultDto>(m))
                 .ToList();
             return Ok(dtos);
@@ -76,6 +78,34 @@ public class MaterialController : Controller
         try
         {
             await _materialService.RemoveAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+
+    [HttpGet]
+    public IActionResult GetTypes()
+    {
+        try
+        {
+            var types = _materialService.GetAllMaterialTypes();
+            return Ok(types);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddType([FromQuery] string singleName, [FromQuery] string multipleName)
+    {
+        try
+        {
+            await  _materialService.AddMaterialType(singleName, multipleName);
             return Ok();
         }
         catch (Exception e)

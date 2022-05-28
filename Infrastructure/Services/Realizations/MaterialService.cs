@@ -1,4 +1,5 @@
 using AutoMapper;
+using Infrastructure.Dtos.Base;
 using Infrastructure.Dtos.Material;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
@@ -10,13 +11,17 @@ namespace Infrastructure.Services.Realizations;
 public class MaterialService : BaseComponentService<Material>, IMaterialService
 {
     private readonly TagRepository _tagRepository;
-    public MaterialService(BaseRepository<Material> repository, TagRepository tagRepository) : base(repository)
+    private readonly BaseRepository<MaterialType> _typeRepository;
+
+    public MaterialService(BaseRepository<Material> repository, TagRepository tagRepository, BaseRepository<MaterialType> typeRepository) : base(repository)
     {
         _tagRepository = tagRepository;
+        _typeRepository = typeRepository;
     }
 
     public Material GetById(long id) =>
-        Repository.GetById(id, q => q.Include(a => a.Tags));
+        Repository.GetById(id, q => q.Include(a => a.Tags)
+            .Include(m => m.Type));
 
     public async Task AddOrUpdateAsync(MaterialEditDto materialDto)
     {
@@ -32,6 +37,17 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
             await Repository.UpdateAsync(material);
     }
 
+    public IEnumerable<MaterialType> GetAllMaterialTypes() => _typeRepository.GetAll();
+    public async Task AddMaterialType(string singleName, string multipleName)
+    {
+        await _typeRepository.AddAsync(new MaterialType()
+        {
+            SingleTypeName = singleName,
+            MultipleTypeName = multipleName
+        });
+        await _typeRepository.SaveChangesAsync();
+    }
+
     public async Task RemoveAsync(long id)
     {
         await Repository.RemoveAsync(id);
@@ -43,7 +59,7 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
         material.Description = materialDto.Description;
         material.Image = materialDto.Image;
         material.AreaId = materialDto.AreaId;
-        material.Type = materialDto.Type;
+        material.TypeId = materialDto.TypeId;
         material.Content = materialDto.Content;
-    }  
+    }
 }

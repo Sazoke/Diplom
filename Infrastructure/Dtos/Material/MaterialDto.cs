@@ -12,7 +12,7 @@ public class MaterialDto
     
     public string Image { get; set; }
     
-    public string Type { get; set; }
+    public long TypeId { get; set; }
 
     public long? AreaId { get; set; }
     

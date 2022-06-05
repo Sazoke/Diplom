@@ -7,7 +7,7 @@ import {AvatarPlaceholder} from "../../Icons/AvatarPlaceholder";
 import { profileObject } from '../../fakeApi';
 import {Material} from "../Material/Material";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {getProfile, updateProfile} from "../../api/fetches";
+import {getCurrentUser, getProfile, updateProfile} from "../../api/fetches";
 import { Input } from '@skbkontur/react-ui/cjs/components/Input';
 import {Event} from "../Event/Event";
 import {Tests} from "../Tests/Tests";
@@ -37,6 +37,7 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
     const navigate = useNavigate();
     const profileId = query.get('teacherId') ?? '';
     const testQuery = searchParams.get('testId') ?? '';
+    const [currentUser, setCurrentUser] = useState('');
 
 
     useEffect(() => {
@@ -50,6 +51,9 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
                 educationalMaterials: result.educationalMaterials
             }
         ));
+        getCurrentUser().then(res => {
+            setCurrentUser(res);
+        });
         if (props.active) {
             return setActive(props.active);
         }
@@ -114,15 +118,15 @@ export const Profile = (props: {active?: string, currentUser: any}) => {
                             <Block canChange={canChange} teacherId={profile.id} header={'Блок новых материалов'} type={'material'} setActive={() => setActive('material')} content={profile.materials}/>
                             <Block canChange={canChange} teacherId={profile.id} header={'Блок свежих мероприятий'} type={'event'} setActive={() => setActive('event')} content={profile.activities}/>
                         </div>
-                        <PhotoCarousel user={profileObject.name} userPic={profileObject.avatar} pics={profileObject.photos}/>
+
                     </div>
                 )
             case 'tests':
-                return <Tests currentUser={props.currentUser} setActive={setActive} teacherId={profile.id}/>
+                return <Tests currentUser={currentUser} setActive={setActive} teacherId={profile.id}/>
             case 'material':
-                return <Material currentUser={props.currentUser}/>
+                return <Material currentUser={currentUser}/>
             case 'event':
-                return <Event currentUser={props.currentUser} />
+                return <Event currentUser={currentUser} />
             case 'test':
                 return <TestConstructor />
             case 'materials':

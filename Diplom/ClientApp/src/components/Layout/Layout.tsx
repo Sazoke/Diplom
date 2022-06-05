@@ -7,7 +7,7 @@ export class Layout extends Component {
 //<NavMenu />
   render () {
     return (
-      <div>
+      <div style={{minHeight: '100vh', height: 'fit-content'}}>
         <NavMenu />
         <div className='mainContainer'>
           {this.props.children}

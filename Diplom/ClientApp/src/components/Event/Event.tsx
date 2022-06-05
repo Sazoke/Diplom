@@ -120,7 +120,7 @@ export const Event = (props: {currentUser: any}) => {
         await fetch(`Attachment/Delete?${name}`).then(() => saveEvent());
     }
 
-    return <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
+    return <div className='material'>
         <div className='title' onDoubleClick={() => canChange ? setChangeableName(!changeableName) : null}>
             { changeableName ? <Input value={event.name} onBlur={() => setChangeableName(!changeableName)} onValueChange={(e) => {
                 setEvent(prevState => ({
@@ -142,26 +142,28 @@ export const Event = (props: {currentUser: any}) => {
                     }} minDate={minDate}/>
             }
         </div>
+        <div onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
+            <JoditEditor
+                ref={editor}
+                value={event.description}
+                config={config}
+                onBlur={(e) => {
+                    let copy = event;
+                    copy.description = e;
+                    setEvent(copy);
+                }}
+            />
+        </div>
         {event.image !== ''
             ? <div className={'image-place'}>
                 <img src={`Files/${event.image}`}/>
                 {canChange && <Button width={200} use='danger' onClick={() => deletePic(event.image)}>Удалить изображение</Button>}
             </div>
             : canChange && <div className='image-loader'>
-                <FileUploader  onAttach={(e) => {pic = e[0].originalFile; saveEvent()}}/>
-            </div>
+            <FileUploader  onAttach={(e) => {pic = e[0].originalFile; setImage();}}/>
+        </div>
 
         }
-        <JoditEditor
-            ref={editor}
-            value={event.description}
-            config={config}
-            onBlur={(e) => {
-                let copy = event;
-                copy.description = e;
-                setEvent(copy);
-            }}
-        />
         {canChange && <Button onClick={() => {
             saveEvent();
         }}>Сохранить мероприятие</Button>}

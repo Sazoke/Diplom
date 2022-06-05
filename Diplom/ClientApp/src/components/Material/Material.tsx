@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import JoditEditor from "jodit-react";
 import './Material.css';
-import {getCurrentUser, getMaterial, removeMaterial} from "../../api/fetches";
+import {getAreas, getCurrentUser, getMaterial, getTypes, removeMaterial} from "../../api/fetches";
 import {Input} from "@skbkontur/react-ui/cjs/components/Input";
 import {Button, Dropdown, FileUploader, Link, MenuItem} from "@skbkontur/react-ui";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
@@ -23,7 +23,7 @@ export const Material = (props: {currentUser: any}) => {
         name: 'Название материала',
         description: '',
         image: '',
-        type: 'Нет типа',
+        typeId: 4,
         areaId: 0,
         tags: [],
         teacherId: teacherId,
@@ -41,7 +41,7 @@ export const Material = (props: {currentUser: any}) => {
                     name: res.name,
                     description: res.description,
                     image: res.image,
-                    type: res.type,
+                    typeId: res.typeId,
                     areaId: res.areaId,
                     tags: res.tags,
                     teacherId: res.teacherId,
@@ -49,11 +49,16 @@ export const Material = (props: {currentUser: any}) => {
                 })
             });
         }
-        getAreas();
+        getTypes(setTypes);
+        getAreas(setAreas);
     }, [search]);
+
     const [changeableContent, setChangeableContent] = useState(false);
     const [changeableName, setChangeableName] = useState(false);
+
     const [areas, setAreas] = useState<any[]>([]);
+    const [types, setTypes] = useState<any[]>([]);
+
     const editor = useRef(null);
     const config = {
         readonly: false,
@@ -67,7 +72,6 @@ export const Material = (props: {currentUser: any}) => {
     };
     config["toolbar"] = changeableContent;
     config["readonly"] = !changeableContent;
-
 
     const saveMaterial = async() => {
         await setImage();
@@ -84,18 +88,6 @@ export const Material = (props: {currentUser: any}) => {
             }).then(response => console.log(response))
             .catch(error => console.log(error));
     };
-
-    const getAreas = async() => {
-        await fetch('/SchoolArea/GetAll')
-            .then(response => response.json())
-            .then(result => {
-                let temp = [];
-                temp = result.map((e: { value: number, name: string }) => e).sort((a: { id: number, name: string }, b: { id: number, name: string }) =>  a.id - b.id);
-                console.log(temp);
-                setAreas(temp);
-            })
-            .catch(err => console.log(err));
-    }
 
 
     const setImage = async() => {
@@ -161,7 +153,7 @@ export const Material = (props: {currentUser: any}) => {
     const canChange = props.currentUser.id === material.teacherId;
 
     return (
-        <div className='material' onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
+        <div className='material'>
             <div className='title' onDoubleClick={() => canChange ? setChangeableName(!changeableName) : null}>
                 { changeableName ? <Input value={material.name} onBlur={() => setChangeableName(!changeableName)} onValueChange={(e) => {
                     setMaterial(prevState => ({
@@ -182,17 +174,33 @@ export const Material = (props: {currentUser: any}) => {
                                 setSelectedArea(el);
                             }}> {el.name} </MenuItem>)}
                         </Dropdown>
-                        <span>Тип материала: </span>
-                        <Input value={material.type} onValueChange={(e) => setMaterial(prevState => ({
-                            ...prevState,
-                            type: e
-                        }))}/>
+                        <Dropdown caption={types[material.typeId - 1]?.singleTypeName ?? 'Урок'}>
+                            {types.map((el: { id: number, singleTypeName: string }) => <MenuItem onClick={() => {
+                                setMaterial(prevState => ({
+                                    ...prevState,
+                                    typeId: el.id,
+                                }));
+                                setSelectedArea(el);
+                            }}> {el.singleTypeName} </MenuItem>)}
+                        </Dropdown>
                     </div>
                     : <div>
                         <span>Предмет: {areas[material.areaId - 1]?.name ?? 'Не указан'}</span>
-                        <span>Тип материала: {material.type}</span>
+                        <span>Тип материала: {types[material.typeId - 1]?.singleTypeName}</span>
                     </div>
                 }
+            </div>
+            <div onDoubleClick={() => canChange ? setChangeableContent(!changeableContent) : null}>
+                <JoditEditor
+                            ref={editor}
+                            value={material.description}
+                            config={config}
+                            onBlur={(e) => {
+                                let copy = material;
+                                copy.description = e;
+                                setMaterial(copy);
+                            }}
+                />
             </div>
             {material.image !== ''
                 ? <div className='image-place'>
@@ -200,19 +208,9 @@ export const Material = (props: {currentUser: any}) => {
                     {canChange && <Button width={200} use='danger' onClick={() => deletePic(material.image)}>Удалить изображение</Button>}
                 </div>
                 : canChange && <div className='image-loader'>
-                <FileUploader onAttach={(e) => {pic = e[0].originalFile; saveMaterial()}}/>
+                <FileUploader onAttach={(e) => {pic = e[0].originalFile; setImage()}}/>
             </div>
             }
-            <JoditEditor
-                        ref={editor}
-                        value={material.content[0].text}
-                        config={config}
-                        onBlur={(e) => {
-                            let copy = material;
-                            copy.description = e;
-                            setMaterial(copy);
-                        }}
-            />
             <div className='files'>
                 <div className='title'>
                     Прикрепленные файлы

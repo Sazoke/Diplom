@@ -60,3 +60,7 @@
     display: flex;
     gap: 4px;
 }
+.test-results-inner {
+    display: flex;
+    gap: 10px;
+}

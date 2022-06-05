@@ -36,3 +36,11 @@
     width: fit-content;
     border-radius: 4px;
 }
+.modal-inner-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 40px;
+}
+.test-result-element {
+    width: 100px;
+}

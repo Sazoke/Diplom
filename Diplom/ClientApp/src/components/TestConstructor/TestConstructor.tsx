@@ -3,7 +3,7 @@ import {QuestionContainer} from "../Question/QuestionContainer";
 import './TestConsctructor.css';
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {getCurrentUser, getTest, getTestQuestions} from "../../api/fetches";
-import {Button, Input, Toast} from "@skbkontur/react-ui";
+import {Button, Input, Modal, Toast} from "@skbkontur/react-ui";
 
 export const TestConstructor = () => {
     const search = useLocation();
@@ -32,8 +32,8 @@ export const TestConstructor = () => {
         setTestState([...copy]);
         console.log(testState);
     }
-    let result = 0;
     const completeTest = async () => {
+        let result = 0;
         testState.forEach(elem => {
             let correct = 0;
             elem.answers.forEach(e => {if(e.isCorrect) correct++});
@@ -61,6 +61,7 @@ export const TestConstructor = () => {
             }
     })
         result = result / testState.length * 100;
+        console.log(testId, username, result);
         await fetch('/Test/AddTestResult',
             {
                 method: 'POST',
@@ -102,7 +103,9 @@ export const TestConstructor = () => {
             getTest(testId).then(res => {
                 if (res.canEdit) setCanChange(true);
                 setTestName(res.name);
-            })
+                setTestResults(res.results);
+            });
+
         } else {
             setCanChange(true);
         }
@@ -111,13 +114,32 @@ export const TestConstructor = () => {
     const [canChange, setCanChange] = useState(false);
     const [username, setUsername] = useState('');
     const [testName, setTestName] = useState('Название теста');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [testResults, setTestResults] = useState<{id: number, username: string, percent: number}[]>([]);
 
-    const navigate = useNavigate();
+    const renderModal = () => <Modal onClose={() => setModalOpen(false)} width={600}>
+        <Modal.Header> Результаты </Modal.Header>
+        <Modal.Body>
+            <div className='test-results-wrapper'>
+                <div className='test-results-inner'>
+                    <div className='test-result-element'>Имя</div>
+                    <div className='test-result-element'>Результат</div>
+                </div>
+                {testResults.map(res =>
+                    <div className='test-results-inner'>
+                        <div className='test-result-element'>{res.username}</div>
+                        <div className='test-result-element'>{res.percent}</div>
+                    </div>)}
+            </div>
+        </Modal.Body>
+    </Modal>
 
     return <div className={'test-container'} style={{height: '700px'}}>
+        {modalOpen && renderModal()}
         <Link to={`/profile/tests?teacherId=${teacherQuery}`}>
             <Button width={300}>Назад к тестам</Button>
         </Link>
+        <Button onClick={() => setModalOpen(true)}>Посмотреть результаты</Button>
         <div>
             {canChange ? <Input width={400} value={testName} onInput={(e) => setTestName(e.currentTarget.value)} />
             : <span>{testName}</span>}
@@ -143,9 +165,9 @@ export const TestConstructor = () => {
         </div>}
     </div>
     : username === '' ? <div>
-            <form className={'username-form'} onSubmit={(e) => setUsername(e.currentTarget.value)}>
+            <form className={'username-form'} onSubmit={() => setUsername((document.getElementById('name-for-test') as HTMLInputElement).value ?? '')}>
                 <span>Введите имя</span>
-                <input />
+                <input id={'name-for-test'} />
             </form>
         </div>
             : <div>

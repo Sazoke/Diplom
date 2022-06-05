@@ -1,6 +1,8 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './BlockContent.css';
 import {ImagePlaceholder} from "../../Icons/ImagePlaceholder";
+import {getTypes} from "../../api/fetches";
+import {useLocation} from "react-router-dom";
 
 interface ContentProps {
     contentName: string,
@@ -9,11 +11,17 @@ interface ContentProps {
     onClick: () => void;
 }
 
+
 export const BlockContent = (props: ContentProps) => {
+    const search = useLocation();
     let typeOrDate = props.contentTypeOrDate !== undefined ? props.contentTypeOrDate : 'Нет типа';
     if (typeOrDate.slice(10,undefined) === 'T00:00:00Z') {
         typeOrDate = typeOrDate.slice(undefined, 10);
     }
+    const [types, setTypes] = useState<any[]>([]);
+    useEffect(() => {
+        getTypes(setTypes);
+    },[search]);
     return (
         <div className='content-container' onClick={props.onClick}>
             <div className='content-type'>

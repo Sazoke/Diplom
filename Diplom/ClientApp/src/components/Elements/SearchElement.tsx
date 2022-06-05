@@ -36,7 +36,7 @@ export const SearchElement = (props: ISearchElement) => {
 
     return <div className={'element-container'} onClick={() => navigate(getNavString(),{ replace: true })}>
         {!props.isTest && <div className={'img-area'}>
-            <img src={`Files/${props.img}`} alt={'Нет изображения'}/>
+            {props.img && <img src={`Files/${props.img}`} />}
         </div>}
         <div className={'name-area'}>
             {props.name ?? 'Название элемента'}

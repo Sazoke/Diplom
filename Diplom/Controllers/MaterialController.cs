@@ -44,9 +44,7 @@ public class MaterialController : Controller
         try
         {
             var materials = _materialService.GetByFilter(filter);
-            if (filter.TypeId is not null)
-                materials = materials.Where(m => m.TypeId == filter.TypeId);
-            var dtos = materials.Select(m => _mapper.Map<FilterResultDto>(m))
+            var dtos = materials.Select(m => _mapper.Map<MaterialFilterResultDto>(m))
                 .ToList();
             return Ok(dtos);
         }

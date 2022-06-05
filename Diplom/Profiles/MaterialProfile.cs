@@ -20,8 +20,9 @@ public class MaterialProfile : Profile
             }));
         CreateMap<Material, MaterialProfilePreview>()
             .ForMember(m => m.Type, expression => expression.MapFrom(m => m.Type.SingleTypeName));
-        CreateMap<Material, FilterResultDto>()
+        CreateMap<Material, MaterialFilterResultDto>()
             .ForMember(m => m.Date, expression => expression.MapFrom(f => f.CreatedAt))
-            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById));
+            .ForMember(a => a.TeacherId, expression => expression.MapFrom(a => a.CreatedById))
+            .ForMember(m => m.Type, expression => expression.MapFrom(m => m.Type.SingleTypeName));
     }
 }

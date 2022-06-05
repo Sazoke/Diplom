@@ -62,4 +62,29 @@ public class MaterialService : BaseComponentService<Material>, IMaterialService
         material.TypeId = materialDto.TypeId;
         material.Content = materialDto.Content;
     }
+
+    public override IEnumerable<Material> GetByFilter(Filter materialFilter)
+    {
+        var filter = materialFilter as MaterialFilter;
+        var components = Repository.GetAll(q =>
+        {
+            if (filter.Text is not null)
+                q = q.Where(c => c.Name.Contains(filter.Text));
+            if (filter.Tags is not null)
+                q = q.Include(c => c.Tags)
+                    .Where(c => c.Tags.All(t => filter.Tags.Contains(t.Id)));
+            if (filter.SchoolArea is not null)
+                q = q.Where(c => filter.SchoolArea == c.AreaId);
+            if (filter.DateTime is not null)
+                q = q.Where(c => c.CreatedAt >= filter.DateTime);
+            if (filter.TeacherId is not null)
+                q = q.Where(c => c.CreatedById == filter.TeacherId);
+            if (filter.TypeId is not null)
+                q = q.Where(m => m.TypeId == filter.TypeId)
+                    .Include(m => m.Type);
+            return q.Skip(filter.Skip)
+                .Take(filter.PageSize);
+        });
+        return components;
+    }
 }
